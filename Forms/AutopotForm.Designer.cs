@@ -45,6 +45,7 @@
             this.firstHP = new System.Windows.Forms.RadioButton();
             this.firstSP = new System.Windows.Forms.RadioButton();
             this.chkStopWitchFC = new System.Windows.Forms.CheckBox();
+            this.chkStopCompetitive = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.txtHPpct)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxHP)).BeginInit();
@@ -225,13 +226,25 @@
             // 
             this.chkStopWitchFC.AutoSize = true;
             this.chkStopWitchFC.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-            this.chkStopWitchFC.Location = new System.Drawing.Point(6, 121);
+            this.chkStopWitchFC.Location = new System.Drawing.Point(12, 102);
             this.chkStopWitchFC.Name = "chkStopWitchFC";
             this.chkStopWitchFC.Size = new System.Drawing.Size(157, 17);
             this.chkStopWitchFC.TabIndex = 50;
             this.chkStopWitchFC.Text = "Parar com Ferimento Crítico";
             this.chkStopWitchFC.UseVisualStyleBackColor = true;
             this.chkStopWitchFC.CheckedChanged += new System.EventHandler(this.chkStopWitchFC_CheckedChanged);
+            // 
+            // chkStopCompetitive
+            // 
+            this.chkStopCompetitive.AutoSize = true;
+            this.chkStopCompetitive.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
+            this.chkStopCompetitive.Location = new System.Drawing.Point(12, 119);
+            this.chkStopCompetitive.Name = "chkStopCompetitive";
+            this.chkStopCompetitive.Size = new System.Drawing.Size(126, 17);
+            this.chkStopCompetitive.TabIndex = 50;
+            this.chkStopCompetitive.Text = "Parar em Competitiva";
+            this.chkStopCompetitive.UseVisualStyleBackColor = true;
+            this.chkStopCompetitive.CheckedChanged += new System.EventHandler(this.chkStopCompetitive_CheckedChanged);
             // 
             // AutopotForm
             // 
@@ -241,6 +254,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
             this.ClientSize = new System.Drawing.Size(300, 150);
             this.Controls.Add(this.chkStopWitchFC);
+            this.Controls.Add(this.chkStopCompetitive);
             this.Controls.Add(this.firstSP);
             this.Controls.Add(this.firstHP);
             this.Controls.Add(this.label5);
@@ -289,5 +303,6 @@
         private System.Windows.Forms.RadioButton firstHP;
         private System.Windows.Forms.RadioButton firstSP;
         private System.Windows.Forms.CheckBox chkStopWitchFC;
+        private System.Windows.Forms.CheckBox chkStopCompetitive;
     }
 }

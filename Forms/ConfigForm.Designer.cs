@@ -201,7 +201,6 @@ namespace _4RTools.Forms
             this.label1.Size = new System.Drawing.Size(140, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Ordem de uso de MasterBall";
-            this.label1.Visible = false;
             // 
             // switchListBox
             // 

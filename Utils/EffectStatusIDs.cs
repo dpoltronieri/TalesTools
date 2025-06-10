@@ -7,6 +7,7 @@ namespace _4RTools.Utils
     [Flags]
     public enum EffectStatusIDs : uint
     {
+        COMPETITIVA = 5019,
         //Status
         QUAGMIRE = 8,
         HALLUCINATIONWALK = 334,

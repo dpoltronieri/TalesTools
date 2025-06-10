@@ -19,6 +19,7 @@ namespace _4RTools.Forms
                 this.picBoxHP.Image = Resources._4RTools.ETCResource.Yggdrasil;
                 this.picBoxSP.Image = Resources._4RTools.ETCResource.Yggdrasil;
                 this.chkStopWitchFC.Hide();
+                this.chkStopCompetitive.Hide();
             }
             subject.Attach(this);
             this.isYgg = isYgg;
@@ -49,6 +50,7 @@ namespace _4RTools.Forms
             this.txtSPpct.Text = this.autopot.spPercent.ToString();
             this.txtAutopotDelay.Text = this.autopot.delay.ToString();
             this.chkStopWitchFC.Checked = this.autopot.stopWitchFC;
+            this.chkStopCompetitive.Checked = this.autopot.stopCompetitive;
             RadioButton rdHealFirst = (RadioButton)this.Controls[ProfileSingleton.GetCurrent().Autopot.firstHeal];
             if (rdHealFirst != null) { rdHealFirst.Checked = true; };
 
@@ -110,6 +112,13 @@ namespace _4RTools.Forms
         {
             CheckBox chk = sender as CheckBox;
             this.autopot.stopWitchFC = chk.Checked;
+            ProfileSingleton.SetConfiguration(this.autopot);
+        }
+
+        private void chkStopCompetitive_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = sender as CheckBox;
+            this.autopot.stopCompetitive = chk.Checked;
             ProfileSingleton.SetConfiguration(this.autopot);
         }
 
