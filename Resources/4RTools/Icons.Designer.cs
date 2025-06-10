@@ -1793,6 +1793,16 @@ namespace _4RTools.Resources._4RTools {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ring_nibelungen {
+            get {
+                object obj = ResourceManager.GetObject("ring_nibelungen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap rising_dragon {
             get {
                 object obj = ResourceManager.GetObject("rising_dragon", resourceCulture);

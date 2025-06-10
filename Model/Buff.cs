@@ -35,6 +35,7 @@ namespace _4RTools.Model
                 new Buff("Canção de Frigga", EffectStatusIDs.FRIGG_SONG, Resources._4RTools.Icons.friggs_song),
                 new Buff("Disparo Selvagem", EffectStatusIDs.FEARBREEZE, Resources._4RTools.Icons.fear_breeze),
                 new Buff("Dança com Lobos", EffectStatusIDs.DANCE_WITH_WUG, Resources._4RTools.Icons.dance_with_wug),
+                new Buff("Anel dos Nibelungos", EffectStatusIDs.RINGNIBELUNGEN, Resources._4RTools.Icons.ring_nibelungen),
             };
 
             return skills;

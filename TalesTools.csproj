@@ -484,6 +484,7 @@
     <None Include="assets\images\canto_candidus.png" />
     <None Include="assets\images\fighting_spirit.png" />
     <None Include="assets\images\providence.png" />
+    <None Include="assets\images\ring_nibelungen.png" />
     <Content Include="TalesIcon.ico" />
     <None Include="assets\images\abrasive.gif" />
     <None Include="assets\images\ac_concentration.gif" />

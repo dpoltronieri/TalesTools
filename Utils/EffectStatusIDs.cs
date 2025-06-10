@@ -31,7 +31,8 @@ namespace _4RTools.Utils
         INSPIRATION = 407,
         [Description("Aegis Domini")]
         SHIELDSPELL = 1316,
-
+        [Description("Anel dos Nibelungos")]
+        RINGNIBELUNGEN = 81,
         [Description("Milagre Solar, Lunar e Estelar")]
         MIRACLE= 2113,
         SPIRIT = 1401,
