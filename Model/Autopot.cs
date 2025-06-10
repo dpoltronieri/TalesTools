@@ -68,26 +68,32 @@ namespace _4RTools.Model
             }
         }
 
+
         private int AutopotThreadExecution(Client roClient, int hpPotCount)
         {
             string currentMap = roClient.ReadCurrentMap();
-            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+            bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
+            bool stopSpammersBot = ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot;
+            bool hasBerserk = hasBuff(roClient, EffectStatusIDs.BERSERK);
+            bool isCompetitive = hasBuff(roClient, EffectStatusIDs.COMPETITIVA);
+            bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+            bool isInCityList = this.listCities.Contains(currentMap);
+
+            bool canHeal = !(hasAntiBot && stopSpammersBot)
+                && !hasBerserk
+                && !(this.stopCompetitive && isCompetitive)
+                && !(stopHealCity && isInCityList);
+
+            if (canHeal)
             {
-                bool isCompetitive = HasBuff(roClient, EffectStatusIDs.COMPETITIVA);
-                if (!(this.stopCompetitive && isCompetitive))
+                bool hasCriticalWound = hasBuff(roClient, EffectStatusIDs.CRITICALWOUND);
+                if (firstHeal.Equals(FIRSTHP))
                 {
-                    if (!ProfileSingleton.GetCurrent().UserPreferences.stopHealCity || this.listCities.Contains(currentMap) == false)
-                    {
-                        bool hasCriticalWound = HasBuff(roClient, EffectStatusIDs.CRITICALWOUND);
-                        if (firstHeal.Equals(FIRSTHP))
-                        {
-                            healHPFirst(roClient, hpPotCount, hasCriticalWound);
-                        }
-                        else
-                        {
-                            healSPFirst(roClient, hpPotCount, hasCriticalWound);
-                        }
-                    }
+                    healHPFirst(roClient, hpPotCount, hasCriticalWound);
+                }
+                else
+                {
+                    healSPFirst(roClient, hpPotCount, hasCriticalWound);
                 }
             }
             Thread.Sleep(this.delay);
@@ -185,23 +191,5 @@ namespace _4RTools.Model
             return this.actionName != null ? this.actionName : ACTION_NAME_AUTOPOT;
         }
 
-        public bool HasBuff(Client c, EffectStatusIDs buff)
-        {
-            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
-            {
-                uint currentStatus = c.CurrentBuffStatusCode(i);
-
-                if (currentStatus == uint.MaxValue) { continue; }
-
-                EffectStatusIDs status = (EffectStatusIDs)currentStatus;
-
-                if (status == buff)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
     }
 }

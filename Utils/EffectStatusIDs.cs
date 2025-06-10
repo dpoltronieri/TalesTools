@@ -117,7 +117,7 @@ namespace _4RTools.Utils
         [Description("Aparar Golpe")]
         PARRYING = 104,
         [Description("Frenesi")]
-        BERSERK = 107,
+        BERSERK = 2108,
         [Description("Instinto de Sobrevivência")]
         AUTOBERSERK = 132,
         [Description("Aura Ninja")]
