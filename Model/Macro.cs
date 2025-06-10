@@ -12,6 +12,7 @@ namespace _4RTools.Model
     {
         public Key key { get; set; }
         public int delay { get; set; } = 50;
+        public bool hasClick { get; set; } = false;
 
         public MacroKey(Key key, int delay)
         {
@@ -56,7 +57,7 @@ namespace _4RTools.Model
     public class Macro : Action
     {
         public static string ACTION_NAME_SONG_MACRO = "SongMacro2.0";
-        public static string ACTION_NAME_MACRO_SWITCH = "MacroSwitch";
+        public static string ACTION_NAME_MACRO_SWITCH = "MacroSwitch2.0";
 
         public string actionName { get; set; }
         private _4RThread thread;
@@ -120,6 +121,13 @@ namespace _4RTools.Model
                                 Keys thisk = (Keys)Enum.Parse(typeof(Keys), macroKey.key.ToString());
                                 Thread.Sleep(macroKey.delay);
                                 Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
+
+                                if (macroKey.hasClick)
+                                {
+                                    Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_LBUTTONDOWN, 0, 0);
+                                    Thread.Sleep(1);
+                                    Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_LBUTTONUP, 0, 0);
+                                }
 
                                 if (chainConfig.daggerKey != Key.None)
                                 {
