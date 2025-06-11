@@ -33,7 +33,7 @@
             this.txtTransferKey = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtAutoClickKey = new System.Windows.Forms.TextBox();
+            this.txtPriorityKey = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -66,21 +66,21 @@
             // 
             this.label2.Location = new System.Drawing.Point(173, 5);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 26);
+            this.label2.Size = new System.Drawing.Size(54, 26);
             this.label2.TabIndex = 16;
-            this.label2.Text = "Auto Click";
+            this.label2.Text = "Tecla Prioridade";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // txtAutoClickKey
+            // txtPriorityKey
             // 
-            this.txtAutoClickKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(51)))), ((int)(((byte)(56)))));
-            this.txtAutoClickKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAutoClickKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtAutoClickKey.ForeColor = System.Drawing.Color.White;
-            this.txtAutoClickKey.Location = new System.Drawing.Point(216, 8);
-            this.txtAutoClickKey.Name = "txtAutoClickKey";
-            this.txtAutoClickKey.Size = new System.Drawing.Size(45, 23);
-            this.txtAutoClickKey.TabIndex = 14;
+            this.txtPriorityKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(51)))), ((int)(((byte)(56)))));
+            this.txtPriorityKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPriorityKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.txtPriorityKey.ForeColor = System.Drawing.Color.White;
+            this.txtPriorityKey.Location = new System.Drawing.Point(233, 7);
+            this.txtPriorityKey.Name = "txtPriorityKey";
+            this.txtPriorityKey.Size = new System.Drawing.Size(45, 23);
+            this.txtPriorityKey.TabIndex = 14;
             // 
             // panel5
             // 
@@ -114,12 +114,12 @@
             // CustomButtonForm
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(31)))), ((int)(((byte)(34)))));
-            this.ClientSize = new System.Drawing.Size(130, 39);
+            this.ClientSize = new System.Drawing.Size(284, 39);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtAutoClickKey);
+            this.Controls.Add(this.txtPriorityKey);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtTransferKey);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
@@ -139,7 +139,7 @@
         private System.Windows.Forms.TextBox txtTransferKey;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtAutoClickKey;
+        private System.Windows.Forms.TextBox txtPriorityKey;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;

@@ -24,6 +24,7 @@ namespace _4RTools.Model
         public static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
 
         public Key tiMode { get; set; } = 0;
+        public Key priorityKey { get; set; } = 0;
 
         public string GetActionName()
         {

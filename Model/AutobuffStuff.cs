@@ -43,6 +43,9 @@ namespace _4RTools.Model
         {
             _4RThread autobuffItemThread = new _4RThread(_ =>
             {
+                if (KeyboardHookHelper.HandlePriorityKey())
+                    return 0;
+
                 bool foundQuag = false;
                 bool foundDecreaseAgi = false;
                 string currentMap = c.ReadCurrentMap();

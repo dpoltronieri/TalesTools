@@ -71,6 +71,9 @@ namespace _4RTools.Model
 
         private int AutopotThreadExecution(Client roClient, int hpPotCount)
         {
+            if (KeyboardHookHelper.HandlePriorityKey())
+                return 0;
+
             string currentMap = roClient.ReadCurrentMap();
             bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
             bool stopSpammersBot = ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot;
@@ -96,6 +99,8 @@ namespace _4RTools.Model
                     healSPFirst(roClient, hpPotCount, hasCriticalWound);
                 }
             }
+
+            
             Thread.Sleep(this.delay);
             return 0;
         }

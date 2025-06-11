@@ -36,12 +36,22 @@ namespace _4RTools.Forms
 
         private void InitializeApplicationForm()
         {
+            Client roClient = ClientSingleton.GetClient();
+            if (roClient != null)
+            {
+                KeyboardHookHelper.PriorityKey = ProfileSingleton.GetCurrent().Custom.priorityKey;
+                KeyboardHookHelper.GameWindowHandle = roClient.process.MainWindowHandle;
+            }
             this.custom = ProfileSingleton.GetCurrent().Custom; 
             this.txtTransferKey.Text = custom.tiMode.ToString();
+            this.txtPriorityKey.Text = custom.priorityKey.ToString();
 
             this.txtTransferKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
             this.txtTransferKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
             this.txtTransferKey.TextChanged += new EventHandler(onTransferKeyChange);
+            this.txtPriorityKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            this.txtPriorityKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            this.txtPriorityKey.TextChanged += new EventHandler(onPriorityKeyChange);
             this.ActiveControl = null;
         }
 
@@ -51,6 +61,18 @@ namespace _4RTools.Forms
             try
             {
                 this.custom.tiMode = key;
+                ProfileSingleton.SetConfiguration(this.custom);
+            }
+            catch { }
+            this.ActiveControl = null;
+        }
+
+        private void onPriorityKeyChange(object sender, EventArgs e)
+        {
+            Key key = (Key)Enum.Parse(typeof(Key), this.txtPriorityKey.Text.ToString());
+            try
+            {
+                this.custom.priorityKey = key;
                 ProfileSingleton.SetConfiguration(this.custom);
             }
             catch { }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -192,5 +193,23 @@ namespace _4RTools.Utils
         }
 
         
+    }
+    public static class KeyboardHookHelper
+    {
+        public static Key PriorityKey { get; set; } = Key.None;
+        public static IntPtr GameWindowHandle { get; set; }
+
+        public static bool HandlePriorityKey()
+        {
+            if (PriorityKey != Key.None && Keyboard.IsKeyDown(PriorityKey))
+            {
+                Keys winKey = (Keys)Enum.Parse(typeof(Keys), PriorityKey.ToString());
+                Interop.PostMessage(GameWindowHandle, Constants.WM_KEYDOWN_MSG_ID, winKey, 0);
+                Thread.Sleep(1);
+                Interop.PostMessage(GameWindowHandle, Constants.WM_KEYUP_MSG_ID, winKey, 0);
+                return true;
+            }
+            return false;
+        }
     }
 }
