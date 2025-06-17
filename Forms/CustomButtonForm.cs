@@ -41,10 +41,12 @@ namespace _4RTools.Forms
             {
                 KeyboardHookHelper.PriorityKey = ProfileSingleton.GetCurrent().Custom.priorityKey;
                 KeyboardHookHelper.GameWindowHandle = roClient.process.MainWindowHandle;
+                KeyboardHookHelper.PriorityDelay = ProfileSingleton.GetCurrent().Custom.priorityDelay;  
             }
             this.custom = ProfileSingleton.GetCurrent().Custom; 
             this.txtTransferKey.Text = custom.tiMode.ToString();
             this.txtPriorityKey.Text = custom.priorityKey.ToString();
+            this.txtPriorityDelay.Text = this.custom.priorityDelay.ToString();
 
             this.txtTransferKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
             this.txtTransferKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
@@ -53,6 +55,15 @@ namespace _4RTools.Forms
             this.txtPriorityKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
             this.txtPriorityKey.TextChanged += new EventHandler(onPriorityKeyChange);
             this.ActiveControl = null;
+        }
+        private void txtPriorityDelay_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                ProfileSingleton.GetCurrent().Custom.priorityDelay = Convert.ToInt16(this.txtPriorityDelay.Value);
+                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().Custom);
+            }
+            catch { }
         }
 
         private void onTransferKeyChange(object sender, EventArgs e)

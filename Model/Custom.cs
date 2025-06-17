@@ -25,6 +25,7 @@ namespace _4RTools.Model
 
         public Key tiMode { get; set; } = 0;
         public Key priorityKey { get; set; } = 0;
+        public int priorityDelay { get; set; } = 50;
 
         public string GetActionName()
         {

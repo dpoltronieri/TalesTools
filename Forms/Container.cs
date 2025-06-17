@@ -275,7 +275,7 @@ namespace _4RTools.Forms
         {
             CustomButtonForm form = new CustomButtonForm(subject);
             form.FormBorderStyle = FormBorderStyle.None;
-            form.Location = new Point(360, 220);
+            form.Location = new Point(360, 210);
             form.MdiParent = this;
             form.Show();
         }
