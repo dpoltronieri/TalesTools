@@ -199,17 +199,34 @@ namespace _4RTools.Utils
         public static Key PriorityKey { get; set; } = Key.None;
         public static IntPtr GameWindowHandle { get; set; }
 
+        private static DateTime _lastSent = DateTime.MinValue;
+        private static bool _wasPressed = false;
+        private static readonly object _lock = new object();
+
+
         public static bool HandlePriorityKey()
         {
-            if (PriorityKey != Key.None && Keyboard.IsKeyDown(PriorityKey))
+            bool isDown = PriorityKey != Key.None && Keyboard.IsKeyDown(PriorityKey);
+            lock (_lock)
             {
-                Keys winKey = (Keys)Enum.Parse(typeof(Keys), PriorityKey.ToString());
-                Interop.PostMessage(GameWindowHandle, Constants.WM_KEYDOWN_MSG_ID, winKey, 0);
-                Thread.Sleep(1);
-                Interop.PostMessage(GameWindowHandle, Constants.WM_KEYUP_MSG_ID, winKey, 0);
-                return true;
+                if (isDown && !_wasPressed)
+                {
+                    _wasPressed = true;
+                    _lastSent = DateTime.Now;
+                    Keys winKey = (Keys)Enum.Parse(typeof(Keys), PriorityKey.ToString());
+                    Thread.Sleep(50);
+                    Interop.PostMessage(GameWindowHandle, Constants.WM_KEYDOWN_MSG_ID, winKey, 0);
+                    Thread.Sleep(1);
+                    Interop.PostMessage(GameWindowHandle, Constants.WM_KEYUP_MSG_ID, winKey, 0);
+                    return true;
+                }
+                else if (!isDown)
+                {
+                    // Reseta o estado quando a tecla é solta
+                    _wasPressed = false;
+                }
             }
-            return false;
+            return isDown;
         }
     }
 }
