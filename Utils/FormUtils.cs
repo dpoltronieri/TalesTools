@@ -22,7 +22,8 @@ namespace _4RTools.Utils
                 if (e.KeyCode.ToString() == "Oemplus")
                 {
                     thisk = Key.OemPlus;
-                }else if(e.KeyCode.ToString() == "Oemtilde")
+                }
+                else if (e.KeyCode.ToString() == "Oemtilde")
                 {
                     thisk = Key.OemTilde;
                 }
@@ -72,7 +73,6 @@ namespace _4RTools.Utils
 
         private static void resetForm(Control control)
         {
-
             IEnumerable<Control> texts = GetAll(control, typeof(TextBox));
             IEnumerable<Control> checks = GetAll(control, typeof(CheckBox));
             IEnumerable<Control> combos = GetAll(control, typeof(ComboBox));
@@ -150,7 +150,7 @@ namespace _4RTools.Utils
             resetForm(group);
         }
 
-       
+
     }
     public static class EnumExtensions
     {
@@ -192,7 +192,7 @@ namespace _4RTools.Utils
             return t;
         }
 
-        
+
     }
     public static class KeyboardHookHelper
     {
@@ -228,5 +228,10 @@ namespace _4RTools.Utils
             }
             return isDown;
         }
+    }
+    public static class GlobalVariablesHelper
+    {
+        public static List<String> CityList { get; set; }
+
     }
 }
