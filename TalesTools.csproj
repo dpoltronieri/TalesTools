@@ -496,6 +496,7 @@
     <None Include="assets\images\providence.png" />
     <None Include="assets\images\ring_nibelungen.png" />
     <None Include="assets\images\hp_conversion.png" />
+    <None Include="assets\images\drumbattlefield.png" />
     <Content Include="TalesIcon.ico" />
     <None Include="assets\images\abrasive.gif" />
     <None Include="assets\images\ac_concentration.gif" />

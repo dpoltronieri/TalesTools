@@ -36,6 +36,7 @@ namespace _4RTools.Model
                 new Buff("Disparo Selvagem", EffectStatusIDs.FEARBREEZE, Resources._4RTools.Icons.fear_breeze),
                 new Buff("Dança com Lobos", EffectStatusIDs.DANCE_WITH_WUG, Resources._4RTools.Icons.dance_with_wug),
                 new Buff("Anel dos Nibelungos", EffectStatusIDs.RINGNIBELUNGEN, Resources._4RTools.Icons.ring_nibelungen),
+                new Buff("Rufar dos Tambores", EffectStatusIDs.DRUMBATTLEFIELD, Resources._4RTools.Icons.drumbattlefield),
             };
 
             return skills;
