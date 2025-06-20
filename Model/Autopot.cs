@@ -130,6 +130,8 @@ namespace _4RTools.Model
             }
             while (roClient.IsHpBelow(hpPercent))
             {
+                if (KeyboardHookHelper.HandlePriorityKey())
+                    return;
                 if (this.actionName == ACTION_NAME_AUTOPOT_YGG)
                 {
                     pressKey(this.hpKey);
@@ -158,6 +160,8 @@ namespace _4RTools.Model
         {
             while (roClient.IsSpBelow(spPercent))
             {
+                if (KeyboardHookHelper.HandlePriorityKey())
+                    return;
                 pressKey(this.spKey);
                 hpPotCount++;
 
