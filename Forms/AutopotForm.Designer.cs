@@ -46,6 +46,11 @@
             this.firstSP = new System.Windows.Forms.RadioButton();
             this.chkStopWitchFC = new System.Windows.Forms.CheckBox();
             this.chkStopCompetitive = new System.Windows.Forms.CheckBox();
+            this.txtHpEquipBefore = new System.Windows.Forms.TextBox();
+            this.txtHpEquipAfter = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblequipBefore = new System.Windows.Forms.Label();
+            this.lblequipAfter = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.txtHPpct)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxHP)).BeginInit();
@@ -58,7 +63,7 @@
             this.txtHPpct.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHPpct.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtHPpct.ForeColor = System.Drawing.Color.White;
-            this.txtHPpct.Location = new System.Drawing.Point(215, 37);
+            this.txtHPpct.Location = new System.Drawing.Point(119, 37);
             this.txtHPpct.Name = "txtHPpct";
             this.txtHPpct.Size = new System.Drawing.Size(44, 23);
             this.txtHPpct.TabIndex = 39;
@@ -68,7 +73,7 @@
             // 
             this.labelSP.AutoSize = true;
             this.labelSP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.labelSP.Location = new System.Drawing.Point(261, 74);
+            this.labelSP.Location = new System.Drawing.Point(165, 74);
             this.labelSP.Name = "labelSP";
             this.labelSP.Size = new System.Drawing.Size(20, 17);
             this.labelSP.TabIndex = 38;
@@ -78,7 +83,7 @@
             // 
             this.labelHP.AutoSize = true;
             this.labelHP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.labelHP.Location = new System.Drawing.Point(261, 40);
+            this.labelHP.Location = new System.Drawing.Point(165, 40);
             this.labelHP.Name = "labelHP";
             this.labelHP.Size = new System.Drawing.Size(20, 17);
             this.labelHP.TabIndex = 37;
@@ -90,9 +95,9 @@
             this.txtAutopotDelay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAutopotDelay.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtAutopotDelay.ForeColor = System.Drawing.Color.White;
-            this.txtAutopotDelay.Location = new System.Drawing.Point(215, 115);
+            this.txtAutopotDelay.Location = new System.Drawing.Point(214, 115);
             this.txtAutopotDelay.Name = "txtAutopotDelay";
-            this.txtAutopotDelay.Size = new System.Drawing.Size(44, 23);
+            this.txtAutopotDelay.Size = new System.Drawing.Size(45, 23);
             this.txtAutopotDelay.TabIndex = 36;
             this.txtAutopotDelay.TextChanged += new System.EventHandler(this.txtAutopotDelayTextChanged);
             // 
@@ -100,7 +105,7 @@
             // 
             this.picBoxSP.BackColor = System.Drawing.Color.Transparent;
             this.picBoxSP.Image = global::_4RTools.Resources._4RTools.ETCResource.SP;
-            this.picBoxSP.Location = new System.Drawing.Point(68, 71);
+            this.picBoxSP.Location = new System.Drawing.Point(24, 71);
             this.picBoxSP.Name = "picBoxSP";
             this.picBoxSP.Size = new System.Drawing.Size(25, 25);
             this.picBoxSP.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -111,7 +116,7 @@
             // 
             this.picBoxHP.BackColor = System.Drawing.Color.Transparent;
             this.picBoxHP.Image = global::_4RTools.Resources._4RTools.ETCResource.HP;
-            this.picBoxHP.Location = new System.Drawing.Point(68, 36);
+            this.picBoxHP.Location = new System.Drawing.Point(24, 36);
             this.picBoxHP.Name = "picBoxHP";
             this.picBoxHP.Size = new System.Drawing.Size(25, 25);
             this.picBoxHP.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -144,9 +149,9 @@
             this.txtHpKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHpKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtHpKey.ForeColor = System.Drawing.Color.White;
-            this.txtHpKey.Location = new System.Drawing.Point(127, 37);
+            this.txtHpKey.Location = new System.Drawing.Point(70, 37);
             this.txtHpKey.Name = "txtHpKey";
-            this.txtHpKey.Size = new System.Drawing.Size(61, 23);
+            this.txtHpKey.Size = new System.Drawing.Size(45, 23);
             this.txtHpKey.TabIndex = 43;
             // 
             // txtSPKey
@@ -155,15 +160,15 @@
             this.txtSPKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSPKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtSPKey.ForeColor = System.Drawing.Color.White;
-            this.txtSPKey.Location = new System.Drawing.Point(127, 72);
+            this.txtSPKey.Location = new System.Drawing.Point(70, 72);
             this.txtSPKey.Name = "txtSPKey";
-            this.txtSPKey.Size = new System.Drawing.Size(61, 23);
+            this.txtSPKey.Size = new System.Drawing.Size(45, 23);
             this.txtSPKey.TabIndex = 44;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(98, 42);
+            this.label3.Location = new System.Drawing.Point(48, 42);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(22, 13);
             this.label3.TabIndex = 45;
@@ -172,7 +177,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(99, 77);
+            this.label4.Location = new System.Drawing.Point(49, 77);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(21, 13);
             this.label4.TabIndex = 46;
@@ -184,7 +189,7 @@
             this.txtSPpct.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSPpct.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtSPpct.ForeColor = System.Drawing.Color.White;
-            this.txtSPpct.Location = new System.Drawing.Point(215, 72);
+            this.txtSPpct.Location = new System.Drawing.Point(119, 72);
             this.txtSPpct.Name = "txtSPpct";
             this.txtSPpct.Size = new System.Drawing.Size(44, 23);
             this.txtSPpct.TabIndex = 40;
@@ -194,7 +199,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label5.Location = new System.Drawing.Point(26, 12);
+            this.label5.Location = new System.Drawing.Point(-1, 12);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 17);
             this.label5.TabIndex = 47;
@@ -204,7 +209,7 @@
             // 
             this.firstHP.AutoSize = true;
             this.firstHP.Checked = true;
-            this.firstHP.Location = new System.Drawing.Point(36, 44);
+            this.firstHP.Location = new System.Drawing.Point(9, 44);
             this.firstHP.Name = "firstHP";
             this.firstHP.Size = new System.Drawing.Size(14, 13);
             this.firstHP.TabIndex = 48;
@@ -215,7 +220,7 @@
             // firstSP
             // 
             this.firstSP.AutoSize = true;
-            this.firstSP.Location = new System.Drawing.Point(36, 78);
+            this.firstSP.Location = new System.Drawing.Point(9, 78);
             this.firstSP.Name = "firstSP";
             this.firstSP.Size = new System.Drawing.Size(14, 13);
             this.firstSP.TabIndex = 49;
@@ -246,6 +251,58 @@
             this.chkStopCompetitive.UseVisualStyleBackColor = true;
             this.chkStopCompetitive.CheckedChanged += new System.EventHandler(this.chkStopCompetitive_CheckedChanged);
             // 
+            // txtHpEquipBefore
+            // 
+            this.txtHpEquipBefore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(51)))), ((int)(((byte)(56)))));
+            this.txtHpEquipBefore.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtHpEquipBefore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.txtHpEquipBefore.ForeColor = System.Drawing.Color.White;
+            this.txtHpEquipBefore.Location = new System.Drawing.Point(191, 38);
+            this.txtHpEquipBefore.Name = "txtHpEquipBefore";
+            this.txtHpEquipBefore.Size = new System.Drawing.Size(45, 23);
+            this.txtHpEquipBefore.TabIndex = 51;
+            // 
+            // txtHpEquipAfter
+            // 
+            this.txtHpEquipAfter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(51)))), ((int)(((byte)(56)))));
+            this.txtHpEquipAfter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtHpEquipAfter.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.txtHpEquipAfter.ForeColor = System.Drawing.Color.White;
+            this.txtHpEquipAfter.Location = new System.Drawing.Point(243, 38);
+            this.txtHpEquipAfter.Name = "txtHpEquipAfter";
+            this.txtHpEquipAfter.Size = new System.Drawing.Size(45, 23);
+            this.txtHpEquipAfter.TabIndex = 53;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label6.Location = new System.Drawing.Point(78, 17);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 17);
+            this.label6.TabIndex = 55;
+            this.label6.Text = "Pot";
+            // 
+            // lblequipBefore
+            // 
+            this.lblequipBefore.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.lblequipBefore.Location = new System.Drawing.Point(185, 9);
+            this.lblequipBefore.Name = "lblequipBefore";
+            this.lblequipBefore.Size = new System.Drawing.Size(58, 28);
+            this.lblequipBefore.TabIndex = 56;
+            this.lblequipBefore.Text = "Equipa Antes";
+            this.lblequipBefore.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblequipAfter
+            // 
+            this.lblequipAfter.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.lblequipAfter.Location = new System.Drawing.Point(237, 9);
+            this.lblequipAfter.Name = "lblequipAfter";
+            this.lblequipAfter.Size = new System.Drawing.Size(58, 28);
+            this.lblequipAfter.TabIndex = 57;
+            this.lblequipAfter.Text = "Equipa Depois";
+            this.lblequipAfter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // AutopotForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -253,6 +310,10 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
             this.ClientSize = new System.Drawing.Size(300, 150);
+            this.Controls.Add(this.txtHpEquipBefore);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtHpEquipAfter);
+            this.Controls.Add(this.txtAutopotDelay);
             this.Controls.Add(this.chkStopWitchFC);
             this.Controls.Add(this.chkStopCompetitive);
             this.Controls.Add(this.firstSP);
@@ -268,9 +329,10 @@
             this.Controls.Add(this.txtHPpct);
             this.Controls.Add(this.labelSP);
             this.Controls.Add(this.labelHP);
-            this.Controls.Add(this.txtAutopotDelay);
             this.Controls.Add(this.picBoxSP);
             this.Controls.Add(this.picBoxHP);
+            this.Controls.Add(this.lblequipAfter);
+            this.Controls.Add(this.lblequipBefore);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "AutopotForm";
@@ -304,5 +366,10 @@
         private System.Windows.Forms.RadioButton firstSP;
         private System.Windows.Forms.CheckBox chkStopWitchFC;
         private System.Windows.Forms.CheckBox chkStopCompetitive;
+        private System.Windows.Forms.TextBox txtHpEquipBefore;
+        private System.Windows.Forms.TextBox txtHpEquipAfter;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblequipBefore;
+        private System.Windows.Forms.Label lblequipAfter;
     }
 }
