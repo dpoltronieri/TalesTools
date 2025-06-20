@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _4RTools.Model
 {
@@ -13,7 +14,7 @@ namespace _4RTools.Model
     public class AutoSwitchHeal : Action
     {
 
-        public static string ACTION_NAME_AUTOPOT = "AutoSwitchHeal";
+        public static string ACTION_NAME_AUTOSWITCHHEAL = "AutoSwitchHeal";
         public Key lessHpKey { get; set; }
         public Key moreHpKey { get; set; }
         public int lessHpPercent { get; set; }
@@ -40,7 +41,8 @@ namespace _4RTools.Model
         public int delayYgg { get; set; } = 500;
 
         public string actionName { get; set; }
-        private _4RThread thread;
+        private _4RThread threadEquips;
+        private _4RThread threadPet;
 
         public List<String> listCities { get; set; } = GlobalVariablesHelper.CityList;
 
@@ -68,19 +70,65 @@ namespace _4RTools.Model
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                if (this.thread != null)
+                if (this.threadEquips != null)
                 {
-                    _4RThread.Stop(this.thread);
+                    _4RThread.Stop(this.threadEquips);
                 }
-                int hpPotCount = 0;
+                if (this.threadPet != null)
+                {
+                    _4RThread.Stop(this.threadPet);
+                }
                 if (this.listCities == null || this.listCities.Count == 0) this.listCities = GlobalVariablesHelper.CityList;
-                this.thread = new _4RThread(_ => AutoSwitchHealThreadExecution(roClient, hpPotCount));
-                _4RThread.Start(this.thread);
+                this.threadEquips = new _4RThread(_ => AutoSwitchHealThreadExecution(roClient));
+                _4RThread.Start(this.threadEquips);
+                this.threadPet = new _4RThread(_ => AutoSwitchHealPetThreadExecution(roClient));
+                _4RThread.Start(this.threadPet);
             }
         }
+        private int AutoSwitchHealPetThreadExecution(Client roClient)
+        {
+            if (KeyboardHookHelper.HandlePriorityKey())
+                return 0;
+            if (this.itemKey == Key.None)
+                return 0;
 
+            string currentMap = roClient.ReadCurrentMap();
+            bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
+            bool stopSpammersBot = ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot;
+            bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+            bool isInCityList = this.listCities.Contains(currentMap);
 
-        private int AutoSwitchHealThreadExecution(Client roClient, int hpPotCount)
+            bool canEquipPet = !(hasAntiBot && stopSpammersBot)
+                && !(stopHealCity && isInCityList);
+
+            if (canEquipPet)
+            {
+                changePet(roClient);
+            }
+            Thread.Sleep(this.switchDelay);
+            return 0;
+        }
+
+        private void changePet(Client roClient)
+        {
+            if (roClient.IsSpBelow(spPercent) && roClient.IsHpAbove(10))
+            {
+                switchPet();
+            }
+        }
+        private void switchPet()
+        {
+            pressKey(itemKey);
+            Thread.Sleep(1000);
+            foreach(var i in Enumerable.Range(0, this.qtdSkill))
+            {
+                pressKey(skillKey);
+                Thread.Sleep(this.switchDelay);
+            }
+            pressKey(nextItemKey);
+        }
+
+        private int AutoSwitchHealThreadExecution(Client roClient)
         {
             if (KeyboardHookHelper.HandlePriorityKey())
                 return 0;
@@ -88,26 +136,18 @@ namespace _4RTools.Model
             string currentMap = roClient.ReadCurrentMap();
             bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
             bool stopSpammersBot = ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot;
-            bool hasBerserk = hasBuff(roClient, EffectStatusIDs.BERSERK);
-            bool isCompetitive = hasBuff(roClient, EffectStatusIDs.COMPETITIVA);
             bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
             bool isInCityList = this.listCities.Contains(currentMap);
 
-            bool canHeal = !(hasAntiBot && stopSpammersBot)
-                && !hasBerserk
+            bool canEquip = !(hasAntiBot && stopSpammersBot)
                 && !(stopHealCity && isInCityList);
 
-            if (canHeal)
+            if (canEquip)
             {
-                bool hasCriticalWound = hasBuff(roClient, EffectStatusIDs.CRITICALWOUND);
-
-                    healHPFirst(roClient, hpPotCount, hasCriticalWound);
-
-                    healSPFirst(roClient, hpPotCount, hasCriticalWound);
+                changeEquip(roClient);
             }
 
-            
-            Thread.Sleep(this.delayYgg);
+            Thread.Sleep(this.equipDelay * 1000);
             return 0;
         }
 
@@ -121,56 +161,39 @@ namespace _4RTools.Model
             return false;
         }
 
-        private void healSPFirst(Client roClient, int hpPotCount, bool hasCriticalWound)
+        private void changeEquip(Client roClient)
         {
-            if (roClient.IsSpBelow(spPercent))
+            if (roClient.IsHpBelow(lessHpPercent))
             {
-                pot(this.spKey);
-                hpPotCount++;
-
-                if (hpPotCount == 3 && roClient.IsHpBelow(hpPercent))
-                {
-                    hpPotCount = 0;
-
-                        pot(this.hpKey);
-
-
-                }
+                pressKey(this.lessHpKey);
             }
-            // check hp
-            if (roClient.IsHpBelow(hpPercent))
+            else if (roClient.IsHpAbove(moreHpPercent))
             {
-                pot(this.hpKey);
+                pressKey(this.moreHpKey);
+            }
+
+            if (roClient.IsSpBelow(lessSpPercent))
+            {
+                pressKey(this.lessSpKey);
+            }
+            else if (roClient.IsSpAbove(moreSpPercent))
+            {
+                pressKey(this.moreSpKey);
             }
         }
 
-        private void healHPFirst(Client roClient, int hpPotCount, bool hasCriticalWound)
+        private void pressKey(Key key)
         {
-            if (roClient.IsHpBelow(hpPercent))
+            if ((key != Key.None) && !Keyboard.IsKeyDown(Key.LeftAlt) && !Keyboard.IsKeyDown(Key.RightAlt))
             {
-                    pot(this.hpKey);
-                    hpPotCount++;
-            }
-            // check sp
-            if (roClient.IsSpBelow(spPercent))
-            {
-                pot(this.spKey);
-            }
-        }
-
-        private void pot(Key key)
-        {
-            Keys k = (Keys)Enum.Parse(typeof(Keys), key.ToString());
-            if ((k != Keys.None) && !Keyboard.IsKeyDown(Key.LeftAlt) && !Keyboard.IsKeyDown(Key.RightAlt))
-            {
-                Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, k, 0); // keydown
-                Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYUP_MSG_ID, k, 0); // keyup
+                Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, (Keys)Enum.Parse(typeof(Keys), key.ToString()), 0);
             }
         }
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread);
+            _4RThread.Stop(this.threadEquips);
+            _4RThread.Stop(this.threadPet);
         }
 
         public string GetConfiguration()
@@ -180,7 +203,7 @@ namespace _4RTools.Model
 
         public string GetActionName()
         {
-            return this.actionName != null ? this.actionName : ACTION_NAME_AUTOPOT;
+            return this.actionName != null ? this.actionName : ACTION_NAME_AUTOSWITCHHEAL;
         }
 
     }
