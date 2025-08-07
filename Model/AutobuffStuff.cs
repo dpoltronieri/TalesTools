@@ -16,6 +16,7 @@ namespace _4RTools.Model
         private _4RThread thread;
         public int delay { get; set; } = 100;
         public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
+        [JsonIgnore]
         public List<String> listCities { get; set; }
 
         public AutoBuffStuff(string actionName)
@@ -25,14 +26,10 @@ namespace _4RTools.Model
 
         public void Start()
         {
-            Stop();
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                if (this.thread != null)
-                {
-                    _4RThread.Stop(this.thread);
-                }
+                Stop();
                 if (this.listCities == null || this.listCities.Count == 0) this.listCities = LocalServerManager.GetListCities();
                 this.thread = AutoBuffThread(roClient);
                 _4RThread.Start(this.thread);
@@ -130,7 +127,10 @@ namespace _4RTools.Model
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread);
+            if (this.thread != null)
+            {
+                _4RThread.Stop(this.thread);
+            }
         }
 
         public string GetConfiguration()

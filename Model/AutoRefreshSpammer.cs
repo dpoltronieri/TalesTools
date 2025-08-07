@@ -15,6 +15,7 @@ namespace _4RTools.Model
         private string ACTION_NAME = "AutoRefreshSpammer";
 
         public Dictionary<int, MacroKey> skillTimer = new Dictionary<int, MacroKey>();
+        [JsonIgnore]
         public List<String> listCities { get; set; }
 
         private _4RThread thread1;
@@ -27,10 +28,7 @@ namespace _4RTools.Model
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                validadeThreads(this.thread1);
-                validadeThreads(this.thread2);
-                validadeThreads(this.thread3);
-                validadeThreads(this.thread4);
+                Stop();
 
                 if (this.listCities == null || this.listCities.Count == 0) this.listCities = LocalServerManager.GetListCities();
 
@@ -43,14 +41,6 @@ namespace _4RTools.Model
                 _4RThread.Start(this.thread2);
                 _4RThread.Start(this.thread3);
                 _4RThread.Start(this.thread4);
-            }
-        }
-
-        private void validadeThreads(_4RThread _4RThread)
-        {
-            if (_4RThread != null)
-            {
-                _4RThread.Stop(_4RThread);
             }
         }
 
@@ -82,10 +72,22 @@ namespace _4RTools.Model
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread1);
-            _4RThread.Stop(this.thread2);
-            _4RThread.Stop(this.thread3);
-            _4RThread.Stop(this.thread4);
+            if (this.thread1 != null)
+            {
+                _4RThread.Stop(this.thread1);
+            }
+            if (this.thread2 != null)
+            {
+                _4RThread.Stop(this.thread2);
+            }
+            if (this.thread3 != null)
+            {
+                _4RThread.Stop(this.thread3);
+            }
+            if (this.thread4 != null)
+            {
+                _4RThread.Stop(this.thread4);
+            }
         }
 
         public string GetConfiguration()

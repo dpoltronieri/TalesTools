@@ -31,7 +31,7 @@ namespace _4RTools.Model
 
         public string actionName { get; set; }
         private _4RThread thread;
-
+        [JsonIgnore]
         public List<String> listCities { get; set; }
 
         public Autopot() { }
@@ -59,10 +59,7 @@ namespace _4RTools.Model
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                if (this.thread != null)
-                {
-                    _4RThread.Stop(this.thread);
-                }
+                Stop();
                 int hpPotCount = 0;
                 if (this.listCities == null || this.listCities.Count == 0) this.listCities = LocalServerManager.GetListCities();
                 this.thread = new _4RThread(_ => AutopotThreadExecution(roClient, hpPotCount));
@@ -186,7 +183,10 @@ namespace _4RTools.Model
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread);
+            if (this.thread != null)
+            {
+                _4RThread.Stop(this.thread);
+            }
         }
 
         public string GetConfiguration()
