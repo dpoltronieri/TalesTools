@@ -497,6 +497,9 @@
     <None Include="assets\images\ring_nibelungen.png" />
     <None Include="assets\images\hp_conversion.png" />
     <None Include="assets\images\drumbattlefield.png" />
+    <None Include="assets\images\renovatio.png" />
+    <None Include="assets\images\stasis.png" />
+    <None Include="assets\images\magical_bullet.png" />
     <Content Include="TalesIcon.ico" />
     <None Include="assets\images\abrasive.gif" />
     <None Include="assets\images\ac_concentration.gif" />

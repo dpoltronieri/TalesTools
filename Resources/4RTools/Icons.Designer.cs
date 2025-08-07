@@ -1413,6 +1413,16 @@ namespace _4RTools.Resources._4RTools {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap magical_bullet {
+            get {
+                object obj = ResourceManager.GetObject("magical_bullet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap magnum {
             get {
                 object obj = ResourceManager.GetObject("magnum", resourceCulture);
@@ -1793,6 +1803,16 @@ namespace _4RTools.Resources._4RTools {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap renovatio {
+            get {
+                object obj = ResourceManager.GetObject("renovatio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap researchreport {
             get {
                 object obj = ResourceManager.GetObject("researchreport", resourceCulture);
@@ -2016,6 +2036,16 @@ namespace _4RTools.Resources._4RTools {
         internal static System.Drawing.Bitmap star_comfort {
             get {
                 object obj = ResourceManager.GetObject("star_comfort", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stasis {
+            get {
+                object obj = ResourceManager.GetObject("stasis", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
