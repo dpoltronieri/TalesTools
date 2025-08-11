@@ -24,7 +24,6 @@ namespace _4RTools.Model
         public int delay { get; set; } = 15;
         public int delayYgg { get; set; } = 50;
         public bool stopWitchFC { get; set; } = false;
-        public bool stopCompetitive { get; set; } = false;
         public string firstHeal { get; set; } = FIRSTHP;
         public Key hpEquipBefore { get; set; }
         public Key hpEquipAfter { get; set; }
@@ -73,20 +72,8 @@ namespace _4RTools.Model
             if (KeyboardHookHelper.HandlePriorityKey())
                 return 0;
 
-            string currentMap = roClient.ReadCurrentMap();
-            bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
-            bool stopSpammersBot = ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot;
-            bool hasBerserk = hasBuff(roClient, EffectStatusIDs.BERSERK);
-            bool isCompetitive = hasBuff(roClient, EffectStatusIDs.COMPETITIVA);
-            bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
-            bool isInCityList = this.listCities.Contains(currentMap);
 
-            bool canHeal = !(hasAntiBot && stopSpammersBot)
-                && !hasBerserk
-                && !(this.stopCompetitive && isCompetitive)
-                && !(stopHealCity && isInCityList);
-
-            if (canHeal)
+            if (canHeal(roClient))
             {
                 bool hasCriticalWound = hasBuff(roClient, EffectStatusIDs.CRITICALWOUND);
                 if (firstHeal.Equals(FIRSTHP))
@@ -127,6 +114,8 @@ namespace _4RTools.Model
             }
             while (roClient.IsHpBelow(hpPercent))
             {
+                if (!canHeal(roClient))
+                    return;
                 if (KeyboardHookHelper.HandlePriorityKey())
                     return;
                 if (this.actionName == ACTION_NAME_AUTOPOT_YGG)
@@ -157,6 +146,8 @@ namespace _4RTools.Model
         {
             while (roClient.IsSpBelow(spPercent))
             {
+                if (!canHeal(roClient))
+                    return;
                 if (KeyboardHookHelper.HandlePriorityKey())
                     return;
                 pressKey(this.spKey);
@@ -179,6 +170,23 @@ namespace _4RTools.Model
                 Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, k, 0); // keydown
                 Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYUP_MSG_ID, k, 0); // keyup
             }
+        }
+        private bool canHeal(Client roClient)
+        {
+            string currentMap = roClient.ReadCurrentMap();
+            bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
+            bool hasBerserk = hasBuff(roClient, EffectStatusIDs.BERSERK);
+            bool isCompetitive = hasBuff(roClient, EffectStatusIDs.COMPETITIVA);
+            bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+            bool isInCityList = this.listCities.Contains(currentMap);
+            bool hasOpenChat = roClient.ReadOpenChat();
+
+            bool canHeal = !hasAntiBot
+                && !hasBerserk
+                && !isCompetitive
+                && !hasOpenChat
+                && !(stopHealCity && isInCityList);
+            return canHeal;
         }
 
         public void Stop()

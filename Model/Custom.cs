@@ -39,7 +39,7 @@ namespace _4RTools.Model
 
         private int CustomExecutionThread(Client roClient)
         {
-            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !roClient.ReadOpenChat())
             {
                 var TiMode = ProfileSingleton.GetCurrent().Custom.tiMode;
                 if (!TiMode.Equals(Key.None) && Keyboard.IsKeyDown(TiMode))

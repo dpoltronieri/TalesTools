@@ -46,7 +46,14 @@ namespace _4RTools.Model
                 bool foundQuag = false;
                 bool foundDecreaseAgi = false;
                 string currentMap = c.ReadCurrentMap();
-                if (!ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity || this.listCities.Contains(currentMap) == false)
+                bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+                bool isInCityList = this.listCities.Contains(currentMap);
+                bool hasOpenChat = c.ReadOpenChat();
+
+                bool canAutobuff = !hasOpenChat
+                    && !(stopHealCity && isInCityList);
+
+                if (canAutobuff)
                 {
                     List<EffectStatusIDs> buffs = new List<EffectStatusIDs>();
                     Dictionary<EffectStatusIDs, Key> bmClone = new Dictionary<EffectStatusIDs, Key>(this.buffMapping);
@@ -80,7 +87,7 @@ namespace _4RTools.Model
                         if (status == EffectStatusIDs.DECREASE_AGI) foundDecreaseAgi = true;
                     }
                     buffs.Clear();
-                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && !c.ReadOpenChat())
                     {
                         foreach (var item in bmClone)
                         {

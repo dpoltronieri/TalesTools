@@ -35,7 +35,6 @@ namespace _4RTools.Forms
             this.skillsListBox = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chkStopOnAntiBot = new System.Windows.Forms.CheckBox();
             this.chkStopHealOnCity = new System.Windows.Forms.CheckBox();
             this.ammo2textBox = new System.Windows.Forms.TextBox();
             this.ammo1textBox = new System.Windows.Forms.TextBox();
@@ -77,7 +76,6 @@ namespace _4RTools.Forms
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.chkStopOnAntiBot);
             this.groupBox1.Controls.Add(this.chkStopHealOnCity);
             this.groupBox1.Controls.Add(this.ammo2textBox);
             this.groupBox1.Controls.Add(this.ammo1textBox);
@@ -93,17 +91,6 @@ namespace _4RTools.Forms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configurações TalesTools";
-            // 
-            // chkStopOnAntiBot
-            // 
-            this.chkStopOnAntiBot.AutoSize = true;
-            this.chkStopOnAntiBot.Location = new System.Drawing.Point(13, 154);
-            this.chkStopOnAntiBot.Name = "chkStopOnAntiBot";
-            this.chkStopOnAntiBot.Size = new System.Drawing.Size(138, 17);
-            this.chkStopOnAntiBot.TabIndex = 311;
-            this.chkStopOnAntiBot.Text = "Pausar durante Anti-Bot";
-            this.chkStopOnAntiBot.UseVisualStyleBackColor = true;
-            this.chkStopOnAntiBot.CheckedChanged += new System.EventHandler(this.chkStopOnAntiBot_CheckedChanged);
             // 
             // chkStopHealOnCity
             // 
@@ -258,7 +245,6 @@ namespace _4RTools.Forms
         private ToolTip toolTip2;
         private ToolTip toolTip3;
         private ToolTip toolTip4;
-        private CheckBox chkStopOnAntiBot;
         private Label label1;
         private ListBox switchListBox;
     }

@@ -119,7 +119,7 @@ namespace _4RTools.Model
                 bool ammo = false;
                 while (Keyboard.IsKeyDown(config.key))
                 {
-                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                     {
                         getOffRein(roClient);
                         autoSwitchAmmo(roClient, ref ammo);
@@ -136,7 +136,7 @@ namespace _4RTools.Model
                 bool ammo = false;
                 while (Keyboard.IsKeyDown(config.key))
                 {
-                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                     {
                         getOffRein(roClient);
                         autoSwitchAmmo(roClient, ref ammo);
@@ -164,7 +164,7 @@ namespace _4RTools.Model
             while (Keyboard.IsKeyDown(config.key))
             {
                 if (noShift) keybd_event(Constants.VK_SHIFT, 0x45, Constants.KEYEVENTF_EXTENDEDKEY, 0);
-                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                 {
                     getOffRein(roClient);
                     autoSwitchAmmo(roClient, ref ammo);
@@ -196,7 +196,7 @@ namespace _4RTools.Model
             bool ammo = false;
             while (Keyboard.IsKeyDown(config.key))
             {
-                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                 {
                     getOffRein(roClient);
                     autoSwitchAmmo(roClient, ref ammo);
@@ -260,6 +260,11 @@ namespace _4RTools.Model
             return false;
         }
 
+        private bool hasOpenChat(Client c)
+        {
+            return c.ReadOpenChat();
+        }
+
         private Keys toKeys(Key k)
         {
             return (Keys)Enum.Parse(typeof(Keys), k.ToString());
@@ -269,7 +274,7 @@ namespace _4RTools.Model
         {
             while (Keyboard.IsKeyDown(config.key))
             {
-                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                 {
                     getOffRein(roClient);
                     Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);

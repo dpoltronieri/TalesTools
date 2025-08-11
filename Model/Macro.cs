@@ -98,7 +98,7 @@ namespace _4RTools.Model
 
         private int MacroExecutionThread(Client roClient)
         {
-            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !roClient.ReadOpenChat())
             {
                 foreach (ChainConfig chainConfig in this.chainConfigs)
                 {

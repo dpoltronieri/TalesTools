@@ -26,10 +26,9 @@ namespace _4RTools.Model
 
         public _4RThread RestoreStatusThread(Client c)
         {
-            Client roClient = ClientSingleton.GetClient();
             _4RThread statusEffectsThread = new _4RThread(_ =>
             {
-                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                if (!hasBuff(c, EffectStatusIDs.ANTI_BOT) && !c.ReadOpenChat())
                 {
                     for (int i = 0; i <= Constants.MAX_BUFF_LIST_INDEX_SIZE - 1; i++)
                     {

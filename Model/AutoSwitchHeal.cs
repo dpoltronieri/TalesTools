@@ -65,11 +65,12 @@ namespace _4RTools.Model
 
             string currentMap = roClient.ReadCurrentMap();
             bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
-            bool stopSpammersBot = ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot;
             bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
             bool isInCityList = this.listCities.Contains(currentMap);
+            bool hasOpenChat = roClient.ReadOpenChat();
 
-            bool canEquip = !(hasAntiBot && stopSpammersBot)
+            bool canEquip = !hasAntiBot
+                && !hasOpenChat
                 && !(stopHealCity && isInCityList);
 
             if (canEquip)
