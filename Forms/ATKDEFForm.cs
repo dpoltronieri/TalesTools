@@ -9,7 +9,7 @@ namespace _4RTools.Forms
 {
     public partial class ATKDEFForm : Form, IObserver
     {
-        public static int TOTAL_ATKDEF_LANES = 4;
+        public static int TOTAL_ATKDEF_LANES = 8;
         public static int TOTAL_EQUIPS = 6;
         public ATKDEFForm(Subject subject)
         {
