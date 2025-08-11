@@ -69,6 +69,7 @@ namespace _4RTools.Model
                 new Buff("Provocar", EffectStatusIDs.PROVOKE, Resources._4RTools.Icons.provoke),
                 new Buff("Aura de Combate", EffectStatusIDs.FIGHTINGSPIRIT, Resources._4RTools.Icons.fighting_spirit),
                 new Buff("Divina Providência", EffectStatusIDs.PROVIDENCE, Resources._4RTools.Icons.providence),
+                new Buff("Força Titânica", EffectStatusIDs.THURISAZ, Resources._4RTools.Icons.giant_growth),
             };
 
             return skills;
@@ -88,6 +89,7 @@ namespace _4RTools.Model
                 new Buff("Amplificação Mística", EffectStatusIDs.MYST_AMPLIFY, Resources._4RTools.Icons.amplify),
                 new Buff("Maestria Arcana", EffectStatusIDs.RECOGNIZEDSPELL, Resources._4RTools.Icons.recognized_spell),
                 new Buff("Enlouquecedor", EffectStatusIDs.MINDBREAKER, Resources._4RTools.Icons.mindbreaker),
+                new Buff("Distorção Arcana", EffectStatusIDs.STASIS, Resources._4RTools.Icons.stasis),
             };
 
             return skills;
@@ -156,6 +158,7 @@ namespace _4RTools.Model
                 new Buff("Basílica", EffectStatusIDs.BASILICA, Resources._4RTools.Icons.basilica),
                 new Buff("Clementia", EffectStatusIDs.BLESSING, Resources._4RTools.Icons.clementia),
                 new Buff("Canto Candidus", EffectStatusIDs.INC_AGI, Resources._4RTools.Icons.canto_candidus),
+                new Buff("Renovatio", EffectStatusIDs.RENOVATIO, Resources._4RTools.Icons.renovatio),
             };
 
             return skills;
@@ -215,6 +218,7 @@ namespace _4RTools.Model
                 new Buff("Pânico do Justiceiro", EffectStatusIDs.ADJUSTMENT, Resources._4RTools.Icons.adjustment),
                 new Buff("Aumentar Precisão", EffectStatusIDs.ACCURACY, Resources._4RTools.Icons.increase_accuracy),
                 new Buff("Reação Ilimitada", EffectStatusIDs.E_CHAIN, Resources._4RTools.Icons.e_chain),
+                new Buff("Bala Mágica", EffectStatusIDs.MAGICAL_BULLET, Resources._4RTools.Icons.magical_bullet),
             };
 
             return skills;

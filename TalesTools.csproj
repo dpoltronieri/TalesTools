@@ -500,6 +500,7 @@
     <None Include="assets\images\renovatio.png" />
     <None Include="assets\images\stasis.png" />
     <None Include="assets\images\magical_bullet.png" />
+    <None Include="assets\images\giant_growth.png" />
     <Content Include="TalesIcon.ico" />
     <None Include="assets\images\abrasive.gif" />
     <None Include="assets\images\ac_concentration.gif" />
