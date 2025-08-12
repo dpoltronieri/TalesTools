@@ -6,13 +6,32 @@ Este projeto e uma adaptacao do projeto 4RTools para uso pessoal e como objeto d
 
 ## Rodando o projeto
 
-Caso voce queira usar esta versao do 4rTools voce pode baixar 'https://github.com/biancaazuma/TalesTools/releases/download/v3.0.0/TalesTools.-.v3.0.0.rar' com a release que esta na raiz do projeto, ou usando o Visual Studio 2022 abrir o `4RTools.sln` e rodar e gerar suas propias releases.
+Caso voce queira usar esta versao do 4rTools voce pode baixar 'https://github.com/biancaazuma/TalesTools/releases/download/v.3.1.0/TalesTools-v3.1.0.rar' com a release que esta na raiz do projeto, ou usando o Visual Studio 2022 abrir o `4RTools.sln` e rodar e gerar suas propias releases.
 
 ## Copiando perfil
 
 Voce pode copiar e substituir a pastar `Profile` de sua versao anterior do 4RTools para a nova pasta extraida e ambos tem compatibilidade.
 
 ## Custom Features
+### Versão 3.1.0
+- [x] Ajustado Bug troca automatica de munição para skill sem click
+- [x] Novo Autobuff-Skill Anel dos nibelungos
+- [x] Novo Autobuff-Skill Rufar dos Tambores
+- [x] Novo Autobuff-Skill Bala Mágica
+- [x] Novo Autobuff-Skill Distorção Arcana
+- [x] Novo Autobuff-Skill Renovatio
+- [x] Novo Autobuff-Skill Força Titânica
+- [x] Adicionado parar heal em instancia competitiva (Não é preciso selecionar nada ele para automaticamente)
+- [x] Adicionado parar heal com Frenesi (Não é preciso selecionar nada ele para automaticamente)
+- [x] Adicionado parar tudo quando o chat principal é aberto (Não é preciso selecionar nada ele para automaticamente e não funciona em chat privado)(contribuição do endereço pelo @Rod)
+- [x] Adicionado macro switch com click (original 4rtools)
+- [x] Adicionado nova função de equipar item antes de potar
+- [x] Adicionado 5 Atk x Def (totalizando 8)
+- [x] Adicionado botão de prioridade (Pausa AutoBuffs e Autopot quando pressionado e manda a tecla pressionada pro jogo, o delay é a demora de mandar a tecla pressionada)
+- [x] Adicionado nova aba de Auto Switch Heal
+    - auto switch heal para HP e SP (recomendo usar um ou outro se o equipamento for do mesmo tipo (por ex: baixo, meio, topo), o delay é em segundos, e a cada x segundos ele valida o hp e sp e usa o item de acordo com a porcentagem colocada
+    - auto switch heal Pet masterball Professora Célia ( se abaixar de X porcentagem de SP, ele equipa a celia e usa a skill indulgir Y vezes, depois muda para o melhor pet, o delay é relacionado ao apertar a skill)
+
 ### Versão 3.0.0
 - [x] Removido Auto switch de GTB
 - [x] Ajustado Auto switch de Vajra
