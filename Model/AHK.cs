@@ -272,11 +272,13 @@ namespace _4RTools.Model
 
         private void _AHKNoClick(Client roClient, KeyConfig config, Keys thisk)
         {
+            bool ammo = false;
             while (Keyboard.IsKeyDown(config.key))
             {
                 if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                 {
                     getOffRein(roClient);
+                    autoSwitchAmmo(roClient, ref ammo);
                     Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
                 }
                 Thread.Sleep(this.AhkDelay);
