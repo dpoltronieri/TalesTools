@@ -19,8 +19,8 @@ namespace _4RTools.Model
         public const string nextItem = "NEXTITEM";
 
         private _4RThread thread;
-        public int delay { get; set; } = 300;
-        public int switchEquipDelay { get; set; } = 1000;
+        public int delay { get; set; } = 500;
+        public int switchEquipDelay { get; set; } = 3000;
         public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
         public List<AutoSwitchConfig> autoSwitchMapping = new List<AutoSwitchConfig>();
         public List<AutoSwitchConfig> autoSwitchGenericMapping = new List<AutoSwitchConfig>();
@@ -311,14 +311,14 @@ namespace _4RTools.Model
         private void switchPet()
         {
             pressKey(ProfileSingleton.GetCurrent().AutoSwitchHeal.itemKey);
-            Thread.Sleep(1000);
+            Thread.Sleep(1500);
             foreach (var i in Enumerable.Range(0, ProfileSingleton.GetCurrent().AutoSwitchHeal.qtdSkill))
             {
                 pressKey(ProfileSingleton.GetCurrent().AutoSwitchHeal.skillKey);
                 Thread.Sleep(ProfileSingleton.GetCurrent().AutoSwitchHeal.switchDelay);
             }
-            Thread.Sleep(ProfileSingleton.GetCurrent().AutoSwitch.delay);
             pressKey(ProfileSingleton.GetCurrent().AutoSwitchHeal.nextItemKey);
+            Thread.Sleep(ProfileSingleton.GetCurrent().AutoSwitch.switchEquipDelay);
         }
     }
 }

@@ -114,6 +114,7 @@ namespace _4RTools.Model
                     }
                     buffs.Clear();
                 }
+                Thread.Sleep(500);
                 return 0;
             });
 
