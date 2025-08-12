@@ -202,6 +202,13 @@ namespace _4RTools.Utils
         FIGHTINGSPIRIT = 322,
         [Description("Basílica")]
         BASILICA = 1122,
+        [Description("Renovatio")]
+        RENOVATIO = 336,
+        [Description("Distorção Arcana")]
+        STASIS = 356,
+        [Description("Bala Mágica")]
+        MAGICAL_BULLET = 966,
+
         EDEN = 9999,
 
         //ELEMENTAL CONVERTERS

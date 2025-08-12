@@ -45,7 +45,6 @@
             this.firstHP = new System.Windows.Forms.RadioButton();
             this.firstSP = new System.Windows.Forms.RadioButton();
             this.chkStopWitchFC = new System.Windows.Forms.CheckBox();
-            this.chkStopCompetitive = new System.Windows.Forms.CheckBox();
             this.txtHpEquipBefore = new System.Windows.Forms.TextBox();
             this.txtHpEquipAfter = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -239,18 +238,6 @@
             this.chkStopWitchFC.UseVisualStyleBackColor = true;
             this.chkStopWitchFC.CheckedChanged += new System.EventHandler(this.chkStopWitchFC_CheckedChanged);
             // 
-            // chkStopCompetitive
-            // 
-            this.chkStopCompetitive.AutoSize = true;
-            this.chkStopCompetitive.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-            this.chkStopCompetitive.Location = new System.Drawing.Point(12, 119);
-            this.chkStopCompetitive.Name = "chkStopCompetitive";
-            this.chkStopCompetitive.Size = new System.Drawing.Size(126, 17);
-            this.chkStopCompetitive.TabIndex = 50;
-            this.chkStopCompetitive.Text = "Parar em Competitiva";
-            this.chkStopCompetitive.UseVisualStyleBackColor = true;
-            this.chkStopCompetitive.CheckedChanged += new System.EventHandler(this.chkStopCompetitive_CheckedChanged);
-            // 
             // txtHpEquipBefore
             // 
             this.txtHpEquipBefore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(51)))), ((int)(((byte)(56)))));
@@ -315,7 +302,6 @@
             this.Controls.Add(this.txtHpEquipAfter);
             this.Controls.Add(this.txtAutopotDelay);
             this.Controls.Add(this.chkStopWitchFC);
-            this.Controls.Add(this.chkStopCompetitive);
             this.Controls.Add(this.firstSP);
             this.Controls.Add(this.firstHP);
             this.Controls.Add(this.label5);
@@ -365,7 +351,6 @@
         private System.Windows.Forms.RadioButton firstHP;
         private System.Windows.Forms.RadioButton firstSP;
         private System.Windows.Forms.CheckBox chkStopWitchFC;
-        private System.Windows.Forms.CheckBox chkStopCompetitive;
         private System.Windows.Forms.TextBox txtHpEquipBefore;
         private System.Windows.Forms.TextBox txtHpEquipAfter;
         private System.Windows.Forms.Label label6;

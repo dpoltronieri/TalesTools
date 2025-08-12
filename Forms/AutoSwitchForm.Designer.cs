@@ -432,7 +432,7 @@ namespace _4RTools.Forms
             this.numDelay.TabIndex = 319;
             this.numDelay.Tag = "delay";
             this.numDelay.Value = new decimal(new int[] {
-            300,
+            500,
             0,
             0,
             0});
@@ -454,7 +454,7 @@ namespace _4RTools.Forms
             this.numSwitchDelay.TabIndex = 320;
             this.numSwitchDelay.Tag = "switchDelay";
             this.numSwitchDelay.Value = new decimal(new int[] {
-            1000,
+            3000,
             0,
             0,
             0});

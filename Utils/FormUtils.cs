@@ -19,22 +19,7 @@ namespace _4RTools.Utils
                 TextBox textBox = (TextBox)sender;
                 Key thisk;
 
-                if (e.KeyCode.ToString() == "Oemplus")
-                {
-                    thisk = Key.OemPlus;
-                }
-                else if (e.KeyCode.ToString() == "Oemtilde")
-                {
-                    thisk = Key.OemTilde;
-                }
-                else if (e.KeyCode.ToString() == "Oemcomma")
-                {
-                    thisk = Key.OemComma;
-                }
-                else
-                {
-                    thisk = (Key)Enum.Parse(typeof(Key), e.KeyCode.ToString());
-                }
+                thisk = (Key)Enum.Parse(typeof(Key), e.KeyCode.ToString());
 
                 switch (thisk)
                 {

@@ -54,11 +54,7 @@ namespace _4RTools.Model
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                if (this.thread != null)
-                {
-                    _4RThread.Stop(this.thread);
-                }
-
+                Stop();
                 this.thread = new _4RThread(_ => AHKThreadExecution(roClient));
                 _4RThread.Start(this.thread);
             }
@@ -123,7 +119,7 @@ namespace _4RTools.Model
                 bool ammo = false;
                 while (Keyboard.IsKeyDown(config.key))
                 {
-                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                     {
                         getOffRein(roClient);
                         autoSwitchAmmo(roClient, ref ammo);
@@ -140,7 +136,7 @@ namespace _4RTools.Model
                 bool ammo = false;
                 while (Keyboard.IsKeyDown(config.key))
                 {
-                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                    if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                     {
                         getOffRein(roClient);
                         autoSwitchAmmo(roClient, ref ammo);
@@ -168,7 +164,7 @@ namespace _4RTools.Model
             while (Keyboard.IsKeyDown(config.key))
             {
                 if (noShift) keybd_event(Constants.VK_SHIFT, 0x45, Constants.KEYEVENTF_EXTENDEDKEY, 0);
-                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                 {
                     getOffRein(roClient);
                     autoSwitchAmmo(roClient, ref ammo);
@@ -200,7 +196,7 @@ namespace _4RTools.Model
             bool ammo = false;
             while (Keyboard.IsKeyDown(config.key))
             {
-                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                 {
                     getOffRein(roClient);
                     autoSwitchAmmo(roClient, ref ammo);
@@ -264,6 +260,11 @@ namespace _4RTools.Model
             return false;
         }
 
+        private bool hasOpenChat(Client c)
+        {
+            return c.ReadOpenChat();
+        }
+
         private Keys toKeys(Key k)
         {
             return (Keys)Enum.Parse(typeof(Keys), k.ToString());
@@ -271,11 +272,13 @@ namespace _4RTools.Model
 
         private void _AHKNoClick(Client roClient, KeyConfig config, Keys thisk)
         {
+            bool ammo = false;
             while (Keyboard.IsKeyDown(config.key))
             {
-                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !hasOpenChat(roClient))
                 {
                     getOffRein(roClient);
+                    autoSwitchAmmo(roClient, ref ammo);
                     Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
                 }
                 Thread.Sleep(this.AhkDelay);
@@ -300,7 +303,10 @@ namespace _4RTools.Model
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread);
+            if (this.thread != null)
+            {
+                _4RThread.Stop(this.thread);
+            }
         }
 
         public string GetConfiguration()

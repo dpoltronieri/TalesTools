@@ -177,6 +177,13 @@ namespace _4RTools.Model
         {
             return BitConverter.ToUInt32(PMR.ReadProcessMemory((IntPtr)address, 4u, out _num), 0);
         }
+
+        public byte ReadMemoryAsByte(int address)
+        {
+            byte[] bytes = PMR.ReadProcessMemory((IntPtr)address, 1, out _num);
+
+            return bytes[0];
+        }
         public void WriteMemory(int address, uint intToWrite)
         {
             PMR.WriteProcessMemory((IntPtr)address, BitConverter.GetBytes(intToWrite), out _num);
@@ -229,6 +236,10 @@ namespace _4RTools.Model
         public string ReadCurrentMap()
         {
             return ReadMemoryAsString(this.currentMapAddress);
+        }
+        public bool ReadOpenChat()
+        {
+            return Convert.ToBoolean(ReadMemoryAsByte(0x00CE5B48));
         }
 
         public uint ReadMaxSp()

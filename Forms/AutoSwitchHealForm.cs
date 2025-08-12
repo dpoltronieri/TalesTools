@@ -81,9 +81,13 @@ namespace _4RTools.Forms
                 var property = typeof(AutoSwitchHeal).GetProperty(txtbox.Name.Substring(3));
                 if (property != null)
                 {
-                    property.SetValue(this.autoSwitchHeal, key);
+                    var oldValue = property.GetValue(this.autoSwitchHeal);
+                    if (!Equals(oldValue, key))
+                    {
+                        property.SetValue(this.autoSwitchHeal, key);
+                        ProfileSingleton.SetConfiguration(this.autoSwitchHeal);
+                    }
                 }
-                ProfileSingleton.SetConfiguration(this.autoSwitchHeal);
                 this.ActiveControl = null;
             }
             catch (Exception ex)
@@ -101,9 +105,13 @@ namespace _4RTools.Forms
                 var property = typeof(AutoSwitchHeal).GetProperty(numericUpDown.Name.Substring(3));
                 if (property != null)
                 {
-                    property.SetValue(this.autoSwitchHeal, percent);
+                    var oldValue = property.GetValue(this.autoSwitchHeal);
+                    if (!Equals(oldValue, percent))
+                    {
+                        property.SetValue(this.autoSwitchHeal, percent);
+                        ProfileSingleton.SetConfiguration(this.autoSwitchHeal);
+                    }
                 }
-                ProfileSingleton.SetConfiguration(this.autoSwitchHeal);
                 this.ActiveControl = null;
             }
             catch (Exception ex)

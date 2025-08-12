@@ -16,6 +16,7 @@ namespace _4RTools.Model
         private _4RThread thread;
         public int delay { get; set; } = 100;
         public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
+        [JsonIgnore]
         public List<String> listCities { get; set; }
 
         public AutoBuffStuff(string actionName)
@@ -25,14 +26,10 @@ namespace _4RTools.Model
 
         public void Start()
         {
-            Stop();
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                if (this.thread != null)
-                {
-                    _4RThread.Stop(this.thread);
-                }
+                Stop();
                 if (this.listCities == null || this.listCities.Count == 0) this.listCities = LocalServerManager.GetListCities();
                 this.thread = AutoBuffThread(roClient);
                 _4RThread.Start(this.thread);
@@ -49,7 +46,14 @@ namespace _4RTools.Model
                 bool foundQuag = false;
                 bool foundDecreaseAgi = false;
                 string currentMap = c.ReadCurrentMap();
-                if (!ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity || this.listCities.Contains(currentMap) == false)
+                bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+                bool isInCityList = this.listCities.Contains(currentMap);
+                bool hasOpenChat = c.ReadOpenChat();
+
+                bool canAutobuff = !hasOpenChat
+                    && !(stopHealCity && isInCityList);
+
+                if (canAutobuff)
                 {
                     List<EffectStatusIDs> buffs = new List<EffectStatusIDs>();
                     Dictionary<EffectStatusIDs, Key> bmClone = new Dictionary<EffectStatusIDs, Key>(this.buffMapping);
@@ -83,7 +87,7 @@ namespace _4RTools.Model
                         if (status == EffectStatusIDs.DECREASE_AGI) foundDecreaseAgi = true;
                     }
                     buffs.Clear();
-                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && !c.ReadOpenChat())
                     {
                         foreach (var item in bmClone)
                         {
@@ -103,7 +107,7 @@ namespace _4RTools.Model
                         }
                     }
                 }
-                Thread.Sleep(300);
+                Thread.Sleep(500);
                 return 0;
 
             });
@@ -130,7 +134,10 @@ namespace _4RTools.Model
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread);
+            if (this.thread != null)
+            {
+                _4RThread.Stop(this.thread);
+            }
         }
 
         public string GetConfiguration()

@@ -19,14 +19,14 @@ namespace _4RTools.Model
         public const string nextItem = "NEXTITEM";
 
         private _4RThread thread;
-        public int delay { get; set; } = 300;
-        public int switchEquipDelay { get; set; } = 1000;
+        public int delay { get; set; } = 500;
+        public int switchEquipDelay { get; set; } = 3000;
         public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
         public List<AutoSwitchConfig> autoSwitchMapping = new List<AutoSwitchConfig>();
         public List<AutoSwitchConfig> autoSwitchGenericMapping = new List<AutoSwitchConfig>();
 
         public List<EffectStatusIDs> autoSwitchOrder { get; set; } = new List<EffectStatusIDs>();
-
+        [JsonIgnore]
         public List<String> listCities { get; set; }
 
         public class AutoSwitchConfig
@@ -67,15 +67,13 @@ namespace _4RTools.Model
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                if (this.thread != null)
-                {
-                    _4RThread.Stop(this.thread);
-                }
-                if (this.listCities == null || this.listCities.Count == 0) this.listCities = LocalServerManager.GetListCities();
+                Stop();
+                if (this.listCities == null || this.listCities.Count == 0) this.listCities = GlobalVariablesHelper.CityList;
                 this.thread = AutoSwitchThread(roClient);
                 _4RThread.Start(this.thread);
             }
         }
+
 
         public _4RThread AutoSwitchThread(Client c)
         {
@@ -94,103 +92,118 @@ namespace _4RTools.Model
             var currentPet = EffectStatusIDs.PROVOKE;
             bool equipedPet = false;
             bool procPet = true;
-            _4RThread autobuffItemThread = new _4RThread(_ =>
+            _4RThread autoSwitchThread = new _4RThread(_ =>
             {
                 procVajra = false;
                 List<AutoSwitchConfig> skillClone = new List<AutoSwitchConfig>(this.autoSwitchMapping.Where(x => x.itemKey != Key.None));
                 List<AutoSwitchConfig> skillCloneGeneric = new List<AutoSwitchConfig>(this.autoSwitchGenericMapping.Where(x => x.itemKey != Key.None));
                 string currentMap = c.ReadCurrentMap();
-                if (!hasBuff(c, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+                bool hasAntiBot = hasBuff(c, EffectStatusIDs.ANTI_BOT);
+                bool stopBuffsCity = ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity;
+                bool isInCityList = this.listCities.Contains(currentMap);
+                bool hasOpenChat = c.ReadOpenChat();
+                var autoSwitchHeal = ProfileSingleton.GetCurrent().AutoSwitchHeal;
+                bool canSwitch = !hasAntiBot
+                && !hasOpenChat
+                && !(stopBuffsCity && isInCityList);
+
+                if (KeyboardHookHelper.HandlePriorityKey())
+                    return 0;
+
+                if (canSwitch)
                 {
-                    if (!ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity || this.listCities.Contains(currentMap) == false)
+                    if (c.IsSpBelow(ProfileSingleton.GetCurrent().AutoSwitchHeal.spPercent) && c.IsHpAbove(10))
                     {
-                        for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+                        switchPet();
+                        equipedPet = false;
+                        procPet = true;
+                    }
+                    for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+                    {
+                        uint currentStatus = c.CurrentBuffStatusCode(i);
+
+                        if (currentStatus == uint.MaxValue) { continue; }
+
+                        EffectStatusIDs status = (EffectStatusIDs)currentStatus;
+
+                        if (effectStatusProcMapping.Exists(x => x == status) && status == currentPet)
                         {
-                            uint currentStatus = c.CurrentBuffStatusCode(i);
-
-                            if (currentStatus == uint.MaxValue) { continue; }
-
-                            EffectStatusIDs status = (EffectStatusIDs)currentStatus;
-
-                            if (effectStatusProcMapping.Exists(x => x == status) && status == currentPet)
+                            if (equipedPet)
                             {
-                                if (equipedPet)
-                                {
-                                    equipedPet = false;
-                                    this.equipNextItem(autoSwitchMapping.FirstOrDefault(x => x.skillId == status).nextItemKey);
-                                    procPet = true;
-                                }
-                            }
-
-                            if (autoSwitchMapping.Exists(x => x.skillId == status))
-                            {
-                                skillClone = skillClone.Where(skill => skill.skillId != status).ToList();
-                            }
-
-                            if (autoSwitchGenericMapping.Exists(x => x.skillId == status))
-                            {
-                                skillCloneGeneric = skillCloneGeneric.Where(skill => skill.skillId != status).ToList();
-                            }
-
-                            if (status == EffectStatusIDs.THURISAZ || status == EffectStatusIDs.FIGHTINGSPIRIT)
-                            {
-
-                                if (equipVajra)
-                                {
-                                    equipVajra = false;
-                                    this.equipNextItem(autoSwitchMapping.FirstOrDefault(x => x.skillId == EffectStatusIDs.THURISAZ).nextItemKey);
-                                }
-                                skillClone = validadeVajraSkills(skillClone, status);
-                                procVajra = true;
+                                equipedPet = false;
+                                this.equipNextItem(autoSwitchMapping.FirstOrDefault(x => x.skillId == status).nextItemKey);
+                                procPet = true;
                             }
                         }
-                        var order = ProfileSingleton.GetCurrent().AutoSwitch.autoSwitchOrder;
-                        skillClone.AddRange(skillCloneGeneric);
 
-                        skillClone = skillClone
-                        .OrderBy(p => order.IndexOf(p.skillId) == -1 ? int.MaxValue : order.IndexOf(p.skillId))
-                        .ToList();
-
-                        skillClone = skillClone.Where(p => p == skillClone.FirstOrDefault() || !order.Contains(p.skillId)).ToList();
-
-                        foreach (var skill in skillClone)
+                        if (autoSwitchMapping.Exists(x => x.skillId == status))
                         {
-                            if (effectStatusProcMapping.Contains(skill.skillId) && skill.itemKey != Key.None)
+                            skillClone = skillClone.Where(skill => skill.skillId != status).ToList();
+                        }
+
+                        if (autoSwitchGenericMapping.Exists(x => x.skillId == status))
+                        {
+                            skillCloneGeneric = skillCloneGeneric.Where(skill => skill.skillId != status).ToList();
+                        }
+
+                        if (status == EffectStatusIDs.THURISAZ || status == EffectStatusIDs.FIGHTINGSPIRIT)
+                        {
+
+                            if (equipVajra)
                             {
-                                contPet++;
-
-                                preventErrorsPet(ref contPet, ref equipedPet, ref procPet, skill);
-
-                                if (!equipedPet && procPet)
-                                {
-                                    currentPet = skill.skillId;
-                                    Thread.Sleep(switchEquipDelay);
-                                    this.useAutobuff(skill.itemKey, skill.skillKey);
-                                    equipedPet = true;
-                                    procPet = false;
-                                }
-                            }
-                            else if (skill.skillId == EffectStatusIDs.THURISAZ || skill.skillId == EffectStatusIDs.FIGHTINGSPIRIT)
-                            {
-                                contVajra++;
-
-                                if (contVajra > 50) { contVajra = 0; equipVajra = false; }
-
-                                if (!equipVajra)
-                                {
-                                    Thread.Sleep(delay);
-                                    this.useAutobuff(skill.itemKey, skill.skillKey);
-                                    equipVajra = true;
-                                }
-                            }
-                            else if (c.ReadCurrentSp() > 8)
-                            {
-                                this.useAutobuff(skill.itemKey, skill.skillKey);
-                                Thread.Sleep(switchEquipDelay);
-                                this.equipNextItem(skill.nextItemKey);
                                 equipVajra = false;
-                                Thread.Sleep(switchEquipDelay);
+                                this.equipNextItem(autoSwitchMapping.FirstOrDefault(x => x.skillId == EffectStatusIDs.THURISAZ).nextItemKey);
                             }
+                            skillClone = validadeVajraSkills(skillClone, status);
+                            procVajra = true;
+                        }
+                    }
+                    var order = ProfileSingleton.GetCurrent().AutoSwitch.autoSwitchOrder;
+                    skillClone.AddRange(skillCloneGeneric);
+
+                    skillClone = skillClone
+                    .OrderBy(p => order.IndexOf(p.skillId) == -1 ? int.MaxValue : order.IndexOf(p.skillId))
+                    .ToList();
+
+                    skillClone = skillClone.Where(p => p == skillClone.FirstOrDefault() || !order.Contains(p.skillId)).ToList();
+
+                    foreach (var skill in skillClone)
+                    {
+                        if (effectStatusProcMapping.Contains(skill.skillId) && skill.itemKey != Key.None)
+                        {
+                            contPet++;
+
+                            preventErrorsPet(ref contPet, ref equipedPet, ref procPet, skill);
+
+                            if (!equipedPet && procPet)
+                            {
+                                currentPet = skill.skillId;
+                                Thread.Sleep(switchEquipDelay);
+                                this.useAutobuff(skill.itemKey, skill.skillKey);
+                                equipedPet = true;
+                                procPet = false;
+                            }
+                        }
+                        else if (skill.skillId == EffectStatusIDs.THURISAZ || skill.skillId == EffectStatusIDs.FIGHTINGSPIRIT)
+                        {
+                            contVajra++;
+
+                            if (contVajra > 50) { contVajra = 0; equipVajra = false; }
+
+                            if (!equipVajra)
+                            {
+                                Thread.Sleep(delay);
+                                this.useAutobuff(skill.itemKey, skill.skillKey);
+                                equipVajra = true;
+                            }
+                        }
+                        else if (c.ReadCurrentSp() > 8)
+                        {
+                            this.useAutobuff(skill.itemKey, skill.skillKey);
+                            Thread.Sleep(switchEquipDelay);
+                            this.equipNextItem(skill.nextItemKey);
+                            equipVajra = false;
+                            Thread.Sleep(switchEquipDelay);
                         }
                     }
                 }
@@ -199,7 +212,7 @@ namespace _4RTools.Model
 
             });
 
-            return autobuffItemThread;
+            return autoSwitchThread;
         }
         private List<AutoSwitchConfig> validadeVajraSkills(List<AutoSwitchConfig> skillClone, EffectStatusIDs status)
         {
@@ -252,7 +265,10 @@ namespace _4RTools.Model
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread);
+            if (this.thread != null)
+            {
+                _4RThread.Stop(this.thread);
+            }
         }
 
         public string GetConfiguration()
@@ -283,6 +299,26 @@ namespace _4RTools.Model
         public void SetAutoSwitchOrder(List<EffectStatusIDs> buffs)
         {
             this.autoSwitchOrder = buffs;
+        }
+
+        private void pressKey(Key key)
+        {
+            if ((key != Key.None) && !Keyboard.IsKeyDown(Key.LeftAlt) && !Keyboard.IsKeyDown(Key.RightAlt))
+            {
+                Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, (Keys)Enum.Parse(typeof(Keys), key.ToString()), 0);
+            }
+        }
+        private void switchPet()
+        {
+            pressKey(ProfileSingleton.GetCurrent().AutoSwitchHeal.itemKey);
+            Thread.Sleep(1500);
+            foreach (var i in Enumerable.Range(0, ProfileSingleton.GetCurrent().AutoSwitchHeal.qtdSkill))
+            {
+                pressKey(ProfileSingleton.GetCurrent().AutoSwitchHeal.skillKey);
+                Thread.Sleep(ProfileSingleton.GetCurrent().AutoSwitchHeal.switchDelay);
+            }
+            pressKey(ProfileSingleton.GetCurrent().AutoSwitchHeal.nextItemKey);
+            Thread.Sleep(ProfileSingleton.GetCurrent().AutoSwitch.switchEquipDelay);
         }
     }
 }

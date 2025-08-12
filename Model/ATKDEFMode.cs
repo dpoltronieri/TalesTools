@@ -83,10 +83,7 @@ namespace _4RTools.Model
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                if (this.thread != null)
-                {
-                    _4RThread.Stop(this.thread);
-                }
+                Stop();
                 this.thread = new _4RThread(_ => AHKThreadExecution(roClient));
                 _4RThread.Start(this.thread);
             }
@@ -94,7 +91,7 @@ namespace _4RTools.Model
 
         private int AHKThreadExecution(Client roClient)
         {
-            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !roClient.ReadOpenChat())
             {
                 foreach (EquipConfig equipConfig in this.equipConfigs)
                 {
@@ -109,6 +106,10 @@ namespace _4RTools.Model
 
                         while (Keyboard.IsKeyDown(equipConfig.keySpammer))
                         {
+                            if (hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || roClient.ReadOpenChat())
+                            {
+                                return 0;
+                            }
                             if (!equipAtkItems)
                             {
                                 foreach (Key key in equipConfig.atkKeys.Values)
@@ -239,7 +240,10 @@ namespace _4RTools.Model
 
         public void Stop()
         {
-            _4RThread.Stop(this.thread);
+            if (this.thread != null)
+            {
+                _4RThread.Stop(this.thread);
+            }
         }
     }
 }
