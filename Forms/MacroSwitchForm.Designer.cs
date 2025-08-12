@@ -331,6 +331,76 @@
             this.in7mac10 = new System.Windows.Forms.TextBox();
             this.in1mac10 = new System.Windows.Forms.TextBox();
             this.chainGroup10 = new System.Windows.Forms.GroupBox();
+            this.in7mac1click = new System.Windows.Forms.CheckBox();
+            this.in6mac1click = new System.Windows.Forms.CheckBox();
+            this.in5mac1click = new System.Windows.Forms.CheckBox();
+            this.in4mac1click = new System.Windows.Forms.CheckBox();
+            this.in3mac1click = new System.Windows.Forms.CheckBox();
+            this.in2mac1click = new System.Windows.Forms.CheckBox();
+            this.in1mac1click = new System.Windows.Forms.CheckBox();
+            this.in7mac2click = new System.Windows.Forms.CheckBox();
+            this.in6mac2click = new System.Windows.Forms.CheckBox();
+            this.in5mac2click = new System.Windows.Forms.CheckBox();
+            this.in4mac2click = new System.Windows.Forms.CheckBox();
+            this.in3mac2click = new System.Windows.Forms.CheckBox();
+            this.in2mac2click = new System.Windows.Forms.CheckBox();
+            this.in1mac2click = new System.Windows.Forms.CheckBox();
+            this.in7mac3click = new System.Windows.Forms.CheckBox();
+            this.in6mac3click = new System.Windows.Forms.CheckBox();
+            this.in5mac3click = new System.Windows.Forms.CheckBox();
+            this.in4mac3click = new System.Windows.Forms.CheckBox();
+            this.in3mac3click = new System.Windows.Forms.CheckBox();
+            this.in2mac3click = new System.Windows.Forms.CheckBox();
+            this.in1mac3click = new System.Windows.Forms.CheckBox();
+            this.in7mac4click = new System.Windows.Forms.CheckBox();
+            this.in6mac4click = new System.Windows.Forms.CheckBox();
+            this.in5mac4click = new System.Windows.Forms.CheckBox();
+            this.in4mac4click = new System.Windows.Forms.CheckBox();
+            this.in3mac4click = new System.Windows.Forms.CheckBox();
+            this.in2mac4click = new System.Windows.Forms.CheckBox();
+            this.in1mac4click = new System.Windows.Forms.CheckBox();
+            this.in7mac5click = new System.Windows.Forms.CheckBox();
+            this.in6mac5click = new System.Windows.Forms.CheckBox();
+            this.in5mac5click = new System.Windows.Forms.CheckBox();
+            this.in4mac5click = new System.Windows.Forms.CheckBox();
+            this.in3mac5click = new System.Windows.Forms.CheckBox();
+            this.in2mac5click = new System.Windows.Forms.CheckBox();
+            this.in1mac5click = new System.Windows.Forms.CheckBox();
+            this.in7mac6click = new System.Windows.Forms.CheckBox();
+            this.in6mac6click = new System.Windows.Forms.CheckBox();
+            this.in5mac6click = new System.Windows.Forms.CheckBox();
+            this.in4mac6click = new System.Windows.Forms.CheckBox();
+            this.in3mac6click = new System.Windows.Forms.CheckBox();
+            this.in2mac6click = new System.Windows.Forms.CheckBox();
+            this.in1mac6click = new System.Windows.Forms.CheckBox();
+            this.in7mac7click = new System.Windows.Forms.CheckBox();
+            this.in6mac7click = new System.Windows.Forms.CheckBox();
+            this.in5mac7click = new System.Windows.Forms.CheckBox();
+            this.in4mac7click = new System.Windows.Forms.CheckBox();
+            this.in3mac7click = new System.Windows.Forms.CheckBox();
+            this.in2mac7click = new System.Windows.Forms.CheckBox();
+            this.in1mac7click = new System.Windows.Forms.CheckBox();
+            this.in7mac8click = new System.Windows.Forms.CheckBox();
+            this.in6mac8click = new System.Windows.Forms.CheckBox();
+            this.in5mac8click = new System.Windows.Forms.CheckBox();
+            this.in4mac8click = new System.Windows.Forms.CheckBox();
+            this.in3mac8click = new System.Windows.Forms.CheckBox();
+            this.in2mac8click = new System.Windows.Forms.CheckBox();
+            this.in1mac8click = new System.Windows.Forms.CheckBox();
+            this.in7mac9click = new System.Windows.Forms.CheckBox();
+            this.in6mac9click = new System.Windows.Forms.CheckBox();
+            this.in5mac9click = new System.Windows.Forms.CheckBox();
+            this.in4mac9click = new System.Windows.Forms.CheckBox();
+            this.in3mac9click = new System.Windows.Forms.CheckBox();
+            this.in2mac9click = new System.Windows.Forms.CheckBox();
+            this.in1mac9click = new System.Windows.Forms.CheckBox();
+            this.in7mac10click = new System.Windows.Forms.CheckBox();
+            this.in6mac10click = new System.Windows.Forms.CheckBox();
+            this.in5mac10click = new System.Windows.Forms.CheckBox();
+            this.in4mac10click = new System.Windows.Forms.CheckBox();
+            this.in3mac10click = new System.Windows.Forms.CheckBox();
+            this.in2mac10click = new System.Windows.Forms.CheckBox();
+            this.in1mac10click = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.in1mac1delay)).BeginInit();
@@ -874,6 +944,13 @@
             // chainGroup1
             // 
             this.chainGroup1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup1.Controls.Add(this.in7mac1click);
+            this.chainGroup1.Controls.Add(this.in6mac1click);
+            this.chainGroup1.Controls.Add(this.in5mac1click);
+            this.chainGroup1.Controls.Add(this.in4mac1click);
+            this.chainGroup1.Controls.Add(this.in3mac1click);
+            this.chainGroup1.Controls.Add(this.in2mac1click);
+            this.chainGroup1.Controls.Add(this.in1mac1click);
             this.chainGroup1.Controls.Add(this.in1mac1);
             this.chainGroup1.Controls.Add(this.in7mac1);
             this.chainGroup1.Controls.Add(this.in6mac1);
@@ -915,6 +992,13 @@
             // chainGroup2
             // 
             this.chainGroup2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup2.Controls.Add(this.in7mac2click);
+            this.chainGroup2.Controls.Add(this.in6mac2click);
+            this.chainGroup2.Controls.Add(this.in5mac2click);
+            this.chainGroup2.Controls.Add(this.in4mac2click);
+            this.chainGroup2.Controls.Add(this.in3mac2click);
+            this.chainGroup2.Controls.Add(this.in2mac2click);
+            this.chainGroup2.Controls.Add(this.in1mac2click);
             this.chainGroup2.Controls.Add(this.in1mac2);
             this.chainGroup2.Controls.Add(this.in7mac2);
             this.chainGroup2.Controls.Add(this.in6mac2);
@@ -1279,6 +1363,13 @@
             // chainGroup3
             // 
             this.chainGroup3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup3.Controls.Add(this.in7mac3click);
+            this.chainGroup3.Controls.Add(this.in6mac3click);
+            this.chainGroup3.Controls.Add(this.in5mac3click);
+            this.chainGroup3.Controls.Add(this.in4mac3click);
+            this.chainGroup3.Controls.Add(this.in3mac3click);
+            this.chainGroup3.Controls.Add(this.in2mac3click);
+            this.chainGroup3.Controls.Add(this.in1mac3click);
             this.chainGroup3.Controls.Add(this.in1mac3);
             this.chainGroup3.Controls.Add(this.in7mac3);
             this.chainGroup3.Controls.Add(this.in6mac3);
@@ -1643,6 +1734,13 @@
             // chainGroup4
             // 
             this.chainGroup4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup4.Controls.Add(this.in7mac4click);
+            this.chainGroup4.Controls.Add(this.in6mac4click);
+            this.chainGroup4.Controls.Add(this.in5mac4click);
+            this.chainGroup4.Controls.Add(this.in4mac4click);
+            this.chainGroup4.Controls.Add(this.in3mac4click);
+            this.chainGroup4.Controls.Add(this.in2mac4click);
+            this.chainGroup4.Controls.Add(this.in1mac4click);
             this.chainGroup4.Controls.Add(this.in1mac4);
             this.chainGroup4.Controls.Add(this.in7mac4);
             this.chainGroup4.Controls.Add(this.in6mac4);
@@ -2007,6 +2105,13 @@
             // chainGroup5
             // 
             this.chainGroup5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup5.Controls.Add(this.in7mac5click);
+            this.chainGroup5.Controls.Add(this.in6mac5click);
+            this.chainGroup5.Controls.Add(this.in5mac5click);
+            this.chainGroup5.Controls.Add(this.in4mac5click);
+            this.chainGroup5.Controls.Add(this.in3mac5click);
+            this.chainGroup5.Controls.Add(this.in2mac5click);
+            this.chainGroup5.Controls.Add(this.in1mac5click);
             this.chainGroup5.Controls.Add(this.in1mac5);
             this.chainGroup5.Controls.Add(this.in7mac5);
             this.chainGroup5.Controls.Add(this.in6mac5);
@@ -2371,6 +2476,13 @@
             // chainGroup6
             // 
             this.chainGroup6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup6.Controls.Add(this.in7mac6click);
+            this.chainGroup6.Controls.Add(this.in6mac6click);
+            this.chainGroup6.Controls.Add(this.in5mac6click);
+            this.chainGroup6.Controls.Add(this.in4mac6click);
+            this.chainGroup6.Controls.Add(this.in3mac6click);
+            this.chainGroup6.Controls.Add(this.in2mac6click);
+            this.chainGroup6.Controls.Add(this.in1mac6click);
             this.chainGroup6.Controls.Add(this.in1mac6);
             this.chainGroup6.Controls.Add(this.in7mac6);
             this.chainGroup6.Controls.Add(this.in6mac6);
@@ -2735,6 +2847,13 @@
             // chainGroup8
             // 
             this.chainGroup8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup8.Controls.Add(this.in7mac8click);
+            this.chainGroup8.Controls.Add(this.in6mac8click);
+            this.chainGroup8.Controls.Add(this.in5mac8click);
+            this.chainGroup8.Controls.Add(this.in4mac8click);
+            this.chainGroup8.Controls.Add(this.in3mac8click);
+            this.chainGroup8.Controls.Add(this.in2mac8click);
+            this.chainGroup8.Controls.Add(this.in1mac8click);
             this.chainGroup8.Controls.Add(this.in1mac8);
             this.chainGroup8.Controls.Add(this.in7mac8);
             this.chainGroup8.Controls.Add(this.in6mac8);
@@ -3099,6 +3218,13 @@
             // chainGroup7
             // 
             this.chainGroup7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup7.Controls.Add(this.in7mac7click);
+            this.chainGroup7.Controls.Add(this.in6mac7click);
+            this.chainGroup7.Controls.Add(this.in5mac7click);
+            this.chainGroup7.Controls.Add(this.in4mac7click);
+            this.chainGroup7.Controls.Add(this.in3mac7click);
+            this.chainGroup7.Controls.Add(this.in2mac7click);
+            this.chainGroup7.Controls.Add(this.in1mac7click);
             this.chainGroup7.Controls.Add(this.in1mac7);
             this.chainGroup7.Controls.Add(this.in7mac7);
             this.chainGroup7.Controls.Add(this.in6mac7);
@@ -3463,6 +3589,13 @@
             // chainGroup9
             // 
             this.chainGroup9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup9.Controls.Add(this.in7mac9click);
+            this.chainGroup9.Controls.Add(this.in6mac9click);
+            this.chainGroup9.Controls.Add(this.in5mac9click);
+            this.chainGroup9.Controls.Add(this.in4mac9click);
+            this.chainGroup9.Controls.Add(this.in3mac9click);
+            this.chainGroup9.Controls.Add(this.in2mac9click);
+            this.chainGroup9.Controls.Add(this.in1mac9click);
             this.chainGroup9.Controls.Add(this.in1mac9);
             this.chainGroup9.Controls.Add(this.in7mac9);
             this.chainGroup9.Controls.Add(this.in6mac9);
@@ -4150,6 +4283,13 @@
             // chainGroup10
             // 
             this.chainGroup10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.chainGroup10.Controls.Add(this.in7mac10click);
+            this.chainGroup10.Controls.Add(this.in6mac10click);
+            this.chainGroup10.Controls.Add(this.in5mac10click);
+            this.chainGroup10.Controls.Add(this.in4mac10click);
+            this.chainGroup10.Controls.Add(this.in3mac10click);
+            this.chainGroup10.Controls.Add(this.in2mac10click);
+            this.chainGroup10.Controls.Add(this.in1mac10click);
             this.chainGroup10.Controls.Add(this.in1mac10);
             this.chainGroup10.Controls.Add(this.in7mac10);
             this.chainGroup10.Controls.Add(this.in6mac10);
@@ -4188,13 +4328,713 @@
             this.chainGroup10.TabStop = false;
             this.chainGroup10.Text = "Switch 10";
             // 
+            // in7mac1click
+            // 
+            this.in7mac1click.AutoSize = true;
+            this.in7mac1click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac1click.Name = "in7mac1click";
+            this.in7mac1click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac1click.TabIndex = 294;
+            this.in7mac1click.Text = "Click";
+            this.in7mac1click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac1click
+            // 
+            this.in6mac1click.AutoSize = true;
+            this.in6mac1click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac1click.Name = "in6mac1click";
+            this.in6mac1click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac1click.TabIndex = 293;
+            this.in6mac1click.Text = "Click";
+            this.in6mac1click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac1click
+            // 
+            this.in5mac1click.AutoSize = true;
+            this.in5mac1click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac1click.Name = "in5mac1click";
+            this.in5mac1click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac1click.TabIndex = 292;
+            this.in5mac1click.Text = "Click";
+            this.in5mac1click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac1click
+            // 
+            this.in4mac1click.AutoSize = true;
+            this.in4mac1click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac1click.Name = "in4mac1click";
+            this.in4mac1click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac1click.TabIndex = 291;
+            this.in4mac1click.Text = "Click";
+            this.in4mac1click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac1click
+            // 
+            this.in3mac1click.AutoSize = true;
+            this.in3mac1click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac1click.Name = "in3mac1click";
+            this.in3mac1click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac1click.TabIndex = 290;
+            this.in3mac1click.Text = "Click";
+            this.in3mac1click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac1click
+            // 
+            this.in2mac1click.AutoSize = true;
+            this.in2mac1click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac1click.Name = "in2mac1click";
+            this.in2mac1click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac1click.TabIndex = 289;
+            this.in2mac1click.Text = "Click";
+            this.in2mac1click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac1click
+            // 
+            this.in1mac1click.AutoSize = true;
+            this.in1mac1click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac1click.Name = "in1mac1click";
+            this.in1mac1click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac1click.TabIndex = 288;
+            this.in1mac1click.Text = "Click";
+            this.in1mac1click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac2click
+            // 
+            this.in7mac2click.AutoSize = true;
+            this.in7mac2click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac2click.Name = "in7mac2click";
+            this.in7mac2click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac2click.TabIndex = 294;
+            this.in7mac2click.Text = "Click";
+            this.in7mac2click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac2click
+            // 
+            this.in6mac2click.AutoSize = true;
+            this.in6mac2click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac2click.Name = "in6mac2click";
+            this.in6mac2click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac2click.TabIndex = 293;
+            this.in6mac2click.Text = "Click";
+            this.in6mac2click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac2click
+            // 
+            this.in5mac2click.AutoSize = true;
+            this.in5mac2click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac2click.Name = "in5mac2click";
+            this.in5mac2click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac2click.TabIndex = 292;
+            this.in5mac2click.Text = "Click";
+            this.in5mac2click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac2click
+            // 
+            this.in4mac2click.AutoSize = true;
+            this.in4mac2click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac2click.Name = "in4mac2click";
+            this.in4mac2click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac2click.TabIndex = 291;
+            this.in4mac2click.Text = "Click";
+            this.in4mac2click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac2click
+            // 
+            this.in3mac2click.AutoSize = true;
+            this.in3mac2click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac2click.Name = "in3mac2click";
+            this.in3mac2click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac2click.TabIndex = 290;
+            this.in3mac2click.Text = "Click";
+            this.in3mac2click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac2click
+            // 
+            this.in2mac2click.AutoSize = true;
+            this.in2mac2click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac2click.Name = "in2mac2click";
+            this.in2mac2click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac2click.TabIndex = 289;
+            this.in2mac2click.Text = "Click";
+            this.in2mac2click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac2click
+            // 
+            this.in1mac2click.AutoSize = true;
+            this.in1mac2click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac2click.Name = "in1mac2click";
+            this.in1mac2click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac2click.TabIndex = 288;
+            this.in1mac2click.Text = "Click";
+            this.in1mac2click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac3click
+            // 
+            this.in7mac3click.AutoSize = true;
+            this.in7mac3click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac3click.Name = "in7mac3click";
+            this.in7mac3click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac3click.TabIndex = 294;
+            this.in7mac3click.Text = "Click";
+            this.in7mac3click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac3click
+            // 
+            this.in6mac3click.AutoSize = true;
+            this.in6mac3click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac3click.Name = "in6mac3click";
+            this.in6mac3click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac3click.TabIndex = 293;
+            this.in6mac3click.Text = "Click";
+            this.in6mac3click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac3click
+            // 
+            this.in5mac3click.AutoSize = true;
+            this.in5mac3click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac3click.Name = "in5mac3click";
+            this.in5mac3click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac3click.TabIndex = 292;
+            this.in5mac3click.Text = "Click";
+            this.in5mac3click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac3click
+            // 
+            this.in4mac3click.AutoSize = true;
+            this.in4mac3click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac3click.Name = "in4mac3click";
+            this.in4mac3click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac3click.TabIndex = 291;
+            this.in4mac3click.Text = "Click";
+            this.in4mac3click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac3click
+            // 
+            this.in3mac3click.AutoSize = true;
+            this.in3mac3click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac3click.Name = "in3mac3click";
+            this.in3mac3click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac3click.TabIndex = 290;
+            this.in3mac3click.Text = "Click";
+            this.in3mac3click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac3click
+            // 
+            this.in2mac3click.AutoSize = true;
+            this.in2mac3click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac3click.Name = "in2mac3click";
+            this.in2mac3click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac3click.TabIndex = 289;
+            this.in2mac3click.Text = "Click";
+            this.in2mac3click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac3click
+            // 
+            this.in1mac3click.AutoSize = true;
+            this.in1mac3click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac3click.Name = "in1mac3click";
+            this.in1mac3click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac3click.TabIndex = 288;
+            this.in1mac3click.Text = "Click";
+            this.in1mac3click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac4click
+            // 
+            this.in7mac4click.AutoSize = true;
+            this.in7mac4click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac4click.Name = "in7mac4click";
+            this.in7mac4click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac4click.TabIndex = 294;
+            this.in7mac4click.Text = "Click";
+            this.in7mac4click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac4click
+            // 
+            this.in6mac4click.AutoSize = true;
+            this.in6mac4click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac4click.Name = "in6mac4click";
+            this.in6mac4click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac4click.TabIndex = 293;
+            this.in6mac4click.Text = "Click";
+            this.in6mac4click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac4click
+            // 
+            this.in5mac4click.AutoSize = true;
+            this.in5mac4click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac4click.Name = "in5mac4click";
+            this.in5mac4click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac4click.TabIndex = 292;
+            this.in5mac4click.Text = "Click";
+            this.in5mac4click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac4click
+            // 
+            this.in4mac4click.AutoSize = true;
+            this.in4mac4click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac4click.Name = "in4mac4click";
+            this.in4mac4click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac4click.TabIndex = 291;
+            this.in4mac4click.Text = "Click";
+            this.in4mac4click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac4click
+            // 
+            this.in3mac4click.AutoSize = true;
+            this.in3mac4click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac4click.Name = "in3mac4click";
+            this.in3mac4click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac4click.TabIndex = 290;
+            this.in3mac4click.Text = "Click";
+            this.in3mac4click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac4click
+            // 
+            this.in2mac4click.AutoSize = true;
+            this.in2mac4click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac4click.Name = "in2mac4click";
+            this.in2mac4click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac4click.TabIndex = 289;
+            this.in2mac4click.Text = "Click";
+            this.in2mac4click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac4click
+            // 
+            this.in1mac4click.AutoSize = true;
+            this.in1mac4click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac4click.Name = "in1mac4click";
+            this.in1mac4click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac4click.TabIndex = 288;
+            this.in1mac4click.Text = "Click";
+            this.in1mac4click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac5click
+            // 
+            this.in7mac5click.AutoSize = true;
+            this.in7mac5click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac5click.Name = "in7mac5click";
+            this.in7mac5click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac5click.TabIndex = 294;
+            this.in7mac5click.Text = "Click";
+            this.in7mac5click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac5click
+            // 
+            this.in6mac5click.AutoSize = true;
+            this.in6mac5click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac5click.Name = "in6mac5click";
+            this.in6mac5click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac5click.TabIndex = 293;
+            this.in6mac5click.Text = "Click";
+            this.in6mac5click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac5click
+            // 
+            this.in5mac5click.AutoSize = true;
+            this.in5mac5click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac5click.Name = "in5mac5click";
+            this.in5mac5click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac5click.TabIndex = 292;
+            this.in5mac5click.Text = "Click";
+            this.in5mac5click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac5click
+            // 
+            this.in4mac5click.AutoSize = true;
+            this.in4mac5click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac5click.Name = "in4mac5click";
+            this.in4mac5click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac5click.TabIndex = 291;
+            this.in4mac5click.Text = "Click";
+            this.in4mac5click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac5click
+            // 
+            this.in3mac5click.AutoSize = true;
+            this.in3mac5click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac5click.Name = "in3mac5click";
+            this.in3mac5click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac5click.TabIndex = 290;
+            this.in3mac5click.Text = "Click";
+            this.in3mac5click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac5click
+            // 
+            this.in2mac5click.AutoSize = true;
+            this.in2mac5click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac5click.Name = "in2mac5click";
+            this.in2mac5click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac5click.TabIndex = 289;
+            this.in2mac5click.Text = "Click";
+            this.in2mac5click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac5click
+            // 
+            this.in1mac5click.AutoSize = true;
+            this.in1mac5click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac5click.Name = "in1mac5click";
+            this.in1mac5click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac5click.TabIndex = 288;
+            this.in1mac5click.Text = "Click";
+            this.in1mac5click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac6click
+            // 
+            this.in7mac6click.AutoSize = true;
+            this.in7mac6click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac6click.Name = "in7mac6click";
+            this.in7mac6click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac6click.TabIndex = 294;
+            this.in7mac6click.Text = "Click";
+            this.in7mac6click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac6click
+            // 
+            this.in6mac6click.AutoSize = true;
+            this.in6mac6click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac6click.Name = "in6mac6click";
+            this.in6mac6click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac6click.TabIndex = 293;
+            this.in6mac6click.Text = "Click";
+            this.in6mac6click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac6click
+            // 
+            this.in5mac6click.AutoSize = true;
+            this.in5mac6click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac6click.Name = "in5mac6click";
+            this.in5mac6click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac6click.TabIndex = 292;
+            this.in5mac6click.Text = "Click";
+            this.in5mac6click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac6click
+            // 
+            this.in4mac6click.AutoSize = true;
+            this.in4mac6click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac6click.Name = "in4mac6click";
+            this.in4mac6click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac6click.TabIndex = 291;
+            this.in4mac6click.Text = "Click";
+            this.in4mac6click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac6click
+            // 
+            this.in3mac6click.AutoSize = true;
+            this.in3mac6click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac6click.Name = "in3mac6click";
+            this.in3mac6click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac6click.TabIndex = 290;
+            this.in3mac6click.Text = "Click";
+            this.in3mac6click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac6click
+            // 
+            this.in2mac6click.AutoSize = true;
+            this.in2mac6click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac6click.Name = "in2mac6click";
+            this.in2mac6click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac6click.TabIndex = 289;
+            this.in2mac6click.Text = "Click";
+            this.in2mac6click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac6click
+            // 
+            this.in1mac6click.AutoSize = true;
+            this.in1mac6click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac6click.Name = "in1mac6click";
+            this.in1mac6click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac6click.TabIndex = 288;
+            this.in1mac6click.Text = "Click";
+            this.in1mac6click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac7click
+            // 
+            this.in7mac7click.AutoSize = true;
+            this.in7mac7click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac7click.Name = "in7mac7click";
+            this.in7mac7click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac7click.TabIndex = 294;
+            this.in7mac7click.Text = "Click";
+            this.in7mac7click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac7click
+            // 
+            this.in6mac7click.AutoSize = true;
+            this.in6mac7click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac7click.Name = "in6mac7click";
+            this.in6mac7click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac7click.TabIndex = 293;
+            this.in6mac7click.Text = "Click";
+            this.in6mac7click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac7click
+            // 
+            this.in5mac7click.AutoSize = true;
+            this.in5mac7click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac7click.Name = "in5mac7click";
+            this.in5mac7click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac7click.TabIndex = 292;
+            this.in5mac7click.Text = "Click";
+            this.in5mac7click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac7click
+            // 
+            this.in4mac7click.AutoSize = true;
+            this.in4mac7click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac7click.Name = "in4mac7click";
+            this.in4mac7click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac7click.TabIndex = 291;
+            this.in4mac7click.Text = "Click";
+            this.in4mac7click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac7click
+            // 
+            this.in3mac7click.AutoSize = true;
+            this.in3mac7click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac7click.Name = "in3mac7click";
+            this.in3mac7click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac7click.TabIndex = 290;
+            this.in3mac7click.Text = "Click";
+            this.in3mac7click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac7click
+            // 
+            this.in2mac7click.AutoSize = true;
+            this.in2mac7click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac7click.Name = "in2mac7click";
+            this.in2mac7click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac7click.TabIndex = 289;
+            this.in2mac7click.Text = "Click";
+            this.in2mac7click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac7click
+            // 
+            this.in1mac7click.AutoSize = true;
+            this.in1mac7click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac7click.Name = "in1mac7click";
+            this.in1mac7click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac7click.TabIndex = 288;
+            this.in1mac7click.Text = "Click";
+            this.in1mac7click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac8click
+            // 
+            this.in7mac8click.AutoSize = true;
+            this.in7mac8click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac8click.Name = "in7mac8click";
+            this.in7mac8click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac8click.TabIndex = 294;
+            this.in7mac8click.Text = "Click";
+            this.in7mac8click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac8click
+            // 
+            this.in6mac8click.AutoSize = true;
+            this.in6mac8click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac8click.Name = "in6mac8click";
+            this.in6mac8click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac8click.TabIndex = 293;
+            this.in6mac8click.Text = "Click";
+            this.in6mac8click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac8click
+            // 
+            this.in5mac8click.AutoSize = true;
+            this.in5mac8click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac8click.Name = "in5mac8click";
+            this.in5mac8click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac8click.TabIndex = 292;
+            this.in5mac8click.Text = "Click";
+            this.in5mac8click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac8click
+            // 
+            this.in4mac8click.AutoSize = true;
+            this.in4mac8click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac8click.Name = "in4mac8click";
+            this.in4mac8click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac8click.TabIndex = 291;
+            this.in4mac8click.Text = "Click";
+            this.in4mac8click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac8click
+            // 
+            this.in3mac8click.AutoSize = true;
+            this.in3mac8click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac8click.Name = "in3mac8click";
+            this.in3mac8click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac8click.TabIndex = 290;
+            this.in3mac8click.Text = "Click";
+            this.in3mac8click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac8click
+            // 
+            this.in2mac8click.AutoSize = true;
+            this.in2mac8click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac8click.Name = "in2mac8click";
+            this.in2mac8click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac8click.TabIndex = 289;
+            this.in2mac8click.Text = "Click";
+            this.in2mac8click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac8click
+            // 
+            this.in1mac8click.AutoSize = true;
+            this.in1mac8click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac8click.Name = "in1mac8click";
+            this.in1mac8click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac8click.TabIndex = 288;
+            this.in1mac8click.Text = "Click";
+            this.in1mac8click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac9click
+            // 
+            this.in7mac9click.AutoSize = true;
+            this.in7mac9click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac9click.Name = "in7mac9click";
+            this.in7mac9click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac9click.TabIndex = 294;
+            this.in7mac9click.Text = "Click";
+            this.in7mac9click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac9click
+            // 
+            this.in6mac9click.AutoSize = true;
+            this.in6mac9click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac9click.Name = "in6mac9click";
+            this.in6mac9click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac9click.TabIndex = 293;
+            this.in6mac9click.Text = "Click";
+            this.in6mac9click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac9click
+            // 
+            this.in5mac9click.AutoSize = true;
+            this.in5mac9click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac9click.Name = "in5mac9click";
+            this.in5mac9click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac9click.TabIndex = 292;
+            this.in5mac9click.Text = "Click";
+            this.in5mac9click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac9click
+            // 
+            this.in4mac9click.AutoSize = true;
+            this.in4mac9click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac9click.Name = "in4mac9click";
+            this.in4mac9click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac9click.TabIndex = 291;
+            this.in4mac9click.Text = "Click";
+            this.in4mac9click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac9click
+            // 
+            this.in3mac9click.AutoSize = true;
+            this.in3mac9click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac9click.Name = "in3mac9click";
+            this.in3mac9click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac9click.TabIndex = 290;
+            this.in3mac9click.Text = "Click";
+            this.in3mac9click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac9click
+            // 
+            this.in2mac9click.AutoSize = true;
+            this.in2mac9click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac9click.Name = "in2mac9click";
+            this.in2mac9click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac9click.TabIndex = 289;
+            this.in2mac9click.Text = "Click";
+            this.in2mac9click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac9click
+            // 
+            this.in1mac9click.AutoSize = true;
+            this.in1mac9click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac9click.Name = "in1mac9click";
+            this.in1mac9click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac9click.TabIndex = 288;
+            this.in1mac9click.Text = "Click";
+            this.in1mac9click.UseVisualStyleBackColor = true;
+            // 
+            // in7mac10click
+            // 
+            this.in7mac10click.AutoSize = true;
+            this.in7mac10click.Location = new System.Drawing.Point(477, 94);
+            this.in7mac10click.Name = "in7mac10click";
+            this.in7mac10click.Size = new System.Drawing.Size(49, 17);
+            this.in7mac10click.TabIndex = 294;
+            this.in7mac10click.Text = "Click";
+            this.in7mac10click.UseVisualStyleBackColor = true;
+            // 
+            // in6mac10click
+            // 
+            this.in6mac10click.AutoSize = true;
+            this.in6mac10click.Location = new System.Drawing.Point(408, 94);
+            this.in6mac10click.Name = "in6mac10click";
+            this.in6mac10click.Size = new System.Drawing.Size(49, 17);
+            this.in6mac10click.TabIndex = 293;
+            this.in6mac10click.Text = "Click";
+            this.in6mac10click.UseVisualStyleBackColor = true;
+            // 
+            // in5mac10click
+            // 
+            this.in5mac10click.AutoSize = true;
+            this.in5mac10click.Location = new System.Drawing.Point(339, 94);
+            this.in5mac10click.Name = "in5mac10click";
+            this.in5mac10click.Size = new System.Drawing.Size(49, 17);
+            this.in5mac10click.TabIndex = 292;
+            this.in5mac10click.Text = "Click";
+            this.in5mac10click.UseVisualStyleBackColor = true;
+            // 
+            // in4mac10click
+            // 
+            this.in4mac10click.AutoSize = true;
+            this.in4mac10click.Location = new System.Drawing.Point(270, 94);
+            this.in4mac10click.Name = "in4mac10click";
+            this.in4mac10click.Size = new System.Drawing.Size(49, 17);
+            this.in4mac10click.TabIndex = 291;
+            this.in4mac10click.Text = "Click";
+            this.in4mac10click.UseVisualStyleBackColor = true;
+            // 
+            // in3mac10click
+            // 
+            this.in3mac10click.AutoSize = true;
+            this.in3mac10click.Location = new System.Drawing.Point(201, 94);
+            this.in3mac10click.Name = "in3mac10click";
+            this.in3mac10click.Size = new System.Drawing.Size(49, 17);
+            this.in3mac10click.TabIndex = 290;
+            this.in3mac10click.Text = "Click";
+            this.in3mac10click.UseVisualStyleBackColor = true;
+            // 
+            // in2mac10click
+            // 
+            this.in2mac10click.AutoSize = true;
+            this.in2mac10click.Location = new System.Drawing.Point(134, 94);
+            this.in2mac10click.Name = "in2mac10click";
+            this.in2mac10click.Size = new System.Drawing.Size(49, 17);
+            this.in2mac10click.TabIndex = 289;
+            this.in2mac10click.Text = "Click";
+            this.in2mac10click.UseVisualStyleBackColor = true;
+            // 
+            // in1mac10click
+            // 
+            this.in1mac10click.AutoSize = true;
+            this.in1mac10click.Location = new System.Drawing.Point(65, 94);
+            this.in1mac10click.Name = "in1mac10click";
+            this.in1mac10click.Size = new System.Drawing.Size(49, 17);
+            this.in1mac10click.TabIndex = 288;
+            this.in1mac10click.Text = "Click";
+            this.in1mac10click.UseVisualStyleBackColor = true;
+            // 
             // MacroSwitchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
-            this.ClientSize = new System.Drawing.Size(542, 1259);
+            this.ClientSize = new System.Drawing.Size(624, 1100);
             this.Controls.Add(this.chainGroup10);
             this.Controls.Add(this.chainGroup9);
             this.Controls.Add(this.chainGroup8);
@@ -4735,5 +5575,75 @@
         private System.Windows.Forms.TextBox in7mac10;
         private System.Windows.Forms.TextBox in1mac10;
         private System.Windows.Forms.GroupBox chainGroup10;
+        private System.Windows.Forms.CheckBox in7mac1click;
+        private System.Windows.Forms.CheckBox in6mac1click;
+        private System.Windows.Forms.CheckBox in5mac1click;
+        private System.Windows.Forms.CheckBox in4mac1click;
+        private System.Windows.Forms.CheckBox in3mac1click;
+        private System.Windows.Forms.CheckBox in2mac1click;
+        private System.Windows.Forms.CheckBox in1mac1click;
+        private System.Windows.Forms.CheckBox in7mac2click;
+        private System.Windows.Forms.CheckBox in6mac2click;
+        private System.Windows.Forms.CheckBox in5mac2click;
+        private System.Windows.Forms.CheckBox in4mac2click;
+        private System.Windows.Forms.CheckBox in3mac2click;
+        private System.Windows.Forms.CheckBox in2mac2click;
+        private System.Windows.Forms.CheckBox in1mac2click;
+        private System.Windows.Forms.CheckBox in7mac3click;
+        private System.Windows.Forms.CheckBox in6mac3click;
+        private System.Windows.Forms.CheckBox in5mac3click;
+        private System.Windows.Forms.CheckBox in4mac3click;
+        private System.Windows.Forms.CheckBox in3mac3click;
+        private System.Windows.Forms.CheckBox in2mac3click;
+        private System.Windows.Forms.CheckBox in1mac3click;
+        private System.Windows.Forms.CheckBox in7mac4click;
+        private System.Windows.Forms.CheckBox in6mac4click;
+        private System.Windows.Forms.CheckBox in5mac4click;
+        private System.Windows.Forms.CheckBox in4mac4click;
+        private System.Windows.Forms.CheckBox in3mac4click;
+        private System.Windows.Forms.CheckBox in2mac4click;
+        private System.Windows.Forms.CheckBox in1mac4click;
+        private System.Windows.Forms.CheckBox in7mac5click;
+        private System.Windows.Forms.CheckBox in6mac5click;
+        private System.Windows.Forms.CheckBox in5mac5click;
+        private System.Windows.Forms.CheckBox in4mac5click;
+        private System.Windows.Forms.CheckBox in3mac5click;
+        private System.Windows.Forms.CheckBox in2mac5click;
+        private System.Windows.Forms.CheckBox in1mac5click;
+        private System.Windows.Forms.CheckBox in7mac6click;
+        private System.Windows.Forms.CheckBox in6mac6click;
+        private System.Windows.Forms.CheckBox in5mac6click;
+        private System.Windows.Forms.CheckBox in4mac6click;
+        private System.Windows.Forms.CheckBox in3mac6click;
+        private System.Windows.Forms.CheckBox in2mac6click;
+        private System.Windows.Forms.CheckBox in1mac6click;
+        private System.Windows.Forms.CheckBox in7mac8click;
+        private System.Windows.Forms.CheckBox in6mac8click;
+        private System.Windows.Forms.CheckBox in5mac8click;
+        private System.Windows.Forms.CheckBox in4mac8click;
+        private System.Windows.Forms.CheckBox in3mac8click;
+        private System.Windows.Forms.CheckBox in2mac8click;
+        private System.Windows.Forms.CheckBox in1mac8click;
+        private System.Windows.Forms.CheckBox in7mac7click;
+        private System.Windows.Forms.CheckBox in6mac7click;
+        private System.Windows.Forms.CheckBox in5mac7click;
+        private System.Windows.Forms.CheckBox in4mac7click;
+        private System.Windows.Forms.CheckBox in3mac7click;
+        private System.Windows.Forms.CheckBox in2mac7click;
+        private System.Windows.Forms.CheckBox in1mac7click;
+        private System.Windows.Forms.CheckBox in7mac9click;
+        private System.Windows.Forms.CheckBox in6mac9click;
+        private System.Windows.Forms.CheckBox in5mac9click;
+        private System.Windows.Forms.CheckBox in4mac9click;
+        private System.Windows.Forms.CheckBox in3mac9click;
+        private System.Windows.Forms.CheckBox in2mac9click;
+        private System.Windows.Forms.CheckBox in1mac9click;
+        private System.Windows.Forms.CheckBox in7mac10click;
+        private System.Windows.Forms.CheckBox in6mac10click;
+        private System.Windows.Forms.CheckBox in5mac10click;
+        private System.Windows.Forms.CheckBox in4mac10click;
+        private System.Windows.Forms.CheckBox in3mac10click;
+        private System.Windows.Forms.CheckBox in2mac10click;
+        private System.Windows.Forms.CheckBox in1mac10click;
     }
 }

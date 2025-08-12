@@ -236,6 +236,12 @@
       <DependentUpon>AutoPatcher.cs</DependentUpon>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </Compile>
+    <Compile Include="Forms\AutoSwitchHealForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AutoSwitchHealForm.Designer.cs">
+      <DependentUpon>AutoSwitchHealForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ClientUpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,6 +262,9 @@
     <Compile Include="Forms\MacroSongForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="Forms\AutoSwitchHealForm.resx">
+      <DependentUpon>AutoSwitchHealForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ClientUpdaterForm.resx">
       <DependentUpon>ClientUpdaterForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -389,6 +398,7 @@
     <Compile Include="Model\Autopot.cs" />
     <Compile Include="Model\AutobuffStuff.cs" />
     <Compile Include="Model\AutoRefreshSpammer.cs" />
+    <Compile Include="Model\AutoSwitchHeal.cs" />
     <Compile Include="Model\Buff.cs" />
     <Compile Include="Model\BuffContainer.cs" />
     <Compile Include="Model\AutoSwitchRenderer.cs" />
@@ -484,6 +494,9 @@
     <None Include="assets\images\canto_candidus.png" />
     <None Include="assets\images\fighting_spirit.png" />
     <None Include="assets\images\providence.png" />
+    <None Include="assets\images\ring_nibelungen.png" />
+    <None Include="assets\images\hp_conversion.png" />
+    <None Include="assets\images\drumbattlefield.png" />
     <Content Include="TalesIcon.ico" />
     <None Include="assets\images\abrasive.gif" />
     <None Include="assets\images\ac_concentration.gif" />

@@ -196,6 +196,15 @@ namespace _4RTools.Model
         {
             return ReadCurrentSp() * 100 < percent * ReadMaxSp();
         }
+        public bool IsHpAbove(int percent)
+        {
+            return ReadCurrentHp() * 100 > percent * ReadMaxHp();
+        }
+
+        public bool IsSpAbove(int percent)
+        {
+            return ReadCurrentSp() * 100 > percent * ReadMaxSp();
+        }
 
         public uint ReadCurrentHp()
         {

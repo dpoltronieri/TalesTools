@@ -7,6 +7,7 @@ namespace _4RTools.Utils
     [Flags]
     public enum EffectStatusIDs : uint
     {
+        COMPETITIVA = 5019,
         //Status
         QUAGMIRE = 8,
         HALLUCINATIONWALK = 334,
@@ -30,7 +31,10 @@ namespace _4RTools.Utils
         INSPIRATION = 407,
         [Description("Aegis Domini")]
         SHIELDSPELL = 1316,
-
+        [Description("Rufar dos Tambores")]
+        DRUMBATTLEFIELD = 80,
+        [Description("Anel dos Nibelungos")]
+        RINGNIBELUNGEN = 81,
         [Description("Milagre Solar, Lunar e Estelar")]
         MIRACLE= 2113,
         SPIRIT = 1401,
@@ -116,7 +120,7 @@ namespace _4RTools.Utils
         [Description("Aparar Golpe")]
         PARRYING = 104,
         [Description("Frenesi")]
-        BERSERK = 107,
+        BERSERK = 2108,
         [Description("Instinto de Sobrevivência")]
         AUTOBERSERK = 132,
         [Description("Aura Ninja")]

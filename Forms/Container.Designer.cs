@@ -36,6 +36,7 @@ namespace _4RTools.Forms
             this.tabPageAutobuffSkill = new System.Windows.Forms.TabPage();
             this.tabPageAutobuffStuff = new System.Windows.Forms.TabPage();
             this.tabPageAutoSwitch = new System.Windows.Forms.TabPage();
+            this.tabPageAutoSwitchHeal = new System.Windows.Forms.TabPage();
             this.atkDef = new System.Windows.Forms.TabPage();
             this.tabPageMacroSongs = new System.Windows.Forms.TabPage();
             this.tabMacroSwitch = new System.Windows.Forms.TabPage();
@@ -400,6 +401,7 @@ namespace _4RTools.Forms
             this.tabControlAutopot.Controls.Add(this.tabPageAutopot);
             this.tabControlAutopot.Controls.Add(this.tabPageYggAutopot);
             this.tabControlAutopot.Controls.Add(this.tabPageSkillTimer);
+            this.tabControlAutopot.Controls.Add(this.tabPageAutoSwitchHeal);
             this.tabControlAutopot.Location = new System.Drawing.Point(15, 83);
             this.tabControlAutopot.Name = "tabControlAutopot";
             this.tabControlAutopot.SelectedIndex = 0;
@@ -435,6 +437,16 @@ namespace _4RTools.Forms
             this.tabPageSkillTimer.Size = new System.Drawing.Size(320, 154);
             this.tabPageSkillTimer.TabIndex = 2;
             this.tabPageSkillTimer.Text = "Skill Timer";
+            // 
+            // tabPageAutoSwitchHeal
+            // 
+            this.tabPageAutoSwitchHeal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.tabPageAutoSwitchHeal.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAutoSwitchHeal.Name = "tabPageAutoSwitchHeal";
+            this.tabPageAutoSwitchHeal.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAutoSwitchHeal.Size = new System.Drawing.Size(320, 154);
+            this.tabPageAutoSwitchHeal.TabIndex = 3;
+            this.tabPageAutoSwitchHeal.Text = "AutoSwitch Heal";
             // 
             // Container
             // 
@@ -496,6 +508,7 @@ namespace _4RTools.Forms
         private TabPage atkDef;
         private TabControl tabControlAutopot;
         private TabPage tabPageAutopot;
+        private TabPage tabPageAutoSwitchHeal;
         private TabPage tabPageYggAutopot;
         private LinkLabel websiteLinkLabel;
         private Panel panel1;

@@ -24,7 +24,10 @@ namespace _4RTools.Model
         public int delay { get; set; } = 15;
         public int delayYgg { get; set; } = 50;
         public bool stopWitchFC { get; set; } = false;
+        public bool stopCompetitive { get; set; } = false;
         public string firstHeal { get; set; } = FIRSTHP;
+        public Key hpEquipBefore { get; set; }
+        public Key hpEquipAfter { get; set; }
 
         public string actionName { get; set; }
         private _4RThread thread;
@@ -67,24 +70,41 @@ namespace _4RTools.Model
             }
         }
 
+
         private int AutopotThreadExecution(Client roClient, int hpPotCount)
         {
+            if (KeyboardHookHelper.HandlePriorityKey())
+                return 0;
+
             string currentMap = roClient.ReadCurrentMap();
-            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || !ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot)
+            bool hasAntiBot = hasBuff(roClient, EffectStatusIDs.ANTI_BOT);
+            bool stopSpammersBot = ProfileSingleton.GetCurrent().UserPreferences.stopSpammersBot;
+            bool hasBerserk = hasBuff(roClient, EffectStatusIDs.BERSERK);
+            bool isCompetitive = hasBuff(roClient, EffectStatusIDs.COMPETITIVA);
+            bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+            bool isInCityList = this.listCities.Contains(currentMap);
+
+            bool canHeal = !(hasAntiBot && stopSpammersBot)
+                && !hasBerserk
+                && !(this.stopCompetitive && isCompetitive)
+                && !(stopHealCity && isInCityList);
+
+            if (canHeal)
             {
-                if (!ProfileSingleton.GetCurrent().UserPreferences.stopHealCity || this.listCities.Contains(currentMap) == false)
+                bool hasCriticalWound = hasBuff(roClient, EffectStatusIDs.CRITICALWOUND);
+                if (firstHeal.Equals(FIRSTHP))
                 {
-                    bool hasCriticalWound = HasCriticalWound(roClient);
-                    if (firstHeal.Equals(FIRSTHP))
-                    {
-                        healHPFirst(roClient, hpPotCount, hasCriticalWound);
-                    }
-                    else
-                    {
-                        healSPFirst(roClient, hpPotCount, hasCriticalWound);
-                    }
+                    healHP(roClient, hpPotCount, hasCriticalWound);
+                    healSP(roClient, hpPotCount);
+                }
+                else
+                {
+                    healSP(roClient, hpPotCount);
+                    healHP(roClient, hpPotCount, hasCriticalWound);
                 }
             }
+
+            
             Thread.Sleep(this.delay);
             return 0;
         }
@@ -99,63 +119,62 @@ namespace _4RTools.Model
             return false;
         }
 
-        private void healSPFirst(Client roClient, int hpPotCount, bool hasCriticalWound)
+        private void healHP(Client roClient, int hpPotCount, bool hasCriticalWound)
         {
-            if (roClient.IsSpBelow(spPercent))
+            bool equipedBefore = false;
+            if (roClient.IsHpBelow(hpPercent) && this.actionName == ACTION_NAME_AUTOPOT && ((!this.stopWitchFC && hasCriticalWound) || !hasCriticalWound))
             {
-                pot(this.spKey);
-                hpPotCount++;
-
-                if (hpPotCount == 3 && roClient.IsHpBelow(hpPercent))
-                {
-                    hpPotCount = 0;
-                    if (this.actionName == ACTION_NAME_AUTOPOT_YGG)
-                    {
-                        pot(this.hpKey);
-                    }
-                    else if (this.actionName == ACTION_NAME_AUTOPOT && ((!this.stopWitchFC && hasCriticalWound) || !hasCriticalWound))
-                    {
-                        pot(this.hpKey);
-                    }
-
-                }
+                pressKey(this.hpEquipBefore);
+                pressKey(this.hpEquipBefore);
+                equipedBefore = true;
             }
-            // check hp
-            if (roClient.IsHpBelow(hpPercent))
+            while (roClient.IsHpBelow(hpPercent))
             {
-                pot(this.hpKey);
-            }
-        }
-
-        private void healHPFirst(Client roClient, int hpPotCount, bool hasCriticalWound)
-        {
-            if (roClient.IsHpBelow(hpPercent))
-            {
+                if (KeyboardHookHelper.HandlePriorityKey())
+                    return;
                 if (this.actionName == ACTION_NAME_AUTOPOT_YGG)
                 {
-                    pot(this.hpKey);
+                    pressKey(this.hpKey);
                     hpPotCount++;
                 }
                 else if (this.actionName == ACTION_NAME_AUTOPOT && ((!this.stopWitchFC && hasCriticalWound) || !hasCriticalWound))
                 {
-                    pot(this.hpKey);
+                    pressKey(this.hpKey);
                     hpPotCount++;
                 }
                 if (hpPotCount == 3 && roClient.IsSpBelow(spPercent))
                 {
                     hpPotCount = 0;
-                    pot(this.spKey);
-
+                    return;
                 }
+                Thread.Sleep(this.delay);
             }
-            // check sp
-            if (roClient.IsSpBelow(spPercent))
+            if (equipedBefore)
             {
-                pot(this.spKey);
+                pressKey(this.hpEquipAfter);
+                pressKey(this.hpEquipAfter);
             }
         }
 
-        private void pot(Key key)
+        private void healSP(Client roClient, int hpPotCount)
+        {
+            while (roClient.IsSpBelow(spPercent))
+            {
+                if (KeyboardHookHelper.HandlePriorityKey())
+                    return;
+                pressKey(this.spKey);
+                hpPotCount++;
+
+                if (hpPotCount == 3 && roClient.IsHpBelow(hpPercent))
+                {
+                    hpPotCount = 0;
+                    return;
+                }
+                Thread.Sleep(this.delay);
+            }
+        }
+
+        private void pressKey(Key key)
         {
             Keys k = (Keys)Enum.Parse(typeof(Keys), key.ToString());
             if ((k != Keys.None) && !Keyboard.IsKeyDown(Key.LeftAlt) && !Keyboard.IsKeyDown(Key.RightAlt))
@@ -180,23 +199,5 @@ namespace _4RTools.Model
             return this.actionName != null ? this.actionName : ACTION_NAME_AUTOPOT;
         }
 
-        public bool HasCriticalWound(Client c)
-        {
-            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
-            {
-                uint currentStatus = c.CurrentBuffStatusCode(i);
-
-                if (currentStatus == uint.MaxValue) { continue; }
-
-                EffectStatusIDs status = (EffectStatusIDs)currentStatus;
-
-                if (status == EffectStatusIDs.CRITICALWOUND)
-                {
-                    return true;
-                }
-            }
-            
-            return false;
-        }
     }
 }

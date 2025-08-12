@@ -65,6 +65,13 @@ namespace _4RTools.Forms
                         NumericUpDown delayInput = (NumericUpDown)d[0];
                         delayInput.Value = chainConfig.macroEntries[cbName].delay;
                     }
+
+                    Control[] c = group.Controls.Find($"{cbName}click", true); // ClicksAdd
+                    if (d.Length > 0)
+                    {
+                        CheckBox checkInput = (CheckBox)c[0];
+                        checkInput.Checked = chainConfig.macroEntries[cbName].hasClick;
+                    }
                 }
             }
             catch (Exception ex)
@@ -100,7 +107,7 @@ namespace _4RTools.Forms
             String cbName = delayInput.Name.Split(new[] { "delay" }, StringSplitOptions.None)[0];
             try
             {
-                if(chainConfig.macroEntries.ContainsKey(cbName))
+                if (chainConfig.macroEntries.ContainsKey(cbName))
                 {
                     chainConfig.macroEntries[cbName].delay = decimal.ToInt16(delayInput.Value);
 
@@ -111,6 +118,16 @@ namespace _4RTools.Forms
             {
                 var exception = ex;
             }
+        }
+        private void onCheckClickChange(object sender, EventArgs e)
+        {
+            CheckBox checkInput = (CheckBox)sender;
+            int chainID = Int16.Parse(checkInput.Parent.Name.Split(new[] { "chainGroup" }, StringSplitOptions.None)[1]);
+            ChainConfig chainConfig = ProfileSingleton.GetCurrent().MacroSwitch.chainConfigs.Find(config => config.id == chainID);
+
+            String cbName = checkInput.Name.Split(new[] { "click" }, StringSplitOptions.None)[0];
+            chainConfig.macroEntries[cbName].hasClick = checkInput.Checked;
+            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().MacroSwitch);
         }
 
         private void UpdateUi()
@@ -148,6 +165,12 @@ namespace _4RTools.Forms
                     {
                         NumericUpDown delayInput = (NumericUpDown)control;
                         delayInput.ValueChanged += new System.EventHandler(this.OnDelayChange);
+                    }
+
+                    if (control is CheckBox)
+                    {
+                        CheckBox checkInput = (CheckBox)control;
+                        checkInput.CheckedChanged += new System.EventHandler(this.onCheckClickChange);
                     }
                 }
             }
