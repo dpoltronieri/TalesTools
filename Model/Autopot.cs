@@ -79,16 +79,14 @@ namespace _4RTools.Model
                 if (firstHeal.Equals(FIRSTHP))
                 {
                     healHP(roClient, hpPotCount, hasCriticalWound);
-                    healSP(roClient, hpPotCount);
                 }
                 else
                 {
-                    healSP(roClient, hpPotCount);
-                    healHP(roClient, hpPotCount, hasCriticalWound);
+                    healSP(roClient, hpPotCount, hasCriticalWound);
                 }
             }
 
-            
+
             Thread.Sleep(this.delay);
             return 0;
         }
@@ -128,9 +126,10 @@ namespace _4RTools.Model
                     pressKey(this.hpKey);
                     hpPotCount++;
                 }
-                if (hpPotCount == 3 && roClient.IsSpBelow(spPercent))
+                if (hpPotCount > 3 && roClient.IsSpBelow(spPercent))
                 {
                     hpPotCount = 0;
+                    pressKey(this.spKey);
                     return;
                 }
                 Thread.Sleep(this.delay);
@@ -140,25 +139,53 @@ namespace _4RTools.Model
                 pressKey(this.hpEquipAfter);
                 pressKey(this.hpEquipAfter);
             }
+            if (roClient.IsSpBelow(spPercent))
+            {
+                hpPotCount = 0;
+                pressKey(this.spKey);
+                Thread.Sleep(this.delay);
+                return;
+            }
         }
 
-        private void healSP(Client roClient, int hpPotCount)
+        private void healSP(Client roClient, int hpPotCount, bool hasCriticalWound)
         {
             while (roClient.IsSpBelow(spPercent))
             {
                 if (!canHeal(roClient))
-                    return;
+                    return;  
                 if (KeyboardHookHelper.HandlePriorityKey())
                     return;
                 pressKey(this.spKey);
                 hpPotCount++;
 
-                if (hpPotCount == 3 && roClient.IsHpBelow(hpPercent))
+                if (hpPotCount > 3 && roClient.IsHpBelow(hpPercent))
                 {
-                    hpPotCount = 0;
-                    return;
+                    if (this.actionName == ACTION_NAME_AUTOPOT_YGG)
+                    {
+                        pressKey(this.hpKey);
+                        hpPotCount++;
+                    }
+                    else if (this.actionName == ACTION_NAME_AUTOPOT && ((!this.stopWitchFC && hasCriticalWound) || !hasCriticalWound))
+                    {
+                        pressKey(this.hpKey);
+                        hpPotCount++;
+                    }
                 }
                 Thread.Sleep(this.delay);
+            }
+            if (roClient.IsHpBelow(hpPercent))
+            {
+                if (this.actionName == ACTION_NAME_AUTOPOT_YGG)
+                {
+                    pressKey(this.hpKey);
+                    hpPotCount++;
+                }
+                else if (this.actionName == ACTION_NAME_AUTOPOT && ((!this.stopWitchFC && hasCriticalWound) || !hasCriticalWound))
+                {
+                    pressKey(this.hpKey);
+                    hpPotCount++;
+                }
             }
         }
 
@@ -180,11 +207,12 @@ namespace _4RTools.Model
             bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
             bool isInCityList = this.listCities.Contains(currentMap);
             bool hasOpenChat = roClient.ReadOpenChat();
+            bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
 
             bool canHeal = !hasAntiBot
                 && !hasBerserk
                 && !isCompetitive
-                && !hasOpenChat
+                && !(hasOpenChat && stopOpenChat)
                 && !(stopHealCity && isInCityList);
             return canHeal;
         }

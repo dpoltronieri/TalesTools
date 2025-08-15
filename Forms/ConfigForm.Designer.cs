@@ -50,6 +50,7 @@ namespace _4RTools.Forms
             this.label1 = new System.Windows.Forms.Label();
             this.switchListBox = new System.Windows.Forms.ListBox();
             this.clientDTOBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.chkStopWithChat = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clientDTOBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -76,6 +77,7 @@ namespace _4RTools.Forms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkStopWithChat);
             this.groupBox1.Controls.Add(this.chkStopHealOnCity);
             this.groupBox1.Controls.Add(this.ammo2textBox);
             this.groupBox1.Controls.Add(this.ammo1textBox);
@@ -128,7 +130,7 @@ namespace _4RTools.Forms
             // switchAmmoCheckBox
             // 
             this.switchAmmoCheckBox.AutoSize = true;
-            this.switchAmmoCheckBox.Location = new System.Drawing.Point(13, 129);
+            this.switchAmmoCheckBox.Location = new System.Drawing.Point(13, 130);
             this.switchAmmoCheckBox.Name = "switchAmmoCheckBox";
             this.switchAmmoCheckBox.Size = new System.Drawing.Size(168, 17);
             this.switchAmmoCheckBox.TabIndex = 307;
@@ -150,7 +152,7 @@ namespace _4RTools.Forms
             // getOffReinCheckBox
             // 
             this.getOffReinCheckBox.AutoSize = true;
-            this.getOffReinCheckBox.Location = new System.Drawing.Point(13, 101);
+            this.getOffReinCheckBox.Location = new System.Drawing.Point(13, 102);
             this.getOffReinCheckBox.Name = "getOffReinCheckBox";
             this.getOffReinCheckBox.Size = new System.Drawing.Size(175, 17);
             this.getOffReinCheckBox.TabIndex = 2;
@@ -204,6 +206,17 @@ namespace _4RTools.Forms
             // 
             this.clientDTOBindingSource.DataSource = typeof(_4RTools.Model.ClientDTO);
             // 
+            // chkStopWithChat
+            // 
+            this.chkStopWithChat.AutoSize = true;
+            this.chkStopWithChat.Location = new System.Drawing.Point(13, 156);
+            this.chkStopWithChat.Name = "chkStopWithChat";
+            this.chkStopWithChat.Size = new System.Drawing.Size(197, 17);
+            this.chkStopWithChat.TabIndex = 311;
+            this.chkStopWithChat.Text = "Pausar Tales Tools com chat aberto";
+            this.chkStopWithChat.UseVisualStyleBackColor = true;
+            this.chkStopWithChat.CheckedChanged += new System.EventHandler(this.chkStopWithChat_CheckedChanged);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -247,5 +260,6 @@ namespace _4RTools.Forms
         private ToolTip toolTip4;
         private Label label1;
         private ListBox switchListBox;
+        private CheckBox chkStopWithChat;
     }
 }
