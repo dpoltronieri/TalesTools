@@ -123,6 +123,7 @@ namespace _4RTools.Forms
                 this.switchAmmoCheckBox.Checked = ProfileSingleton.GetCurrent().UserPreferences.switchAmmo;
                 this.ammo1textBox.Text = ProfileSingleton.GetCurrent().UserPreferences.ammo1Key.ToString();
                 this.ammo2textBox.Text = ProfileSingleton.GetCurrent().UserPreferences.ammo2Key.ToString();
+                this.chkStopWithChat.Checked = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
             }
             catch (Exception ex)
             {
@@ -254,6 +255,13 @@ namespace _4RTools.Forms
         {
             CheckBox chk = sender as CheckBox;
             ProfileSingleton.GetCurrent().UserPreferences.getOffRein = chk.Checked;
+            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().UserPreferences);
+        }
+
+        private void chkStopWithChat_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = sender as CheckBox;
+            ProfileSingleton.GetCurrent().UserPreferences.stopWithChat = chk.Checked;
             ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().UserPreferences);
         }
 

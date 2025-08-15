@@ -91,7 +91,7 @@ namespace _4RTools.Model
 
         private int AHKThreadExecution(Client roClient)
         {
-            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !roClient.ReadOpenChat())
+            if (!hasBuff(roClient, EffectStatusIDs.ANTI_BOT) && !(roClient.ReadOpenChat() && ProfileSingleton.GetCurrent().UserPreferences.stopWithChat))
             {
                 foreach (EquipConfig equipConfig in this.equipConfigs)
                 {
@@ -106,7 +106,7 @@ namespace _4RTools.Model
 
                         while (Keyboard.IsKeyDown(equipConfig.keySpammer))
                         {
-                            if (hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || roClient.ReadOpenChat())
+                            if (hasBuff(roClient, EffectStatusIDs.ANTI_BOT) || (roClient.ReadOpenChat() && ProfileSingleton.GetCurrent().UserPreferences.stopWithChat))
                             {
                                 return 0;
                             }

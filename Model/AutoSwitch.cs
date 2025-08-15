@@ -102,9 +102,10 @@ namespace _4RTools.Model
                 bool stopBuffsCity = ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity;
                 bool isInCityList = this.listCities.Contains(currentMap);
                 bool hasOpenChat = c.ReadOpenChat();
+                bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
                 var autoSwitchHeal = ProfileSingleton.GetCurrent().AutoSwitchHeal;
                 bool canSwitch = !hasAntiBot
-                && !hasOpenChat
+                && !(hasOpenChat && stopOpenChat)
                 && !(stopBuffsCity && isInCityList);
 
                 if (KeyboardHookHelper.HandlePriorityKey())

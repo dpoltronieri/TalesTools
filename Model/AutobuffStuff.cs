@@ -49,8 +49,11 @@ namespace _4RTools.Model
                 bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
                 bool isInCityList = this.listCities.Contains(currentMap);
                 bool hasOpenChat = c.ReadOpenChat();
+                bool hasAntiBot = hasBuff(c, EffectStatusIDs.ANTI_BOT);
+                bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
 
-                bool canAutobuff = !hasOpenChat
+                bool canAutobuff = !hasAntiBot
+                    &&!(hasOpenChat && stopOpenChat)
                     && !(stopHealCity && isInCityList);
 
                 if (canAutobuff)
@@ -87,7 +90,7 @@ namespace _4RTools.Model
                         if (status == EffectStatusIDs.DECREASE_AGI) foundDecreaseAgi = true;
                     }
                     buffs.Clear();
-                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && !c.ReadOpenChat())
+                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && !(hasOpenChat && stopOpenChat))
                     {
                         foreach (var item in bmClone)
                         {
@@ -126,6 +129,15 @@ namespace _4RTools.Model
             {
                 buffMapping.Add(status, key);
             }
+        }
+        private bool hasBuff(Client c, EffectStatusIDs buff)
+        {
+            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+            {
+                uint currentStatus = c.CurrentBuffStatusCode(i);
+                if (currentStatus == (int)buff) { return true; }
+            }
+            return false;
         }
         public void ClearKeyMapping()
         {

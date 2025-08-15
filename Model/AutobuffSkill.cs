@@ -51,9 +51,10 @@ namespace _4RTools.Model
                 bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
                 bool isInCityList = this.listCities.Contains(currentMap);
                 bool hasOpenChat = c.ReadOpenChat();
+                bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
 
                 bool canAutobuff = !hasAntiBot
-                    && !hasOpenChat
+                    && !(hasOpenChat && stopOpenChat)
                     && !(stopHealCity && isInCityList);
 
                 if (canAutobuff)
@@ -90,9 +91,9 @@ namespace _4RTools.Model
                         if (status == EffectStatusIDs.QUAGMIRE) foundQuag = true;
                         if (status == EffectStatusIDs.DECREASE_AGI) foundDecreaseAgi = true;
                     }
-                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && !c.ReadOpenChat())
+                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && (!c.ReadOpenChat() || !ProfileSingleton.GetCurrent().UserPreferences.stopWithChat))
                     {
-                        if (!buffs.Contains(EffectStatusIDs.RIDDING) || ProfileSingleton.GetCurrent().UserPreferences.stopBuffsRein == false)
+                        if (!buffs.Contains(EffectStatusIDs.RIDDING) || !ProfileSingleton.GetCurrent().UserPreferences.stopBuffsRein)
                         {
                             foreach (var item in bmClone)
                             {

@@ -68,9 +68,10 @@ namespace _4RTools.Model
             bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
             bool isInCityList = this.listCities.Contains(currentMap);
             bool hasOpenChat = roClient.ReadOpenChat();
+            bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat; 
 
             bool canEquip = !hasAntiBot
-                && !hasOpenChat
+                && !(hasOpenChat && stopOpenChat)
                 && !(stopHealCity && isInCityList);
 
             if (canEquip)

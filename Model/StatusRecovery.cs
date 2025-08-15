@@ -28,7 +28,7 @@ namespace _4RTools.Model
         {
             _4RThread statusEffectsThread = new _4RThread(_ =>
             {
-                if (!hasBuff(c, EffectStatusIDs.ANTI_BOT) && !c.ReadOpenChat())
+                if (!hasBuff(c, EffectStatusIDs.ANTI_BOT) && !(c.ReadOpenChat() && ProfileSingleton.GetCurrent().UserPreferences.stopWithChat))
                 {
                     for (int i = 0; i <= Constants.MAX_BUFF_LIST_INDEX_SIZE - 1; i++)
                     {
