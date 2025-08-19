@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
@@ -42,10 +42,17 @@ namespace _4RTools.Model
                 HashSet<EffectStatusIDs> currentBuffs = GetCurrentBuffsAsSet(c);
 
                 bool hasAntiBot = hasBuff(currentBuffs, EffectStatusIDs.ANTI_BOT);
+                string currentMap = c.ReadCurrentMap();
+                bool stopBuffsCity = ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity;
+                // CORREÇÃO AQUI: Obtenha a lista de cidades diretamente do LocalServerManager.
+                bool isInCityList = LocalServerManager.GetListCities().Contains(currentMap);
                 bool hasOpenChat = c.ReadOpenChat();
                 bool stopWithChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
 
-                bool canAutobuff = !hasAntiBot && !(hasOpenChat && stopWithChat);
+                bool canAutobuff = !hasAntiBot
+                    // CORREÇÃO AQUI: A variável correta é stopWithChat.
+                    && !(hasOpenChat && stopWithChat)
+                    && !(stopBuffsCity && isInCityList);
 
                 if (canAutobuff)
                 {
