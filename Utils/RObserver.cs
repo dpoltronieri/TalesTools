@@ -29,6 +29,7 @@ namespace _4RTools.Utils
         ADDED_NEW_AUTOBUFF_SKILL,
         CHANGED_AUTOSWITCH_SKILL,
         ADDED_NEW_AUTOSWITCH_PETS,
+
     }
 
     public class Message

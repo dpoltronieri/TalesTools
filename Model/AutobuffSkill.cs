@@ -5,10 +5,10 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using _4RTools.Utils;
+using System.Linq;
 
 namespace _4RTools.Model
 {
-
     public class AutoBuffSkill : Action
     {
         public static string ACTION_NAME_AUTOBUFFSKILL = "AutobuffSkill";
@@ -44,14 +44,17 @@ namespace _4RTools.Model
                 if (KeyboardHookHelper.HandlePriorityKey())
                     return 0;
 
-                bool foundQuag = false;
-                bool foundDecreaseAgi = false;
+                // OPTIMIZATION: Read all buffs into a HashSet at the start of the loop.
+                HashSet<EffectStatusIDs> currentBuffs = GetCurrentBuffsAsSet(c);
+
                 string currentMap = c.ReadCurrentMap();
-                bool hasAntiBot = hasBuff(c, EffectStatusIDs.ANTI_BOT);
                 bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
-                bool isInCityList = this.listCities.Contains(currentMap);
                 bool hasOpenChat = c.ReadOpenChat();
                 bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
+
+                // OPTIMIZATION: Use the fast, pre-fetched HashSet for checks.
+                bool hasAntiBot = hasBuff(currentBuffs, EffectStatusIDs.ANTI_BOT);
+                bool isInCityList = this.listCities.Contains(currentMap);
 
                 bool canAutobuff = !hasAntiBot
                     && !(hasOpenChat && stopOpenChat)
@@ -59,61 +62,50 @@ namespace _4RTools.Model
 
                 if (canAutobuff)
                 {
-                    List<EffectStatusIDs> buffs = new List<EffectStatusIDs>();
                     Dictionary<EffectStatusIDs, Key> bmClone = new Dictionary<EffectStatusIDs, Key>(this.buffMapping);
-                    for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+
+                    // Process existing buffs to remove them from the "to-do" list (bmClone)
+                    foreach (EffectStatusIDs status in currentBuffs)
                     {
-                        uint currentStatus = c.CurrentBuffStatusCode(i);
-
-                        if (currentStatus == uint.MaxValue) { continue; }
-
-                        buffs.Add((EffectStatusIDs)currentStatus);
-                        EffectStatusIDs status = (EffectStatusIDs)currentStatus;
-
                         if (status == EffectStatusIDs.OVERTHRUSTMAX)
                         {
-                            if (buffMapping.ContainsKey(EffectStatusIDs.OVERTHRUST))
-                            {
-                                bmClone.Remove(EffectStatusIDs.OVERTHRUST);
-                            }
+                            bmClone.Remove(EffectStatusIDs.OVERTHRUST);
                         }
 
-                        if (bmClone.ContainsKey(EffectStatusIDs.EDEN))
-                        {
-                            bmClone.Remove(EffectStatusIDs.EDEN);
-                        }
-
-                        if (buffMapping.ContainsKey(status)) //CHECK IF STATUS EXISTS IN STATUS LIST AND DO ACTION
-                        {
-                            bmClone.Remove(status);
-                        }
-
-                        if (status == EffectStatusIDs.QUAGMIRE) foundQuag = true;
-                        if (status == EffectStatusIDs.DECREASE_AGI) foundDecreaseAgi = true;
+                        // Remove the buff if it's active
+                        bmClone.Remove(status);
                     }
-                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && (!c.ReadOpenChat() || !ProfileSingleton.GetCurrent().UserPreferences.stopWithChat))
+
+                    // EDEN is a special case that might not be in the buff list but should be removed if any buff exists.
+                    if (currentBuffs.Any())
                     {
-                        if (!buffs.Contains(EffectStatusIDs.RIDDING) || !ProfileSingleton.GetCurrent().UserPreferences.stopBuffsRein)
+                        bmClone.Remove(EffectStatusIDs.EDEN);
+                    }
+
+                    bool foundQuag = hasBuff(currentBuffs, EffectStatusIDs.QUAGMIRE);
+                    bool foundDecreaseAgi = hasBuff(currentBuffs, EffectStatusIDs.DECREASE_AGI);
+
+                    if (!hasBuff(currentBuffs, EffectStatusIDs.RIDDING) || !ProfileSingleton.GetCurrent().UserPreferences.stopBuffsRein)
+                    {
+                        foreach (var item in bmClone)
                         {
-                            foreach (var item in bmClone)
+                            if (foundQuag && (item.Key == EffectStatusIDs.CONCENTRATION || item.Key == EffectStatusIDs.INC_AGI || item.Key == EffectStatusIDs.TRUESIGHT || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.SPEARQUICKEN || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.WINDWALK || item.Key == EffectStatusIDs.TWOHANDQUICKEN))
                             {
-                                if (foundQuag && (item.Key == EffectStatusIDs.CONCENTRATION || item.Key == EffectStatusIDs.INC_AGI || item.Key == EffectStatusIDs.TRUESIGHT || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.SPEARQUICKEN || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.WINDWALK || item.Key == EffectStatusIDs.TWOHANDQUICKEN))
-                                {
-                                    break;
-                                }
-                                else if (foundDecreaseAgi && (item.Key == EffectStatusIDs.TWOHANDQUICKEN || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.ADRENALINE2 || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.SPEARQUICKEN))
-                                {
-                                    break;
-                                }
-                                else if (c.ReadCurrentHp() >= Constants.MINIMUM_HP_TO_RECOVER)
-                                {
-                                    this.useAutobuff(item.Value);
-                                    Thread.Sleep(delay);
-                                }
+                                continue; // Use continue instead of break to check other buffs
+                            }
+
+                            if (foundDecreaseAgi && (item.Key == EffectStatusIDs.TWOHANDQUICKEN || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.ADRENALINE2 || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.SPEARQUICKEN))
+                            {
+                                continue; // Use continue instead of break
+                            }
+
+                            if (c.ReadCurrentHp() >= Constants.MINIMUM_HP_TO_RECOVER)
+                            {
+                                this.useAutobuff(item.Value);
+                                Thread.Sleep(delay);
                             }
                         }
                     }
-                    buffs.Clear();
                 }
                 Thread.Sleep(500);
                 return 0;
@@ -121,15 +113,37 @@ namespace _4RTools.Model
 
             return autobuffItemThread;
         }
-        private bool hasBuff(Client c, EffectStatusIDs buff)
+
+        /// <summary>
+        /// OPTIMIZED: Reads all buffs from memory once and stores them in a HashSet for fast lookups.
+        /// </summary>
+        /// <param name="c">The game client</param>
+        /// <returns>A HashSet containing all active buff IDs.</returns>
+        public HashSet<EffectStatusIDs> GetCurrentBuffsAsSet(Client c)
         {
+            var activeBuffs = new HashSet<EffectStatusIDs>();
             for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
             {
                 uint currentStatus = c.CurrentBuffStatusCode(i);
-                if (currentStatus == (int)buff) { return true; }
+                if (currentStatus != uint.MaxValue)
+                {
+                    activeBuffs.Add((EffectStatusIDs)currentStatus);
+                }
             }
-            return false;
+            return activeBuffs;
         }
+
+        /// <summary>
+        /// OPTIMIZED: Performs a fast check against a pre-fetched set of current buffs.
+        /// </summary>
+        /// <param name="currentBuffs">A HashSet of currently active buffs.</param>
+        /// <param name="buff">The buff to check for.</param>
+        /// <returns>True if the buff is active, otherwise false.</returns>
+        public bool hasBuff(HashSet<EffectStatusIDs> currentBuffs, EffectStatusIDs buff)
+        {
+            return currentBuffs.Contains(buff);
+        }
+
         public void AddKeyToBuff(EffectStatusIDs status, Key key)
         {
             if (buffMapping.ContainsKey(status))
@@ -147,6 +161,7 @@ namespace _4RTools.Model
         {
             this.buffMapping = new Dictionary<EffectStatusIDs, Key>(buffs);
         }
+
         public void ClearKeyMapping()
         {
             buffMapping.Clear();
@@ -177,3 +192,5 @@ namespace _4RTools.Model
         }
     }
 }
+
+

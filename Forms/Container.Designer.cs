@@ -189,6 +189,22 @@ namespace _4RTools.Forms
             this.tabPageProfiles.Size = new System.Drawing.Size(629, 274);
             this.tabPageProfiles.TabIndex = 9;
             this.tabPageProfiles.Text = "Profiles";
+#if DEBUG
+            // 
+            // tabDev
+            // 
+            this.tabDev = new System.Windows.Forms.TabPage();
+            this.tabDev.SuspendLayout();
+            atkDefMode.Controls.Add(this.tabDev);
+            this.tabDev.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
+            this.tabDev.Location = new System.Drawing.Point(4, 22);
+            this.tabDev.Name = "tabDev";
+            this.tabDev.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDev.Size = new System.Drawing.Size(629, 274);
+            this.tabDev.TabIndex = 11;
+            this.tabDev.Text = "Dev";
+            this.tabDev.ResumeLayout(false);
+#endif
             // 
             // lblProcessName
             // 
@@ -519,6 +535,9 @@ namespace _4RTools.Forms
         //private TabPage tabPageServer;
         private TabPage tabPageDebuffs;
         private TabPage tabConfig;
+#if DEBUG
+        private TabPage tabDev;
+#endif
         private LinkLabel livepixLinkLabel;
         private Panel panel2;
     }

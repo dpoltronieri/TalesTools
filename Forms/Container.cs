@@ -20,6 +20,7 @@ namespace _4RTools.Forms
         {
             this.subject.Attach(this);
 
+
             InitializeComponent();
             this.Text = AppConfig.Name + " - " + AppConfig.Version; // Window title
 
@@ -47,6 +48,9 @@ namespace _4RTools.Forms
             SetAutoSwitchWindow();
             SetAutoSwitchHealWindow();
             SetConfigWindow();
+#if DEBUG
+            SetDevWindow();
+#endif
 
             //TrackerSingleton.Instance().SendEvent("desktop_login", "page_view", "desktop_container_load");
         }
@@ -380,6 +384,16 @@ namespace _4RTools.Forms
             frm.Show();
         }
 
+#if DEBUG
+        public void SetDevWindow()
+        {
+            DevForm frm = new DevForm();
+            frm.FormBorderStyle = FormBorderStyle.None;
+            frm.MdiParent = this;
+            addform(this.tabDev, frm);
+            frm.Show();
+        }
+#endif
         #endregion
     }
 }
