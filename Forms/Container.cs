@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -18,8 +18,8 @@ namespace _4RTools.Forms
         private ToggleApplicationStateForm frmToggleApplication = new ToggleApplicationStateForm();
         public Container()
         {
+            ClientObserver.Instance.Attach(this);
             this.subject.Attach(this);
-
 
             InitializeComponent();
             this.Text = AppConfig.Name + " - " + AppConfig.Version; // Window title
@@ -83,16 +83,12 @@ namespace _4RTools.Forms
 
         private void processCB_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Client client = new Client(this.processCB.SelectedItem.ToString());
-            ClientSingleton.Instance(client);
-            characterName.Text = client.ReadCharacterName();
-            subject.Notify(new Utils.Message(Utils.MessageCode.PROCESS_CHANGED, null));
+            ClientObserver.Instance.SelectProcess(this.processCB.SelectedItem as string);
         }
 
         private void Container_Load(object sender, EventArgs e)
         {
             ProfileSingleton.Create("Default");
-            this.refreshProcessList();
             this.refreshProfileList();
             this.profileCB.SelectedItem = "Default";
         }
@@ -109,24 +105,9 @@ namespace _4RTools.Forms
             }
         }
 
-        private void refreshProcessList()
-        {
-            this.Invoke((MethodInvoker)delegate ()
-            {
-                this.processCB.Items.Clear();
-            });
-            foreach (Process p in Process.GetProcesses())
-            {
-                if (p.MainWindowTitle != "" && ClientListSingleton.ExistsByProcessName(p.ProcessName))
-                {
-                    this.processCB.Items.Add(string.Format("{0}.exe - {1}", p.ProcessName, p.Id));
-                }
-            }
-        }
-
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            this.refreshProcessList();
+            // Now handled by ClientObserver
         }
 
         protected override void OnClosed(EventArgs e)
@@ -185,26 +166,73 @@ namespace _4RTools.Forms
 
         public void Update(ISubject subject)
         {
-            switch ((subject as Subject).Message.code)
+            if (subject is ClientObserver)
             {
-                case MessageCode.TURN_ON:
-                case MessageCode.PROFILE_CHANGED:
-                    Client client = ClientSingleton.GetClient();
-                    if (client != null)
-                    {
-                        characterName.Text = ClientSingleton.GetClient().ReadCharacterName();
-                    }
-                    break;
-                case MessageCode.SERVER_LIST_CHANGED:
-                    this.refreshProcessList();
-                    break;
-                case MessageCode.CLICK_ICON_TRAY:
-                    this.Show();
-                    this.WindowState = FormWindowState.Normal;
-                    break;
-                case MessageCode.SHUTDOWN_APPLICATION:
-                    this.ShutdownApplication();
-                    break;
+                switch (subject.Message.code)
+                {
+                    case MessageCode.PROCESS_LIST_CHANGED:
+                        this.Invoke((MethodInvoker)delegate ()
+                        {
+                            string selected = (string)this.processCB.SelectedItem;
+                            this.processCB.Items.Clear();
+                            List<string> processes = (List<string>)subject.Message.data;
+                            foreach (string p in processes)
+                            {
+                                this.processCB.Items.Add(p);
+                            }
+                            if (selected != null && this.processCB.Items.Contains(selected))
+                            {
+                                this.processCB.SelectedItem = selected;
+                            }
+                        });
+                        break;
+                    case MessageCode.PROCESS_CHANGED:
+                        this.Invoke((MethodInvoker)delegate ()
+                        {
+                            Client client = (Client)subject.Message.data;
+                            if (client != null && client.process != null)
+                            {
+                                characterName.Text = client.ReadCharacterName();
+                                string processString = string.Format("{0}.exe - {1}", client.process.ProcessName, client.process.Id);
+                                if (this.processCB.Items.Contains(processString))
+                                {
+                                    this.processCB.SelectedItem = processString;
+                                }
+                            }
+                            else
+                            {
+                                characterName.Text = "N/A";
+                                this.processCB.SelectedItem = null;
+                            }
+                            this.subject.Notify(new Utils.Message(MessageCode.PROCESS_CHANGED, null)); // Notify children
+                        });
+                        break;
+                }
+            }
+            else // From container's own subject
+            {
+                switch (subject.Message.code)
+                {
+                    case MessageCode.TURN_ON:
+                    case MessageCode.PROFILE_CHANGED:
+                        Client client = ClientSingleton.GetClient();
+                        if (client != null)
+                        {
+                            characterName.Text = ClientSingleton.GetClient().ReadCharacterName();
+                        }
+                        break;
+                    case MessageCode.SERVER_LIST_CHANGED:
+                        // Was this.refreshProcessList();
+                        // Now handled by ClientObserver
+                        break;
+                    case MessageCode.CLICK_ICON_TRAY:
+                        this.Show();
+                        this.WindowState = FormWindowState.Normal;
+                        break;
+                    case MessageCode.SHUTDOWN_APPLICATION:
+                        this.ShutdownApplication();
+                        break;
+                }
             }
         }
 
