@@ -126,11 +126,6 @@ namespace _4RTools.Utils
                 Notify(new Message(MessageCode.PROCESS_LIST_CHANGED, processList));
             }
 
-            if (client == null && currentProcesses.Count == 1)
-            {
-                SelectProcess(currentProcesses[0]);
-            }
-
             if (client != null && (client.process == null || client.process.HasExited))
             {
                 client = null;

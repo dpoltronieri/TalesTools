@@ -107,6 +107,16 @@ namespace _4RTools.Forms
             else
             {
                 Client client = ClientSingleton.GetClient();
+                if (client == null)
+                {
+                    System.Collections.Generic.List<string> processes = ClientObserver.Instance.GetProcessList();
+                    if (processes.Count == 1)
+                    {
+                        ClientObserver.Instance.SelectProcess(processes[0]);
+                        client = ClientSingleton.GetClient();
+                    }
+                }
+
                 if (client != null)
                 {
                     this.btnStatusToggle.BackColor = Color.Green;
