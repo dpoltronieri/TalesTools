@@ -128,12 +128,12 @@ namespace _4RTools.Model
             this.AutopotYgg = new Autopot(Autopot.ACTION_NAME_AUTOPOT_YGG);
             this.AutoRefreshSpammer = new AutoRefreshSpammer();
             this.AutobuffSkill = new AutoBuffSkill(AutoBuffSkill.ACTION_NAME_AUTOBUFFSKILL);
-            this.AutobuffStuff = new AutoBuffStuff(AutoBuffStuff.ACTION_NAME_AUTOBUFFSTUFF);
+            this.AutobuffStuff = new AutoBuffStuff(AutoBuffStuff.ACTION_NAME_AUTOBUFF_STUFF);
             this.StatusRecovery = new StatusRecovery();
             this.SongMacro = new Macro(Macro.ACTION_NAME_SONG_MACRO,MacroSongForm.TOTAL_MACRO_LANES_FOR_SONGS);
             this.MacroSwitch = new Macro(Macro.ACTION_NAME_MACRO_SWITCH, MacroSwitchForm.TOTAL_MACRO_LANES);
             this.AtkDefMode = new ATKDEFMode(ATKDEFForm.TOTAL_ATKDEF_LANES);
-            this.DebuffsRecovery = new DebuffsRecovery();
+            this.DebuffsRecovery = new DebuffsRecovery(DebuffsRecovery.ACTION_NAME_DEBUFFS_RECOVERY);
             this.Custom = new Custom();
             this.AutoSwitch = new AutoSwitch();
             this.AutoSwitchHeal = new AutoSwitchHeal();

@@ -1,73 +1,24 @@
-﻿using _4RTools.Utils;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using _4RTools.Utils;
+using Newtonsoft.Json;
 
 namespace _4RTools.Model
 {
     public class DebuffsRecovery : Action
     {
-        public static string ACTION_NAME_DEBUFF_RECOVERY = "DebuffsRecovery";
-
+        public static string ACTION_NAME_DEBUFFS_RECOVERY = "DebuffsRecovery";
+        public string actionName { get; set; }
         private _4RThread thread;
-        public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
-        public int delay { get; set; } = 1;
+        public int delay { get; set; } = 100;
+        public Dictionary<EffectStatusIDs, Key> debuffMapping { get; set; } = new Dictionary<EffectStatusIDs, Key>();
 
-        public string GetActionName()
+        public DebuffsRecovery(string actionName)
         {
-            return ACTION_NAME_DEBUFF_RECOVERY;
-        }
-
-        public _4RThread RestoreStatusThread(Client c)
-        {
-            _4RThread statusEffectsThread = new _4RThread(_ =>
-            {
-                if (!hasBuff(c, EffectStatusIDs.ANTI_BOT) && !(c.ReadOpenChat() && ProfileSingleton.GetCurrent().UserPreferences.stopWithChat))
-                {
-                    for (int i = 0; i <= Constants.MAX_BUFF_LIST_INDEX_SIZE - 1; i++)
-                    {
-                        uint currentStatus = c.CurrentBuffStatusCode(i);
-
-                        if (currentStatus == uint.MaxValue) { continue; }
-
-                        EffectStatusIDs status = (EffectStatusIDs)currentStatus;
-                        if (buffMapping.ContainsKey((EffectStatusIDs)currentStatus)) //IF FOR REMOVE STATUS - CHECK IF STATUS EXISTS IN STATUS LIST AND DO ACTION
-                        {
-                            //IF CONTAINS CURRENT STATUS ON DICT
-                            Key key = buffMapping[(EffectStatusIDs)currentStatus];
-                            if (Enum.IsDefined(typeof(EffectStatusIDs), currentStatus))
-                            {
-                                this.useStatusRecovery(key);
-                            }
-                        }
-                    }
-                }
-                Thread.Sleep(this.delay);
-                return 0;
-            });
-
-            return statusEffectsThread;
-        }
-
-        private bool hasBuff(Client c, EffectStatusIDs buff)
-        {
-            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
-            {
-                uint currentStatus = c.CurrentBuffStatusCode(i);
-                if (currentStatus == (int)buff) { return true; }
-            }
-            return false;
-        }
-
-        public string GetConfiguration()
-        {
-            return JsonConvert.SerializeObject(this);
+            this.actionName = actionName;
         }
 
         public void Start()
@@ -76,22 +27,84 @@ namespace _4RTools.Model
             if (roClient != null)
             {
                 Stop();
-                this.thread = RestoreStatusThread(roClient);
+                this.thread = RecoveryThread(roClient);
                 _4RThread.Start(this.thread);
             }
         }
 
-        public void AddKeyToBuff(EffectStatusIDs status, Key key)
+        public _4RThread RecoveryThread(Client c)
         {
-            if (buffMapping.ContainsKey(status))
+            _4RThread healingThread = new _4RThread(_ =>
             {
-                buffMapping.Remove(status);
+                if (KeyboardHookHelper.HandlePriorityKey()) return 0;
+
+                // OTIMIZAÇÃO: Lê todos os status (incluindo debuffs) da memória uma vez por ciclo.
+                HashSet<EffectStatusIDs> currentStatus = GetCurrentBuffsAsSet(c);
+
+                bool hasOpenChat = c.ReadOpenChat();
+                bool stopWithChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
+
+                if (!(hasOpenChat && stopWithChat))
+                {
+                    // Itera sobre o mapeamento de debuffs para verificar se algum está ativo.
+                    foreach (var entry in debuffMapping)
+                    {
+                        EffectStatusIDs debuffId = entry.Key;
+                        Key hotkey = entry.Value;
+
+                        // Se o debuff estiver ativo, simula o pressionamento da tecla para curá-lo.
+                        if (hasDebuff(currentStatus, debuffId))
+                        {
+                            this.useRecovery(hotkey);
+                            Thread.Sleep(this.delay);
+                        }
+                    }
+                }
+
+                Thread.Sleep(100);
+                return 0;
+            });
+
+            return healingThread;
+        }
+
+        // OTIMIZAÇÃO: Novo método auxiliar que lê todos os status e os retorna em um HashSet.
+        public HashSet<EffectStatusIDs> GetCurrentBuffsAsSet(Client c)
+        {
+            var activeStatus = new HashSet<EffectStatusIDs>();
+            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+            {
+                uint currentStatusId = c.CurrentBuffStatusCode(i);
+                if (currentStatusId != uint.MaxValue)
+                {
+                    activeStatus.Add((EffectStatusIDs)currentStatusId);
+                }
+            }
+            return activeStatus;
+        }
+
+        // OTIMIZAÇÃO: O método agora verifica o debuff contra o HashSet, uma operação muito mais rápida.
+        public bool hasDebuff(HashSet<EffectStatusIDs> currentStatus, EffectStatusIDs debuff)
+        {
+            return currentStatus.Contains(debuff);
+        }
+
+        public void AddKeyToDebuff(EffectStatusIDs status, Key key)
+        {
+            if (debuffMapping.ContainsKey(status))
+            {
+                debuffMapping.Remove(status);
             }
 
             if (FormUtils.IsValidKey(key))
             {
-                buffMapping.Add(status, key);
+                debuffMapping.Add(status, key);
             }
+        }
+
+        public void ClearKeyMapping()
+        {
+            this.debuffMapping.Clear();
         }
 
         public void Stop()
@@ -102,11 +115,20 @@ namespace _4RTools.Model
             }
         }
 
-        private void useStatusRecovery(Key key)
+        public string GetConfiguration()
         {
-            if ((key != Key.None) && !Keyboard.IsKeyDown(Key.LeftAlt) && !Keyboard.IsKeyDown(Key.RightAlt))
-                Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, (Keys)Enum.Parse(typeof(Keys), key.ToString()), 0);
+            return JsonConvert.SerializeObject(this);
         }
 
+        public string GetActionName()
+        {
+            return actionName;
+        }
+
+        private void useRecovery(Key key)
+        {
+            if (key != Key.None)
+                Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, (Keys)Enum.Parse(typeof(Keys), key.ToString()), 0);
+        }
     }
 }

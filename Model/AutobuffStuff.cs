@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Threading;
-using System.Windows.Input;
-using System.Windows.Forms;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Threading;
+using System.Windows.Forms;
+using System.Windows.Input;
 using _4RTools.Utils;
+using Newtonsoft.Json;
 
 namespace _4RTools.Model
 {
-
     public class AutoBuffStuff : Action
     {
-        public static string ACTION_NAME_AUTOBUFFSTUFF = "AutobuffStuff";
+        public static string ACTION_NAME_AUTOBUFF_STUFF = "AutoBuffStuff";
         public string actionName { get; set; }
         private _4RThread thread;
         public int delay { get; set; } = 100;
-        public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
-        [JsonIgnore]
-        public List<String> listCities { get; set; }
+        public Dictionary<EffectStatusIDs, Key> buffMapping { get; set; } = new Dictionary<EffectStatusIDs, Key>();
 
         public AutoBuffStuff(string actionName)
         {
@@ -30,7 +27,6 @@ namespace _4RTools.Model
             if (roClient != null)
             {
                 Stop();
-                if (this.listCities == null || this.listCities.Count == 0) this.listCities = LocalServerManager.GetListCities();
                 this.thread = AutoBuffThread(roClient);
                 _4RThread.Start(this.thread);
             }
@@ -40,108 +36,78 @@ namespace _4RTools.Model
         {
             _4RThread autobuffItemThread = new _4RThread(_ =>
             {
-                if (KeyboardHookHelper.HandlePriorityKey())
-                    return 0;
+                if (KeyboardHookHelper.HandlePriorityKey()) return 0;
 
-                bool foundQuag = false;
-                bool foundDecreaseAgi = false;
-                string currentMap = c.ReadCurrentMap();
-                bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
-                bool isInCityList = this.listCities.Contains(currentMap);
+                // OTIMIZAÇÃO: Lê todos os buffs da memória uma única vez por ciclo.
+                HashSet<EffectStatusIDs> currentBuffs = GetCurrentBuffsAsSet(c);
+
+                bool hasAntiBot = hasBuff(currentBuffs, EffectStatusIDs.ANTI_BOT);
                 bool hasOpenChat = c.ReadOpenChat();
-                bool hasAntiBot = hasBuff(c, EffectStatusIDs.ANTI_BOT);
-                bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
+                bool stopWithChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
 
-                bool canAutobuff = !hasAntiBot
-                    &&!(hasOpenChat && stopOpenChat)
-                    && !(stopHealCity && isInCityList);
+                bool canAutobuff = !hasAntiBot && !(hasOpenChat && stopWithChat);
 
                 if (canAutobuff)
                 {
-                    List<EffectStatusIDs> buffs = new List<EffectStatusIDs>();
-                    Dictionary<EffectStatusIDs, Key> bmClone = new Dictionary<EffectStatusIDs, Key>(this.buffMapping);
-                    for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+                    // Itera sobre o mapeamento de buffs para verificar quais precisam ser ativados.
+                    foreach (var entry in this.buffMapping)
                     {
-                        uint currentStatus = c.CurrentBuffStatusCode(i);
+                        EffectStatusIDs buffId = entry.Key;
+                        Key hotkey = entry.Value;
 
-                        if (currentStatus == uint.MaxValue) { continue; }
-
-                        buffs.Add((EffectStatusIDs)currentStatus);
-                        EffectStatusIDs status = (EffectStatusIDs)currentStatus;
-
-                        if (status == EffectStatusIDs.OVERTHRUSTMAX)
+                        // Se o buff não estiver ativo, simula o pressionamento da tecla.
+                        if (!hasBuff(currentBuffs, buffId))
                         {
-                            if (buffMapping.ContainsKey(EffectStatusIDs.OVERTHRUST))
-                            {
-                                bmClone.Remove(EffectStatusIDs.OVERTHRUST);
-                            }
-                        }
-                        if (bmClone.ContainsKey(EffectStatusIDs.EDEN))
-                        {
-                            bmClone.Remove(EffectStatusIDs.EDEN);
-                        }
-
-                        if (buffMapping.ContainsKey(status)) //CHECK IF STATUS EXISTS IN STATUS LIST AND DO ACTION
-                        {
-                            bmClone.Remove(status);
-                        }
-
-                        if (status == EffectStatusIDs.QUAGMIRE) foundQuag = true;
-                        if (status == EffectStatusIDs.DECREASE_AGI) foundDecreaseAgi = true;
-                    }
-                    buffs.Clear();
-                    if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && !(hasOpenChat && stopOpenChat))
-                    {
-                        foreach (var item in bmClone)
-                        {
-                            if (foundQuag && (item.Key == EffectStatusIDs.CONCENTRATION || item.Key == EffectStatusIDs.INC_AGI || item.Key == EffectStatusIDs.TRUESIGHT || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.SPEARQUICKEN || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.WINDWALK))
-                            {
-                                break;
-                            }
-                            else if (foundDecreaseAgi && (item.Key == EffectStatusIDs.TWOHANDQUICKEN || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.ADRENALINE2 || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.SPEARQUICKEN))
-                            {
-                                break;
-                            }
-                            else if (c.ReadCurrentHp() >= Constants.MINIMUM_HP_TO_RECOVER)
-                            {
-                                this.useAutobuff(item.Value);
-                                Thread.Sleep(delay);
-                            }
+                            this.useAutobuff(hotkey);
+                            Thread.Sleep(this.delay);
                         }
                     }
                 }
+
                 Thread.Sleep(500);
                 return 0;
-
             });
 
             return autobuffItemThread;
         }
 
+        // OTIMIZAÇÃO: Novo método auxiliar que lê todos os buffs e os retorna em um HashSet.
+        public HashSet<EffectStatusIDs> GetCurrentBuffsAsSet(Client c)
+        {
+            var activeBuffs = new HashSet<EffectStatusIDs>();
+            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+            {
+                uint currentStatus = c.CurrentBuffStatusCode(i);
+                if (currentStatus != uint.MaxValue)
+                {
+                    activeBuffs.Add((EffectStatusIDs)currentStatus);
+                }
+            }
+            return activeBuffs;
+        }
+
+        // OTIMIZAÇÃO: O método agora verifica o buff contra o HashSet, uma operação muito mais rápida.
+        public bool hasBuff(HashSet<EffectStatusIDs> currentBuffs, EffectStatusIDs buff)
+        {
+            return currentBuffs.Contains(buff);
+        }
+
         public void AddKeyToBuff(EffectStatusIDs status, Key key)
         {
-            if (buffMapping.ContainsKey(status))
+            if (this.buffMapping.ContainsKey(status))
             {
-                buffMapping.Remove(status);
+                this.buffMapping.Remove(status);
             }
 
             if (FormUtils.IsValidKey(key))
             {
-                buffMapping.Add(status, key);
+                this.buffMapping.Add(status, key);
             }
         }
-        private bool hasBuff(Client c, EffectStatusIDs buff)
-        {
-            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
-            {
-                uint currentStatus = c.CurrentBuffStatusCode(i);
-                if (currentStatus == (int)buff) { return true; }
-            }
-            return false;
-        }
+
         public void ClearKeyMapping()
         {
-            buffMapping.Clear();
+            this.buffMapping.Clear();
         }
 
         public void Stop()

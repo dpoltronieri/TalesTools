@@ -19,6 +19,10 @@ namespace _4RTools.Model
         public List<String> listCities { get; set; }
 
         public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
+        [JsonIgnore]
+        private Dictionary<EffectStatusIDs, Key> buffsToCast = new Dictionary<EffectStatusIDs, Key>();
+        [JsonIgnore]
+        private HashSet<EffectStatusIDs> currentBuffsSet = new HashSet<EffectStatusIDs>();
 
         public AutoBuffSkill(string actionName)
         {
@@ -44,17 +48,25 @@ namespace _4RTools.Model
                 if (KeyboardHookHelper.HandlePriorityKey())
                     return 0;
 
-                // OPTIMIZATION: Read all buffs into a HashSet at the start of the loop.
-                HashSet<EffectStatusIDs> currentBuffs = GetCurrentBuffsAsSet(c);
+                // Reuse HashSet instead of creating a new one
+                this.currentBuffsSet.Clear();
+                for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
+                {
+                    uint currentStatus = c.CurrentBuffStatusCode(i);
+                    if (currentStatus != uint.MaxValue)
+                    {
+                        this.currentBuffsSet.Add((EffectStatusIDs)currentStatus);
+                    }
+                }
 
                 string currentMap = c.ReadCurrentMap();
-                bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+                Profile currentProfile = ProfileSingleton.GetCurrent();
+                bool stopHealCity = currentProfile != null && currentProfile.UserPreferences.stopHealCity;
                 bool hasOpenChat = c.ReadOpenChat();
-                bool stopOpenChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
+                bool stopOpenChat = currentProfile != null && currentProfile.UserPreferences.stopWithChat;
 
-                // OPTIMIZATION: Use the fast, pre-fetched HashSet for checks.
-                bool hasAntiBot = hasBuff(currentBuffs, EffectStatusIDs.ANTI_BOT);
-                bool isInCityList = this.listCities.Contains(currentMap);
+                bool hasAntiBot = this.currentBuffsSet.Contains(EffectStatusIDs.ANTI_BOT);
+                bool isInCityList = this.listCities != null && this.listCities.Contains(currentMap);
 
                 bool canAutobuff = !hasAntiBot
                     && !(hasOpenChat && stopOpenChat)
@@ -62,32 +74,39 @@ namespace _4RTools.Model
 
                 if (canAutobuff)
                 {
-                    Dictionary<EffectStatusIDs, Key> bmClone = new Dictionary<EffectStatusIDs, Key>(this.buffMapping);
+                    // Reuse Dictionary instead of creating a new one
+                    this.buffsToCast.Clear();
+                    if (this.buffMapping != null)
+                    {
+                        foreach (var item in this.buffMapping)
+                        {
+                            this.buffsToCast.Add(item.Key, item.Value);
+                        }
+                    }
 
-                    // Process existing buffs to remove them from the "to-do" list (bmClone)
-                    foreach (EffectStatusIDs status in currentBuffs)
+                    // Process existing buffs to remove them from the "to-do" list (buffsToCast)
+                    foreach (EffectStatusIDs status in this.currentBuffsSet)
                     {
                         if (status == EffectStatusIDs.OVERTHRUSTMAX)
-                        {
-                            bmClone.Remove(EffectStatusIDs.OVERTHRUST);
+                        {                            this.buffsToCast.Remove(EffectStatusIDs.OVERTHRUST);
                         }
 
                         // Remove the buff if it's active
-                        bmClone.Remove(status);
+                        this.buffsToCast.Remove(status);
                     }
 
                     // EDEN is a special case that might not be in the buff list but should be removed if any buff exists.
-                    if (currentBuffs.Any())
+                    if (this.currentBuffsSet.Any())
                     {
-                        bmClone.Remove(EffectStatusIDs.EDEN);
+                        this.buffsToCast.Remove(EffectStatusIDs.EDEN);
                     }
 
-                    bool foundQuag = hasBuff(currentBuffs, EffectStatusIDs.QUAGMIRE);
-                    bool foundDecreaseAgi = hasBuff(currentBuffs, EffectStatusIDs.DECREASE_AGI);
+                    bool foundQuag = this.currentBuffsSet.Contains(EffectStatusIDs.QUAGMIRE);
+                    bool foundDecreaseAgi = this.currentBuffsSet.Contains(EffectStatusIDs.DECREASE_AGI);
 
-                    if (!hasBuff(currentBuffs, EffectStatusIDs.RIDDING) || !ProfileSingleton.GetCurrent().UserPreferences.stopBuffsRein)
+                    if (!this.currentBuffsSet.Contains(EffectStatusIDs.RIDDING) || (currentProfile != null && !currentProfile.UserPreferences.stopBuffsRein))
                     {
-                        foreach (var item in bmClone)
+                        foreach (var item in this.buffsToCast)
                         {
                             if (foundQuag && (item.Key == EffectStatusIDs.CONCENTRATION || item.Key == EffectStatusIDs.INC_AGI || item.Key == EffectStatusIDs.TRUESIGHT || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.SPEARQUICKEN || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.WINDWALK || item.Key == EffectStatusIDs.TWOHANDQUICKEN))
                             {
@@ -95,8 +114,7 @@ namespace _4RTools.Model
                             }
 
                             if (foundDecreaseAgi && (item.Key == EffectStatusIDs.TWOHANDQUICKEN || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.ADRENALINE2 || item.Key == EffectStatusIDs.ONEHANDQUICKEN || item.Key == EffectStatusIDs.SPEARQUICKEN))
-                            {
-                                continue; // Use continue instead of break
+                            {                                continue; // Use continue instead of break
                             }
 
                             if (c.ReadCurrentHp() >= Constants.MINIMUM_HP_TO_RECOVER)

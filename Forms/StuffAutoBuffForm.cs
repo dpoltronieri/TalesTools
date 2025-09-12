@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
-using System.Windows.Input;
 using System.Collections.Generic;
-using _4RTools.Utils;
+using System.Windows.Forms;
 using _4RTools.Model;
+using _4RTools.Utils;
+using System.Windows.Input;
 
 namespace _4RTools.Forms
 {
@@ -14,6 +14,7 @@ namespace _4RTools.Forms
         public StuffAutoBuffForm(Subject subject)
         {
             InitializeComponent();
+            
             stuffContainers.Add(new BuffContainer(this.PotionsGP, Buff.GetPotionsBuffs()));
             stuffContainers.Add(new BuffContainer(this.ElementalsGP, Buff.GetElementalsBuffs()));
             stuffContainers.Add(new BuffContainer(this.BoxesGP, Buff.GetBoxesBuffs()));
@@ -22,7 +23,6 @@ namespace _4RTools.Forms
             stuffContainers.Add(new BuffContainer(this.EtcGP, Buff.GetETCBuffs()));
 
             new BuffRenderer(stuffContainers, toolTip1, ProfileSingleton.GetCurrent().AutobuffStuff.actionName, subject).doRender();
-
             subject.Attach(this);
         }
 
@@ -57,6 +57,7 @@ namespace _4RTools.Forms
             {
                 ProfileSingleton.GetCurrent().AutobuffStuff.delay = Convert.ToInt16(this.numericDelay.Value);
                 ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutobuffStuff);
+                this.ActiveControl = null;
             }
             catch { }
         }

@@ -51,7 +51,7 @@ namespace _4RTools.Forms
         }
         public static void doUpdate(Control control)
         {
-            var autobuffDict = ProfileSingleton.GetCurrent().DebuffsRecovery.buffMapping;
+            var autobuffDict = ProfileSingleton.GetCurrent().DebuffsRecovery.debuffMapping;
             var groupbox = control.Controls.OfType<GroupBox>().FirstOrDefault();
             foreach (TextBox txt in groupbox.Controls.OfType<TextBox>()) {
                 var buffid = int.Parse(txt.Name.Split('n')[1]);
