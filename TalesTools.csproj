@@ -501,6 +501,16 @@
     <None Include="assets\images\stasis.png" />
     <None Include="assets\images\magical_bullet.png" />
     <None Include="assets\images\giant_growth.png" />
+    <None Include="assets\images\soul_projection.png" />
+    <None Include="assets\images\shadow_clone.png" />
+    <None Include="assets\images\yinyang_style.png" />
+    <None Include="assets\images\drunk_punch.png" />
+    <None Include="assets\images\blood_sucker_plant.png" />
+    <None Include="assets\images\overheating.png" />
+    <None Include="assets\images\poison_shower.png" />
+    <None Include="assets\images\boomerang_dagger.png" />
+    <None Include="assets\images\element_master.png" />
+    <None Include="assets\images\justa.png" />
     <Content Include="TalesIcon.ico" />
     <None Include="assets\images\abrasive.gif" />
     <None Include="assets\images\ac_concentration.gif" />
