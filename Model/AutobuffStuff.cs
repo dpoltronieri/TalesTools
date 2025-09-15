@@ -46,7 +46,7 @@ namespace _4RTools.Model
                 bool foundQuag = false;
                 bool foundDecreaseAgi = false;
                 string currentMap = c.ReadCurrentMap();
-                bool stopHealCity = ProfileSingleton.GetCurrent().UserPreferences.stopHealCity;
+                bool stopBuffsCity = ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity;
                 bool isInCityList = this.listCities.Contains(currentMap);
                 bool hasOpenChat = c.ReadOpenChat();
                 bool hasAntiBot = hasBuff(c, EffectStatusIDs.ANTI_BOT);
@@ -54,7 +54,7 @@ namespace _4RTools.Model
 
                 bool canAutobuff = !hasAntiBot
                     &&!(hasOpenChat && stopOpenChat)
-                    && !(stopHealCity && isInCityList);
+                    && !(stopBuffsCity && isInCityList);
 
                 if (canAutobuff)
                 {
