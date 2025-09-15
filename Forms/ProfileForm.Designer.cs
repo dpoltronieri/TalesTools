@@ -1,4 +1,4 @@
-﻿namespace _4RTools.Forms
+namespace _4RTools.Forms
 {
     partial class ProfileForm
     {
@@ -34,6 +34,7 @@
             this.btnRemoveProfile = new System.Windows.Forms.Button();
             this.lblProfilesList = new System.Windows.Forms.Label();
             this.lbProfilesList = new System.Windows.Forms.ListBox();
+            this.btnAssignProfile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtProfileName
@@ -106,12 +107,26 @@
             this.lbProfilesList.Size = new System.Drawing.Size(238, 132);
             this.lbProfilesList.TabIndex = 8;
             // 
+            // btnAssignProfile
+            // 
+            this.btnAssignProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(51)))), ((int)(((byte)(56)))));
+            this.btnAssignProfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAssignProfile.ForeColor = System.Drawing.Color.White;
+            this.btnAssignProfile.Location = new System.Drawing.Point(267, 106);
+            this.btnAssignProfile.Name = "btnAssignProfile";
+            this.btnAssignProfile.Size = new System.Drawing.Size(78, 23);
+            this.btnAssignProfile.TabIndex = 9;
+            this.btnAssignProfile.Text = "Assign Profile";
+            this.btnAssignProfile.UseVisualStyleBackColor = false;
+            this.btnAssignProfile.Click += new System.EventHandler(this.btnAssignProfile_Click);
+            // 
             // ProfileForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
             this.ClientSize = new System.Drawing.Size(374, 232);
+            this.Controls.Add(this.btnAssignProfile);
             this.Controls.Add(this.lbProfilesList);
             this.Controls.Add(this.lblProfilesList);
             this.Controls.Add(this.btnRemoveProfile);
@@ -135,5 +150,6 @@
         private System.Windows.Forms.Button btnRemoveProfile;
         private System.Windows.Forms.Label lblProfilesList;
         private System.Windows.Forms.ListBox lbProfilesList;
+        private System.Windows.Forms.Button btnAssignProfile;
     }
 }

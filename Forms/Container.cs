@@ -14,6 +14,7 @@ namespace _4RTools.Forms
 
         private Subject subject = new Subject();
         private string currentProfile;
+        private bool manualProfileSelectionDone = false;
         List<ClientDTO> clients = new List<ClientDTO>();
         private ToggleApplicationStateForm frmToggleApplication = new ToggleApplicationStateForm();
         public Container()
@@ -156,6 +157,7 @@ namespace _4RTools.Forms
                     ProfileSingleton.Load(this.profileCB.Text); //LOAD PROFILE
                     subject.Notify(new Utils.Message(MessageCode.PROFILE_CHANGED, null));
                     currentProfile = this.profileCB.Text.ToString();
+                    manualProfileSelectionDone = true;
                 }
                 catch (Exception ex)
                 {
@@ -206,6 +208,22 @@ namespace _4RTools.Forms
                             }
                             this.subject.Notify(new Utils.Message(MessageCode.PROCESS_CHANGED, null)); // Notify children
                         });
+                        break;
+                    case MessageCode.LOAD_PROFILE_BY_NAME:
+                        if (!manualProfileSelectionDone)
+                        {
+                            this.Invoke((MethodInvoker)delegate ()
+                            {
+                                string profileName = (string)subject.Message.data;
+                                if (this.profileCB.Items.Contains(profileName))
+                                {
+                                    this.profileCB.SelectedItem = profileName;
+                                }
+                            });
+                        }
+                        break;
+                    case MessageCode.CLIENT_DISCONNECTED:
+                        manualProfileSelectionDone = false;
                         break;
                 }
             }

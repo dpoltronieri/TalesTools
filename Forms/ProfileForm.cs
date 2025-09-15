@@ -48,5 +48,32 @@ namespace _4RTools.Forms
                 this.container.refreshProfileList();
             }
         }
+
+        private void btnAssignProfile_Click(object sender, EventArgs e)
+        {
+            Client client = ClientSingleton.GetClient();
+            if (client == null)
+            {
+                MessageBox.Show("No client selected. Please select a client first.");
+                return;
+            }
+
+            if (this.lbProfilesList.SelectedItem == null)
+            {
+                MessageBox.Show("No profile selected. Please select a profile from the list.");
+                return;
+            }
+
+            string characterName = client.ReadCharacterName();
+            if (string.IsNullOrEmpty(characterName))
+            {
+                MessageBox.Show("Could not read character name from the client.");
+                return;
+            }
+
+            string selectedProfile = this.lbProfilesList.SelectedItem.ToString();
+            CharacterProfileManager.SetProfile(characterName, selectedProfile);
+            MessageBox.Show($"Profile '{selectedProfile}' assigned to character '{characterName}'.");
+        }
     }
 }

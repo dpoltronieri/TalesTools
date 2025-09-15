@@ -153,13 +153,16 @@ namespace _4RTools.Model
             List<string> profiles = new List<string>();
             try
             {
-                string[] files =  Directory.GetFiles(AppConfig.ProfileFolder);
-                
-                foreach(string fileName in files)
+                string[] files = Directory.GetFiles(AppConfig.ProfileFolder);
+
+                foreach (string fileName in files)
                 {
-                    string[] len = fileName.Split('\\');
-                    string profileName = len[len.Length - 1].Split('.')[0];
-                    profiles.Add(profileName);
+                    string profileNameWithExt = Path.GetFileName(fileName);
+                    if (profileNameWithExt != "character_profiles.json")
+                    {
+                        string profileName = Path.GetFileNameWithoutExtension(fileName);
+                        profiles.Add(profileName);
+                    }
                 }
             }
             catch { }
@@ -167,4 +170,44 @@ namespace _4RTools.Model
         }
     }
 
+    public static class CharacterProfileManager
+    {
+        private static readonly string FilePath = Path.Combine(AppConfig.ProfileFolder, "character_profiles.json");
+        private static Dictionary<string, string> characterProfileMap = new Dictionary<string, string>();
+
+        static CharacterProfileManager()
+        {
+            Load();
+        }
+
+        private static void Load()
+        {
+            if (File.Exists(FilePath))
+            {
+                string json = File.ReadAllText(FilePath);
+                characterProfileMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
+            }
+        }
+
+        private static void Save()
+        {
+            string json = JsonConvert.SerializeObject(characterProfileMap, Formatting.Indented);
+            File.WriteAllText(FilePath, json);
+        }
+
+        public static string GetProfileName(string characterName)
+        {
+            if (characterProfileMap.TryGetValue(characterName, out string profileName))
+            {
+                return profileName;
+            }
+            return null;
+        }
+
+        public static void SetProfile(string characterName, string profileName)
+        {
+            characterProfileMap[characterName] = profileName;
+            Save();
+        }
+    }
 }

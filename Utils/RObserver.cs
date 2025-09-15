@@ -35,6 +35,8 @@ namespace _4RTools.Utils
         ADDED_NEW_AUTOBUFF_SKILL,
         CHANGED_AUTOSWITCH_SKILL,
         ADDED_NEW_AUTOSWITCH_PETS,
+        LOAD_PROFILE_BY_NAME,
+        CLIENT_DISCONNECTED
     }
 
     public class Message
@@ -126,12 +128,28 @@ namespace _4RTools.Utils
                 Notify(new Message(MessageCode.PROCESS_LIST_CHANGED, processList));
             }
 
+            if (client != null && client.process != null && !client.process.HasExited)
+            {
+                string currentCharacterName = client.ReadCharacterName();
+                if (!string.IsNullOrEmpty(currentCharacterName) && currentCharacterName != client.characterName)
+                {
+                    client.characterName = currentCharacterName;
+                    Notify(new Message(MessageCode.CLIENT_DISCONNECTED, null)); // To reset manualProfileSelectionDone in Container
+
+                    string profileName = CharacterProfileManager.GetProfileName(currentCharacterName);
+                    if (profileName != null)
+                    {
+                        Notify(new Message(MessageCode.LOAD_PROFILE_BY_NAME, profileName));
+                    }
+                }
+            }
+
             if (client != null && (client.process == null || client.process.HasExited))
             {
                 client = null;
                 selectedProcessName = null;
                 ClientSingleton.Instance(null);
-                Notify(new Message(MessageCode.PROCESS_CHANGED, null));
+                Notify(new Message(MessageCode.CLIENT_DISCONNECTED, null));
             }
         }
 
@@ -145,6 +163,16 @@ namespace _4RTools.Utils
                     client = new Client(selectedProcessName);
                     ClientSingleton.Instance(client);
                     Notify(new Message(MessageCode.PROCESS_CHANGED, client));
+
+                    string characterName = client.ReadCharacterName();
+                    if (!string.IsNullOrEmpty(characterName))
+                    {
+                        string profileName = CharacterProfileManager.GetProfileName(characterName);
+                        if (profileName != null)
+                        {
+                            Notify(new Message(MessageCode.LOAD_PROFILE_BY_NAME, profileName));
+                        }
+                    }
                 }
                 else
                 {

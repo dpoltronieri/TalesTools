@@ -91,6 +91,7 @@ namespace _4RTools.Model
     public class Client
     {
         public Process process { get; }
+        public string characterName { get; set; }
 
         public string processName { get; private set; }
         private Utils.ProcessMemoryReader PMR { get; set; }
