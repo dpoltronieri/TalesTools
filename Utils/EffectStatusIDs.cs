@@ -209,6 +209,28 @@ namespace _4RTools.Utils
         [Description("Bala Mágica")]
         MAGICAL_BULLET = 966,
 
+        [Description("Justa")]
+        JUSTA = 2189,
+        [Description("Mestre dos Elementos")]
+        ELEMENT_MASTER = 2182,
+        [Description("Adaga de Arremesso")]
+        BOOMERANG_DAGGER = 2174,
+        [Description("Banho de Toxinas")]
+        POISON_SHOWER = 2186,
+        [Description("Punho Embriagado")]
+        DRUNK_PUNCH = 2198,
+        [Description("Estilo Yin/Yang")]
+        YINYANG_STYLE = 2197,
+        [Description("Superaquecimento")]
+        OVERHEATING = 2180,
+        [Description("Clone das Sombras")]
+        SHADOW_CLONE = 2196,
+        [Description("Planta Sanguessuga")]
+        BLOOD_SUCKER_PLANT = 464,
+        [Description("Projeção Espiritual")]
+        SOUL_PROJECTION = 2193,
+
+
         EDEN = 9999,
 
         //ELEMENTAL CONVERTERS
