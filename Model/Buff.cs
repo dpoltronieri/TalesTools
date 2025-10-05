@@ -70,6 +70,7 @@ namespace _4RTools.Model
                 new Buff("Aura de Combate", EffectStatusIDs.FIGHTINGSPIRIT, Resources._4RTools.Icons.fighting_spirit),
                 new Buff("Divina Providência", EffectStatusIDs.PROVIDENCE, Resources._4RTools.Icons.providence),
                 new Buff("Força Titânica", EffectStatusIDs.THURISAZ, Resources._4RTools.Icons.giant_growth),
+                new Buff("Justa", EffectStatusIDs.JUSTA, Resources._4RTools.Icons.justa),
             };
 
             return skills;
@@ -90,6 +91,7 @@ namespace _4RTools.Model
                 new Buff("Maestria Arcana", EffectStatusIDs.RECOGNIZEDSPELL, Resources._4RTools.Icons.recognized_spell),
                 new Buff("Enlouquecedor", EffectStatusIDs.MINDBREAKER, Resources._4RTools.Icons.mindbreaker),
                 new Buff("Distorção Arcana", EffectStatusIDs.STASIS, Resources._4RTools.Icons.stasis),
+                new Buff("Mestre dos Elementos", EffectStatusIDs.ELEMENT_MASTER, Resources._4RTools.Icons.element_master),
             };
 
             return skills;
@@ -112,7 +114,9 @@ namespace _4RTools.Model
                 new Buff("Aceleração", EffectStatusIDs.ACCELERATION, Resources._4RTools.Icons.mec_acceleration),
                 new Buff("Propulsão do Carrinho", EffectStatusIDs.GN_CARTBOOST, Resources._4RTools.Icons.cart_boost),
                 new Buff("Research Report", EffectStatusIDs.RESEARCHREPORT, Resources._4RTools.Icons.researchreport),
-                new Buff("Bater em Retirada", EffectStatusIDs.HOM_AVOID, Resources._4RTools.Icons.hom_avoid)
+                new Buff("Bater em Retirada", EffectStatusIDs.HOM_AVOID, Resources._4RTools.Icons.hom_avoid),
+                new Buff("Planta Sanguessuga", EffectStatusIDs.BLOOD_SUCKER_PLANT, Resources._4RTools.Icons.blood_sucker_plant),
+                new Buff("Superaquecimento", EffectStatusIDs.OVERHEATING, Resources._4RTools.Icons.overheating),
             };
 
             return skills;
@@ -131,7 +135,9 @@ namespace _4RTools.Model
                 new Buff("Esconderijo", EffectStatusIDs.HIDING, Resources._4RTools.Icons.hiding),
                 new Buff("Furtividade", EffectStatusIDs.CLOAKING, Resources._4RTools.Icons.cloaking),
                 new Buff("Desejo das Sombras", EffectStatusIDs.AUTOSHADOWSPELL, Resources._4RTools.Icons.autoshadowspell),
-                new Buff("Espreitar", EffectStatusIDs.CHASEWALK, Resources._4RTools.Icons.chase_walk)
+                new Buff("Espreitar", EffectStatusIDs.CHASEWALK, Resources._4RTools.Icons.chase_walk),
+                new Buff("Adaga de Arremesso", EffectStatusIDs.BOOMERANG_DAGGER, Resources._4RTools.Icons.boomerang_dagger),
+                new Buff("Banho de Toxinas", EffectStatusIDs.POISON_SHOWER, Resources._4RTools.Icons.poison_shower),
 
             };
 
@@ -159,6 +165,8 @@ namespace _4RTools.Model
                 new Buff("Clementia", EffectStatusIDs.BLESSING, Resources._4RTools.Icons.clementia),
                 new Buff("Canto Candidus", EffectStatusIDs.INC_AGI, Resources._4RTools.Icons.canto_candidus),
                 new Buff("Renovatio", EffectStatusIDs.RENOVATIO, Resources._4RTools.Icons.renovatio),
+                new Buff("Punho Embriagado", EffectStatusIDs.DRUNK_PUNCH, Resources._4RTools.Icons.drunk_punch),
+                new Buff("Estilo Yin/Yang", EffectStatusIDs.YINYANG_STYLE, Resources._4RTools.Icons.yinyang_style),
             };
 
             return skills;
@@ -172,7 +180,8 @@ namespace _4RTools.Model
                 new Buff("Troca de Pele", EffectStatusIDs.PEEL_CHANGE, Resources._4RTools.Icons.nj_utsusemi),
                 new Buff("Aura Ninja", EffectStatusIDs.AURA_NINJA, Resources._4RTools.Icons.nj_nen),
                 new Buff("Inspiração", EffectStatusIDs.IZAYOI, Resources._4RTools.Icons.izayoi),
-                new Buff("Imagem Falsa", EffectStatusIDs.BUNSINJYUTSU, Resources._4RTools.Icons.bunsinjyutsu)
+                new Buff("Imagem Falsa", EffectStatusIDs.BUNSINJYUTSU, Resources._4RTools.Icons.bunsinjyutsu),
+                new Buff("Clone das Sombras", EffectStatusIDs.SHADOW_CLONE, Resources._4RTools.Icons.shadow_clone),
             };
 
             return skills;
@@ -202,6 +211,7 @@ namespace _4RTools.Model
                 new Buff("Kaizel", EffectStatusIDs.KAIZEL, Resources._4RTools.Icons.kaizel),
                 new Buff("Kaahi", EffectStatusIDs.KAAHI, Resources._4RTools.Icons.kaahi),
                 new Buff("Corrida", EffectStatusIDs.RUN, Resources._4RTools.Icons.run),
+                new Buff("Projeção Espiritual", EffectStatusIDs.SOUL_PROJECTION, Resources._4RTools.Icons.soul_projection),
 
             };
 

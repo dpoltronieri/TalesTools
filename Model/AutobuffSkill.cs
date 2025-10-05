@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Windows.Input;
 using System.Windows.Forms;
@@ -67,10 +67,10 @@ namespace _4RTools.Model
 
                 bool hasAntiBot = this.currentBuffsSet.Contains(EffectStatusIDs.ANTI_BOT);
                 bool isInCityList = this.listCities != null && this.listCities.Contains(currentMap);
-
+                bool stopBuffsCity = ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity;
                 bool canAutobuff = !hasAntiBot
                     && !(hasOpenChat && stopOpenChat)
-                    && !(stopHealCity && isInCityList);
+                    && !(stopBuffsCity && isInCityList);
 
                 if (canAutobuff)
                 {

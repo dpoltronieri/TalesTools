@@ -1,4 +1,3 @@
-#if DEBUG
 namespace _4RTools.Forms
 {
     partial class DevForm
@@ -149,5 +148,3 @@ namespace _4RTools.Forms
         private System.Windows.Forms.DataGridViewTextBoxColumn colRelatedKey;
     }
 }
-#endif
-
