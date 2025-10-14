@@ -35,6 +35,9 @@ namespace _4RTools.Forms
             this.skillsListBox = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbTabs = new System.Windows.Forms.GroupBox();
+            this.gbAutobuffSkills = new System.Windows.Forms.GroupBox();
+            this.gbAutobuffStuffs = new System.Windows.Forms.GroupBox();
             this.chkStopHealOnCity = new System.Windows.Forms.CheckBox();
             this.ammo2textBox = new System.Windows.Forms.TextBox();
             this.ammo1textBox = new System.Windows.Forms.TextBox();
@@ -87,12 +90,22 @@ namespace _4RTools.Forms
             this.groupBox1.Controls.Add(this.chkStopBuffsOnRein);
             this.groupBox1.Controls.Add(this.chkStopBuffsOnCity);
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-            this.groupBox1.Location = new System.Drawing.Point(309, 20);
+            this.groupBox1.Location = new System.Drawing.Point(300, 20);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(300, 197);
+            this.groupBox1.Size = new System.Drawing.Size(280, 197);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configurações TalesTools";
+            // 
+            // gbTabs
+            // 
+            this.gbTabs.Location = new System.Drawing.Point(13, 256);
+            this.gbTabs.Name = "gbTabs";
+            this.gbTabs.Size = new System.Drawing.Size(270, 200);
+            this.gbTabs.TabIndex = 312;
+            this.gbTabs.TabStop = false;
+            this.gbTabs.Text = "Tabs Configuration";
+            this.gbTabs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
             // 
             // chkStopHealOnCity
             // 
@@ -219,10 +232,28 @@ namespace _4RTools.Forms
             // 
             // ConfigForm
             // 
+            this.gbAutobuffStuffs.Text = "Autobuff Stuffs Sections";
+            this.gbAutobuffStuffs.TabIndex = 314;
+            this.gbAutobuffStuffs.TabStop = false;
+            this.gbAutobuffStuffs.Size = new System.Drawing.Size(280, 80);
+            this.gbAutobuffStuffs.Name = "gbAutobuffStuffs";
+            this.gbAutobuffStuffs.Location = new System.Drawing.Point(300, 330);
+            this.gbAutobuffStuffs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
+            this.gbAutobuffSkills.Text = "Autobuff Skills Sections";
+            this.gbAutobuffSkills.TabIndex = 313;
+            this.gbAutobuffSkills.TabStop = false;
+            this.gbAutobuffSkills.Size = new System.Drawing.Size(280, 100);
+            this.gbAutobuffSkills.Name = "gbAutobuffSkills";
+            this.gbAutobuffSkills.Location = new System.Drawing.Point(300, 223);
+            this.gbAutobuffSkills.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
-            this.ClientSize = new System.Drawing.Size(674, 256);
+            this.ClientSize = new System.Drawing.Size(674, 430);
+            this.Controls.Add(this.gbTabs);
+            this.Controls.Add(this.gbAutobuffSkills);
+            this.Controls.Add(this.gbAutobuffStuffs);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.switchListBox);
             this.Controls.Add(this.groupBox1);
@@ -261,5 +292,8 @@ namespace _4RTools.Forms
         private Label label1;
         private ListBox switchListBox;
         private CheckBox chkStopWithChat;
+        private System.Windows.Forms.GroupBox gbTabs;
+        private System.Windows.Forms.GroupBox gbAutobuffSkills;
+        private System.Windows.Forms.GroupBox gbAutobuffStuffs;
     }
 }

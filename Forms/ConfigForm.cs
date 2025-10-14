@@ -12,9 +12,47 @@ namespace _4RTools.Forms
 {
     public partial class ConfigForm : Form, IObserver
     {
+
+        private const string SKILL_SPAMMER_TAB = "tabPageSpammer";
+        private const string AUTOBOSS_SKILL_TAB = "tabPageAutobuffSkill";
+        private const string AUTOBOSS_STUFF_TAB = "tabPageAutobuffStuff";
+        private const string AUTO_SWITCH_TAB = "tabPageAutoSwitch";
+        private const string ATK_DEF_TAB = "atkDef";
+        private const string MACRO_SONGS_TAB = "tabPageMacroSongs";
+        private const string MACRO_SWITCH_TAB = "tabMacroSwitch";
+        private const string DEBUFFS_TAB = "tabPageDebuffs";
+
+        //Secondary Tabs
+        private const string AUTOPOT_TAB = "tabPageAutopot";
+        private const string YGG_AUTOPOT_TAB = "tabPageYggAutopot";
+        private const string SKILL_TIMER_TAB = "tabPageSkillTimer";
+        private const string AUTO_SWITCH_HEAL_TAB = "tabPageAutoSwitchHeal";
+
+        //Autobuff Skill
+        private const string SWORDMAN_GROUP = "Swordman";
+        private const string ARCHER_GROUP = "Archer";
+        private const string MAGE_GROUP = "Mage";
+        private const string THIEF_GROUP = "Thief";
+        private const string ACOLYTE_GROUP = "Acolyte";
+        private const string MERCHANT_GROUP = "Merchant";
+        private const string OTHERS_GROUP = "Others";
+        private const string TAEKWON_GROUP = "Taekwon";
+        private const string NINJA_GROUP = "Ninja";
+        private const string GUNSLINGER_GROUP = "Gunslinger";
+
+        //Autobuff Stuff
+        private const string FOODS_GROUP = "FoodsGP";
+        private const string POTIONS_GROUP = "PotionsGP";
+        private const string BOX_GROUP = "BoxesGP";
+        private const string ELEMENTALS_GROUP = "ElementalsGP";
+        private const string SCROLL_GROUP = "ScrollBuffsGP";
+        private const string ETC_GROUP = "EtcGP";
+
+
         public ConfigForm(Subject subject)
         {
             InitializeComponent();
+            InitializeTabConfig();
             this.textReinKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
             this.textReinKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
             this.textReinKey.TextChanged += new EventHandler(this.textReinKey_TextChanged);
@@ -45,11 +83,147 @@ namespace _4RTools.Forms
             subject.Attach(this);
         }
 
+        private void InitializeTabConfig()
+        {
+            // Main Tabs
+            var mainTabs = new List<Tuple<string, string>> {
+                Tuple.Create("Skill Spammer", SKILL_SPAMMER_TAB),
+                Tuple.Create("Autobuff - Skills", AUTOBOSS_SKILL_TAB),
+                Tuple.Create("Autobuff - Stuffs", AUTOBOSS_STUFF_TAB),
+                Tuple.Create("Auto Switch", AUTO_SWITCH_TAB),
+                Tuple.Create("ATK x DEF", ATK_DEF_TAB),
+                Tuple.Create("Macro Songs", MACRO_SONGS_TAB),
+                Tuple.Create("Macro Switch", MACRO_SWITCH_TAB),
+                Tuple.Create("Debuffs", DEBUFFS_TAB)
+            };
+
+            int y = 20;
+            foreach (var tab in mainTabs)
+            {
+                CheckBox chk = new CheckBox { Text = tab.Item1, Name = tab.Item2, Location = new Point(10, y) };
+                chk.CheckedChanged += OnTabVisibilityChanged;
+                if (ProfileSingleton.GetCurrent().UserPreferences.TabVisibility.TryGetValue(chk.Name, out bool isVisible))
+                {
+                    chk.Checked = isVisible;
+                }
+                else
+                {
+                    chk.Checked = true; // Default to visible
+                }
+                this.gbTabs.Controls.Add(chk);
+                y += 25;
+            }
+
+            // Secondary Tabs
+            var secondaryTabs = new List<Tuple<string, string>> {
+                Tuple.Create("Autopot", AUTOPOT_TAB),
+                Tuple.Create("Yggdrasil", YGG_AUTOPOT_TAB),
+                Tuple.Create("Skill Timer", SKILL_TIMER_TAB),
+                Tuple.Create("AutoSwitch Heal", AUTO_SWITCH_HEAL_TAB)
+            };
+
+            y = 20;
+            foreach (var tab in secondaryTabs)
+            {
+                CheckBox chk = new CheckBox { Text = tab.Item1, Name = tab.Item2, Location = new Point(150, y) };
+                chk.CheckedChanged += OnTabVisibilityChanged;
+                if (ProfileSingleton.GetCurrent().UserPreferences.TabVisibility.TryGetValue(chk.Name, out bool isVisible))
+                {
+                    chk.Checked = isVisible;
+                }
+                else
+                {
+                    chk.Checked = true; // Default to visible
+                }
+                this.gbTabs.Controls.Add(chk);
+                y += 25;
+            }
+
+            // Autobuff Skills Granular
+            var skillGroups = new List<Tuple<string, string>> { 
+                Tuple.Create("Swordman", SWORDMAN_GROUP), Tuple.Create("Archer", ARCHER_GROUP),
+                Tuple.Create("Mage", MAGE_GROUP), Tuple.Create("Thief", THIEF_GROUP),
+                Tuple.Create("Acolyte", ACOLYTE_GROUP), Tuple.Create("Merchant", MERCHANT_GROUP),
+                Tuple.Create("Taekwon", TAEKWON_GROUP), Tuple.Create("Ninja", NINJA_GROUP), Tuple.Create("Gunslinger", GUNSLINGER_GROUP)
+            };
+
+            int skillY = 20, skillX = 10;
+            foreach (var group in skillGroups)
+            {
+                CheckBox chk = new CheckBox { Text = group.Item1, Name = group.Item2, Location = new Point(skillX, skillY), Width = 80 };
+                chk.CheckedChanged += OnAutobuffSkillVisibilityChanged;
+                if (ProfileSingleton.GetCurrent().UserPreferences.AutobuffSkillVisibility.TryGetValue(chk.Name, out bool isVisible))
+                {
+                    chk.Checked = isVisible;
+                }
+                else
+                {
+                    chk.Checked = true;
+                }
+                this.gbAutobuffSkills.Controls.Add(chk);
+                skillY += 25;
+                if (skillY > 70) { skillY = 20; skillX += 90; }
+            }
+
+            // Autobuff Stuffs Granular
+            var stuffGroups = new List<Tuple<string, string>> {
+                Tuple.Create("Foods", FOODS_GROUP), Tuple.Create("Potions", POTIONS_GROUP),
+                Tuple.Create("Boxes", BOX_GROUP), Tuple.Create("Elementals", ELEMENTALS_GROUP),
+                Tuple.Create("Scrolls", SCROLL_GROUP), Tuple.Create("Etc", ETC_GROUP)
+            };
+
+            int stuffY = 20, stuffX = 10;
+            foreach (var group in stuffGroups)
+            {
+                CheckBox chk = new CheckBox { Text = group.Item1, Name = group.Item2, Location = new Point(stuffX, stuffY), Width = 80 };
+                chk.CheckedChanged += OnAutobuffStuffVisibilityChanged;
+                if (ProfileSingleton.GetCurrent().UserPreferences.AutobuffStuffVisibility.TryGetValue(chk.Name, out bool isVisible))
+                {
+                    chk.Checked = isVisible;
+                }
+                else
+                {
+                    chk.Checked = true;
+                }
+                this.gbAutobuffStuffs.Controls.Add(chk);
+                stuffY += 25;
+                if (stuffY > 45) { stuffY = 20; stuffX += 90; }
+            }
+        }
+
+        private void OnTabVisibilityChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = sender as CheckBox;
+            ProfileSingleton.GetCurrent().UserPreferences.TabVisibility[chk.Name] = chk.Checked;
+            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().UserPreferences);
+            new Subject().Notify(new Utils.Message(MessageCode.TURN_OFF_TABS, null));
+        }
+
+        private void OnAutobuffSkillVisibilityChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = sender as CheckBox;
+            ProfileSingleton.GetCurrent().UserPreferences.AutobuffSkillVisibility[chk.Name] = chk.Checked;
+            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().UserPreferences);
+        }
+
+        private void OnAutobuffStuffVisibilityChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = sender as CheckBox;
+            ProfileSingleton.GetCurrent().UserPreferences.AutobuffStuffVisibility[chk.Name] = chk.Checked;
+            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().UserPreferences);
+        }
+
         public void Update(ISubject subject)
         {
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
+                    this.gbTabs.Controls.Clear();
+                    this.gbAutobuffSkills.Controls.Clear();
+                    this.gbAutobuffStuffs.Controls.Clear();
+                    InitializeTabConfig();
+                    UpdateUI(subject);
+                    break;
                 case MessageCode.ADDED_NEW_AUTOBUFF_SKILL:
                 case MessageCode.ADDED_NEW_AUTOSWITCH_PETS:
                     UpdateUI(subject);

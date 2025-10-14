@@ -29,6 +29,11 @@ namespace _4RTools.Forms
              * 3.4  Delete 4RTools_old in file folder.
              * 4. If equals, version are updated.
              */
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
             StartAutopatcher();
         }
 

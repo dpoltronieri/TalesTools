@@ -26,6 +26,10 @@ namespace _4RTools.Model
 
         public bool stopSpammersBot { get; set; } = false;
 
+        public Dictionary<string, bool> TabVisibility { get; set; } = new Dictionary<string, bool>();
+        public Dictionary<string, bool> AutobuffSkillVisibility { get; set; } = new Dictionary<string, bool>();
+        public Dictionary<string, bool> AutobuffStuffVisibility { get; set; } = new Dictionary<string, bool>();
+
         public UserPreferences()
         {
         }

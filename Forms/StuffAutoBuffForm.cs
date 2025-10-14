@@ -26,11 +26,46 @@ namespace _4RTools.Forms
             subject.Attach(this);
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            RenderStuffGroups();
+        }
+
+        private void RenderStuffGroups()
+        {
+            this.Invoke((MethodInvoker)delegate {
+                UserPreferences prefs = ProfileSingleton.GetCurrent().UserPreferences;
+
+                var groupMapping = new Dictionary<string, GroupBox> {
+                    { "FoodsGP", FoodsGP },
+                    { "PotionsGP", PotionsGP },
+                    { "BoxesGP", BoxesGP },
+                    { "ElementalsGP", ElementalsGP },
+                    { "ScrollBuffsGP", ScrollBuffsGP },
+                    { "EtcGP", EtcGP },
+                };
+
+                foreach (var entry in groupMapping)
+                {
+                    if (prefs.AutobuffStuffVisibility.TryGetValue(entry.Key, out bool isVisible))
+                    {
+                        entry.Value.Visible = isVisible;
+                    }
+                    else
+                    {
+                        entry.Value.Visible = true; // Default to visible
+                    }
+                }
+            });
+        }
+
         public void Update(ISubject subject)
         {
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
+                    RenderStuffGroups();
                     BuffRenderer.doUpdate(new Dictionary<EffectStatusIDs, Key>(ProfileSingleton.GetCurrent().AutobuffStuff.buffMapping), this);
                     this.numericDelay.Value = ProfileSingleton.GetCurrent().AutobuffStuff.delay;
                     break;

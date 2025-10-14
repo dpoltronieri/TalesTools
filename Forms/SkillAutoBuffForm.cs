@@ -32,11 +32,77 @@ namespace _4RTools.Forms
 
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            RenderClassGroups();
+        }
+
+        private void RenderClassGroups()
+        {
+            this.Invoke((MethodInvoker)delegate {
+                UserPreferences prefs = ProfileSingleton.GetCurrent().UserPreferences;
+
+                // Mapping from config name to GroupBox control
+                var groupMapping = new Dictionary<string, GroupBox> {
+                    { "Swordman", SwordmanSkillGP },
+                    { "Archer", ArcherSkillsGP },
+                    { "Mage", MageSkillGP },
+                    { "Thief", ThiefSkillsGP },
+                    { "Acolyte", AcolyteSkillsGP },
+                    { "Merchant", MerchantSkillsGP },
+                };
+
+                foreach (var entry in groupMapping)
+                {
+                    if (prefs.AutobuffSkillVisibility.TryGetValue(entry.Key, out bool isVisible))
+                    {
+                        entry.Value.Visible = isVisible;
+                    }
+                    else
+                    {
+                        entry.Value.Visible = true; // Default to visible
+                    }
+                }
+
+                // Handle Taekwon
+                if (prefs.AutobuffSkillVisibility.TryGetValue("Taekwon", out bool tkVisible))
+                {
+                    TKSkillGroupBox.Visible = tkVisible;
+                }
+                else
+                {
+                    TKSkillGroupBox.Visible = true;
+                }
+
+                // Handle Ninja
+                if (prefs.AutobuffSkillVisibility.TryGetValue("Ninja", out bool ninjaVisible))
+                {
+                    NinjaSkillsGP.Visible = ninjaVisible;
+                }
+                else
+                {
+                    NinjaSkillsGP.Visible = true;
+                }
+
+                // Handle Gunslinger
+                if (prefs.AutobuffSkillVisibility.TryGetValue("Gunslinger", out bool gunsVisible))
+                {
+                    GunsSkillsGP.Visible = gunsVisible;
+                }
+                else
+                {
+                    GunsSkillsGP.Visible = true;
+                }
+            });
+        }
+
         public void Update(ISubject subject)
         {
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
+                    RenderClassGroups();
                     BuffRenderer.doUpdate(new Dictionary<EffectStatusIDs, Key>(ProfileSingleton.GetCurrent().AutobuffSkill.buffMapping), this);
                     this.numericDelay.Value = ProfileSingleton.GetCurrent().AutobuffSkill.delay;
                     break;

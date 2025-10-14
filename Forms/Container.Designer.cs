@@ -30,7 +30,7 @@ namespace _4RTools.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TabControl atkDefMode;
+            this.atkDefMode = new System.Windows.Forms.TabControl();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Container));
             this.tabPageSpammer = new System.Windows.Forms.TabPage();
             this.tabPageAutobuffSkill = new System.Windows.Forms.TabPage();
@@ -66,29 +66,29 @@ namespace _4RTools.Forms
             this.tabPageAutopot = new System.Windows.Forms.TabPage();
             this.tabPageYggAutopot = new System.Windows.Forms.TabPage();
             this.tabPageSkillTimer = new System.Windows.Forms.TabPage();
-            atkDefMode = new System.Windows.Forms.TabControl();
-            atkDefMode.SuspendLayout();
+            this.atkDefMode = new System.Windows.Forms.TabControl();
+            this.atkDefMode.SuspendLayout();
             this.panelFooter.SuspendLayout();
             this.tabControlAutopot.SuspendLayout();
             this.SuspendLayout();
             // 
             // atkDefMode
             // 
-            atkDefMode.Controls.Add(this.tabPageSpammer);
-            atkDefMode.Controls.Add(this.tabPageAutobuffSkill);
-            atkDefMode.Controls.Add(this.tabPageAutobuffStuff);
-            atkDefMode.Controls.Add(this.tabPageAutoSwitch);
-            atkDefMode.Controls.Add(this.atkDef);
-            atkDefMode.Controls.Add(this.tabPageMacroSongs);
-            atkDefMode.Controls.Add(this.tabMacroSwitch);
-            atkDefMode.Controls.Add(this.tabPageDebuffs);
-            atkDefMode.Controls.Add(this.tabConfig);
-            atkDefMode.Controls.Add(this.tabPageProfiles);
-            atkDefMode.Location = new System.Drawing.Point(15, 274);
-            atkDefMode.Name = "atkDefMode";
-            atkDefMode.SelectedIndex = 0;
-            atkDefMode.Size = new System.Drawing.Size(637, 300);
-            atkDefMode.TabIndex = 6;
+            this.atkDefMode.Controls.Add(this.tabPageSpammer);
+            this.atkDefMode.Controls.Add(this.tabPageAutobuffSkill);
+            this.atkDefMode.Controls.Add(this.tabPageAutobuffStuff);
+            this.atkDefMode.Controls.Add(this.tabPageAutoSwitch);
+            this.atkDefMode.Controls.Add(this.atkDef);
+            this.atkDefMode.Controls.Add(this.tabPageMacroSongs);
+            this.atkDefMode.Controls.Add(this.tabMacroSwitch);
+            this.atkDefMode.Controls.Add(this.tabPageDebuffs);
+            this.atkDefMode.Controls.Add(this.tabConfig);
+            this.atkDefMode.Controls.Add(this.tabPageProfiles);
+            this.atkDefMode.Location = new System.Drawing.Point(15, 274);
+            this.atkDefMode.Name = "atkDefMode";
+            this.atkDefMode.SelectedIndex = 0;
+            this.atkDefMode.Size = new System.Drawing.Size(637, 300);
+            this.atkDefMode.TabIndex = 6;
             // 
             // tabPageSpammer
             // 
@@ -195,7 +195,7 @@ namespace _4RTools.Forms
             // 
             this.tabDev = new System.Windows.Forms.TabPage();
             this.tabDev.SuspendLayout();
-            atkDefMode.Controls.Add(this.tabDev);
+            this.atkDefMode.Controls.Add(this.tabDev);
             this.tabDev.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
             this.tabDev.Location = new System.Drawing.Point(4, 22);
             this.tabDev.Name = "tabDev";
@@ -470,7 +470,7 @@ namespace _4RTools.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(31)))), ((int)(((byte)(34)))));
             this.ClientSize = new System.Drawing.Size(668, 624);
-            this.Controls.Add(atkDefMode);
+            this.Controls.Add(this.atkDefMode);
             this.Controls.Add(this.tabControlAutopot);
             this.Controls.Add(this.panelFooter);
             this.Controls.Add(this.panel5);
@@ -491,7 +491,7 @@ namespace _4RTools.Forms
             this.Text = "TalesTools";
             this.Load += new System.EventHandler(this.Container_Load);
             this.Resize += new System.EventHandler(this.containerResize);
-            atkDefMode.ResumeLayout(false);
+            this.atkDefMode.ResumeLayout(false);
             this.panelFooter.ResumeLayout(false);
             this.panelFooter.PerformLayout();
             this.tabControlAutopot.ResumeLayout(false);
@@ -540,5 +540,6 @@ namespace _4RTools.Forms
 #endif
         private LinkLabel livepixLinkLabel;
         private Panel panel2;
+        private TabControl atkDefMode;
     }
 }
