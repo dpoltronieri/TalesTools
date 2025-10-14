@@ -45,6 +45,7 @@
             this.numericDelay = new System.Windows.Forms.NumericUpDown();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
             this.label5 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox38)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericDelay)).BeginInit();
             this.SuspendLayout();
@@ -226,12 +227,21 @@
             this.Controls.Add(this.MageSkillGP);
             this.Controls.Add(this.ArcherSkillsGP);
             this.Controls.Add(this.SwordmanSkillGP);
+            this.Controls.Add(this.flowLayoutPanel1);
+
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SkillAutoBuffForm";
             this.Text = "SkilAutoBuffForm";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox38)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericDelay)).EndInit();
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.TabIndex = 304;
+            this.flowLayoutPanel1.WrapContents = false;
+
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -253,5 +263,6 @@
         private System.Windows.Forms.NumericUpDown numericDelay;
         private System.Windows.Forms.ToolTip toolTip2;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

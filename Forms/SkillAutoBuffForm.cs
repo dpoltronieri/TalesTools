@@ -4,6 +4,7 @@ using _4RTools.Utils;
 using _4RTools.Model;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace _4RTools.Forms
 {
@@ -17,6 +18,27 @@ namespace _4RTools.Forms
             this.KeyPreview = true;
             InitializeComponent();
 
+            // Create a panel to hold the config buttons
+            Panel configPanel = new Panel { Width = 520, Height = 60 };
+
+            // Remove controls from the main form and add them to the panel
+            this.Controls.Remove(this.label5);
+            this.Controls.Remove(this.numericDelay);
+            this.Controls.Remove(this.btnResetAutobuff);
+
+            // Set locations relative to the panel
+            this.label5.Location = new Point(10, 5);
+            this.numericDelay.Location = new Point(10, 25);
+            this.btnResetAutobuff.Location = new Point(80, 22);
+
+            configPanel.Controls.Add(this.label5);
+            configPanel.Controls.Add(this.numericDelay);
+            configPanel.Controls.Add(this.btnResetAutobuff);
+
+            // Add the panel to the top of the flow layout
+            this.flowLayoutPanel1.Controls.Add(configPanel);
+
+
             skillContainers.Add(new BuffContainer(this.ArcherSkillsGP, Buff.GetArcherSkills()));
             skillContainers.Add(new BuffContainer(this.SwordmanSkillGP, Buff.GetSwordmanSkill()));
             skillContainers.Add(new BuffContainer(this.MageSkillGP, Buff.GetMageSkills()));
@@ -26,6 +48,13 @@ namespace _4RTools.Forms
             skillContainers.Add(new BuffContainer(this.TKSkillGroupBox, Buff.GetTaekwonSkills()));
             skillContainers.Add(new BuffContainer(this.NinjaSkillsGP, Buff.GetNinjaSkills()));
             skillContainers.Add(new BuffContainer(this.GunsSkillsGP, Buff.GetGunsSkills()));
+
+            foreach (var container in skillContainers)
+            {
+                this.Controls.Remove(container.container);
+                this.flowLayoutPanel1.Controls.Add(container.container);
+            }
+
 
             new BuffRenderer(skillContainers, toolTip1, ProfileSingleton.GetCurrent().AutobuffSkill.actionName, subject).doRender();
             subject.Attach(this);

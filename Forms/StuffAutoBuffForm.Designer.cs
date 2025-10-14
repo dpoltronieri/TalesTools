@@ -40,6 +40,7 @@
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
             this.numericDelay = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.numericDelay)).BeginInit();
             this.SuspendLayout();
             // 
@@ -163,11 +164,18 @@
             // 
             // StuffAutoBuffForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(45)))), ((int)(((byte)(49)))));
             this.ClientSize = new System.Drawing.Size(607, 248);
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(607, 248);
+            this.flowLayoutPanel1.TabIndex = 303;
+            this.flowLayoutPanel1.WrapContents = false;
+
             this.Controls.Add(this.numericDelay);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnResetAutobuff);
@@ -177,6 +185,7 @@
             this.Controls.Add(this.BoxesGP);
             this.Controls.Add(this.PotionsGP);
             this.Controls.Add(this.FoodsGP);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "StuffAutoBuffForm";
@@ -199,5 +208,6 @@
         private System.Windows.Forms.ToolTip toolTip2;
         private System.Windows.Forms.NumericUpDown numericDelay;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

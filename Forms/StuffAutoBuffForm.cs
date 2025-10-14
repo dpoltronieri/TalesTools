@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using _4RTools.Model;
 using _4RTools.Utils;
 using System.Windows.Input;
+using System.Drawing;
 
 namespace _4RTools.Forms
 {
@@ -14,13 +15,39 @@ namespace _4RTools.Forms
         public StuffAutoBuffForm(Subject subject)
         {
             InitializeComponent();
-            
+
+            // Create a panel to hold the config buttons
+            Panel configPanel = new Panel { Width = 520, Height = 60 };
+
+            // Remove controls from the main form and add them to the panel
+            this.Controls.Remove(this.label5);
+            this.Controls.Remove(this.numericDelay);
+            this.Controls.Remove(this.btnResetAutobuff);
+
+            // Set locations relative to the panel
+            this.label5.Location = new Point(10, 5);
+            this.numericDelay.Location = new Point(10, 25);
+            this.btnResetAutobuff.Location = new Point(80, 22);
+
+            configPanel.Controls.Add(this.label5);
+            configPanel.Controls.Add(this.numericDelay);
+            configPanel.Controls.Add(this.btnResetAutobuff);
+
+            // Add the panel to the top of the flow layout
+            this.flowLayoutPanel1.Controls.Add(configPanel);
+
             stuffContainers.Add(new BuffContainer(this.PotionsGP, Buff.GetPotionsBuffs()));
             stuffContainers.Add(new BuffContainer(this.ElementalsGP, Buff.GetElementalsBuffs()));
             stuffContainers.Add(new BuffContainer(this.BoxesGP, Buff.GetBoxesBuffs()));
             stuffContainers.Add(new BuffContainer(this.FoodsGP, Buff.GetFoodBuffs()));
             stuffContainers.Add(new BuffContainer(this.ScrollBuffsGP, Buff.GetScrollBuffs()));
             stuffContainers.Add(new BuffContainer(this.EtcGP, Buff.GetETCBuffs()));
+
+            foreach (var container in stuffContainers)
+            {
+                this.Controls.Remove(container.container);
+                this.flowLayoutPanel1.Controls.Add(container.container);
+            }
 
             new BuffRenderer(stuffContainers, toolTip1, ProfileSingleton.GetCurrent().AutobuffStuff.actionName, subject).doRender();
             subject.Attach(this);
