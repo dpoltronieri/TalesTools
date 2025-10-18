@@ -39,6 +39,7 @@ namespace _4RTools.Forms
             setupInputs();
             _subject = subject;
 
+            this.allBuffs.Add(new Buff("Incenso Queimado", EffectStatusIDs.SPIRIT, Resources._4RTools.Icons.burnt_incense));
             this.allBuffs.AddRange(Buff.GetArcherSkills());
             this.allBuffs.AddRange(Buff.GetSwordmanSkill());
             this.allBuffs.AddRange(Buff.GetMageSkills());

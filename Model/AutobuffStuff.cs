@@ -76,10 +76,6 @@ namespace _4RTools.Model
                                 bmClone.Remove(EffectStatusIDs.OVERTHRUST);
                             }
                         }
-                        if (bmClone.ContainsKey(EffectStatusIDs.EDEN))
-                        {
-                            bmClone.Remove(EffectStatusIDs.EDEN);
-                        }
 
                         if (buffMapping.ContainsKey(status)) //CHECK IF STATUS EXISTS IN STATUS LIST AND DO ACTION
                         {
@@ -88,6 +84,15 @@ namespace _4RTools.Model
 
                         if (status == EffectStatusIDs.QUAGMIRE) foundQuag = true;
                         if (status == EffectStatusIDs.DECREASE_AGI) foundDecreaseAgi = true;
+                    }
+                    if (bmClone.ContainsKey(EffectStatusIDs.EDEN))
+                    {
+                        bmClone.Remove(EffectStatusIDs.EDEN);
+                        if (bmClone.ContainsKey(EffectStatusIDs.ASSUMPTIO))
+                        {
+                            bmClone.Remove(EffectStatusIDs.BLESSING);
+                            bmClone.Remove(EffectStatusIDs.INC_AGI);
+                        }
                     }
                     buffs.Clear();
                     if (!buffs.Contains(EffectStatusIDs.ANTI_BOT) && !(hasOpenChat && stopOpenChat))

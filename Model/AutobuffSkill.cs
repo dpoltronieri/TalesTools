@@ -78,11 +78,6 @@ namespace _4RTools.Model
                             }
                         }
 
-                        if (bmClone.ContainsKey(EffectStatusIDs.EDEN))
-                        {
-                            bmClone.Remove(EffectStatusIDs.EDEN);
-                        }
-
                         if (buffMapping.ContainsKey(status)) //CHECK IF STATUS EXISTS IN STATUS LIST AND DO ACTION
                         {
                             bmClone.Remove(status);
