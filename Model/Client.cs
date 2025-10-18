@@ -98,6 +98,7 @@ namespace _4RTools.Model
         public int currentHPBaseAddress { get; set; }
         public int currentMapAddress { get; set; }
         private int statusBufferAddress { get; set; }
+        private int currentOpenChatAddress { get; set; }
         private int _num = 0;
 
         public Client(string processName, int currentHPBaseAddress, int currentNameAddress, int currentMapAddress)
@@ -107,6 +108,7 @@ namespace _4RTools.Model
             this.currentMapAddress = currentMapAddress;
             this.processName = processName;
             this.statusBufferAddress = currentHPBaseAddress + 0x474;
+            this.currentOpenChatAddress = 0x012A714C;
         }
 
         public Client(ClientDTO dto)
@@ -116,6 +118,7 @@ namespace _4RTools.Model
             this.currentNameAddress = Convert.ToInt32(dto.nameAddress, 16);
             this.currentMapAddress = Convert.ToInt32(dto.mapAddress, 16);
             this.statusBufferAddress = this.currentHPBaseAddress + 0x474;
+            this.currentOpenChatAddress = 0x012A714C;
         }
 
         public Client(string processName)
@@ -142,6 +145,7 @@ namespace _4RTools.Model
                         this.currentNameAddress = c.currentNameAddress;
                         this.currentMapAddress = c.currentMapAddress;
                         this.statusBufferAddress = c.statusBufferAddress;
+                        this.currentOpenChatAddress = c.currentOpenChatAddress;
                     }
                     catch
                     {
@@ -150,6 +154,7 @@ namespace _4RTools.Model
                         this.currentNameAddress = 0;
                         this.currentMapAddress = 0;
                         this.statusBufferAddress = 0;
+                        this.currentOpenChatAddress = 0;
                     }
                    
                     //Do not block spammer for non supported Versions
@@ -239,7 +244,7 @@ namespace _4RTools.Model
         }
         public bool ReadOpenChat()
         {
-            return Convert.ToBoolean(ReadMemoryAsByte(0x00CE5B48));
+            return Convert.ToBoolean(ReadMemoryAsByte(this.currentOpenChatAddress));
         }
 
         public uint ReadMaxSp()
