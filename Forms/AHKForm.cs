@@ -26,10 +26,10 @@ namespace _4RTools.Forms
                     InitializeApplicationForm();
                     break;
                 case MessageCode.TURN_ON:
-                    this.ahk.Start();
+                    if (this.ahk != null) this.ahk.Start();
                     break;
                 case MessageCode.TURN_OFF:
-                    this.ahk.Stop();
+                    if (this.ahk != null) this.ahk.Stop();
                     break;
             }
         }

@@ -95,7 +95,6 @@ namespace _4RTools.Model
                         this.buffsToCast.Remove(status);
                     }
 
-                    // EDEN is a special case that might not be in the buff list but should be removed if any buff exists.
                     if (this.currentBuffsSet.Any())
                     {
                         this.buffsToCast.Remove(EffectStatusIDs.EDEN);

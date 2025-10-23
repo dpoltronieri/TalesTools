@@ -26,10 +26,10 @@ namespace _4RTools.Forms
                     InitializeApplicationForm();
                     break;
                 case MessageCode.TURN_OFF:
-                    this.custom.Stop();
+                    if(this.custom != null) this.custom.Stop();
                     break;
                 case MessageCode.TURN_ON:
-                    this.custom.Start();
+                    if(this.custom != null) this.custom.Start();
                     break;
             }
         }

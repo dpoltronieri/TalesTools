@@ -17,12 +17,17 @@ namespace _4RTools.Forms
         private bool manualProfileSelectionDone = false;
         List<ClientDTO> clients = new List<ClientDTO>();
         private ToggleApplicationStateForm frmToggleApplication = new ToggleApplicationStateForm();
+
+        private List<TabPage> mainTabs = new List<TabPage>();
+        private List<TabPage> secondaryTabs = new List<TabPage>();
+
         public Container()
         {
             ClientObserver.Instance.Attach(this);
             this.subject.Attach(this);
 
             InitializeComponent();
+            InitializeTabs();
             this.Text = AppConfig.Name + " - " + AppConfig.Version; // Window title
 
             clients.AddRange(LocalServerManager.GetLocalClients()); //Load Local Servers First
@@ -32,29 +37,60 @@ namespace _4RTools.Forms
             this.IsMdiContainer = true;
             SetBackGroundColorOfMDIForm();
 
-            //Paint Children Forms 
-            frmToggleApplication = SetToggleApplicationStateWindow();
-            SetAutopotWindow();
-            SetAutopotYggWindow();
-            SetSkillTimerWindow();
-            SetCustomButtonsWindow();
-            SetAHKWindow();
-            SetAutoBuffStatusWindow();
-            SetProfileWindow();
-            SetAutobuffStuffWindow();
-            SetAutobuffSkillWindow();
-            SetSongMacroWindow();
-            SetATKDEFWindow();
-            SetMacroSwitchWindow();
-            SetAutoSwitchWindow();
-            SetAutoSwitchHealWindow();
-            SetConfigWindow();
-#if DEBUG
-            SetDevWindow();
-#endif
-
             //TrackerSingleton.Instance().SendEvent("desktop_login", "page_view", "desktop_container_load");
         }
+
+        private void InitializeTabs()
+        {
+            // Main Tabs
+            mainTabs.Add(tabPageSpammer);
+            mainTabs.Add(tabPageAutobuffSkill);
+            mainTabs.Add(tabPageAutobuffStuff);
+            mainTabs.Add(tabPageAutoSwitch);
+            mainTabs.Add(atkDef);
+            mainTabs.Add(tabPageMacroSongs);
+            mainTabs.Add(tabMacroSwitch);
+            mainTabs.Add(tabPageDebuffs);
+            mainTabs.Add(tabConfig); // Always visible
+            mainTabs.Add(tabPageProfiles); // Always visible
+
+#if DEBUG
+            mainTabs.Add(tabDev);
+#endif
+
+            // Secondary Tabs
+            secondaryTabs.Add(tabPageAutopot);
+            secondaryTabs.Add(tabPageYggAutopot);
+            secondaryTabs.Add(tabPageSkillTimer);
+            secondaryTabs.Add(tabPageAutoSwitchHeal);
+        }
+
+        private void RenderTabs()
+        {
+            this.Invoke((MethodInvoker)delegate {
+                atkDefMode.TabPages.Clear();
+                tabControlAutopot.TabPages.Clear();
+
+                UserPreferences prefs = ProfileSingleton.GetCurrent().UserPreferences;
+
+                foreach (TabPage tab in mainTabs)
+                {
+                    if (tab.Name == "tabConfig" || tab.Name == "tabPageProfiles" || tab.Name == "tabDev" || !prefs.TabVisibility.TryGetValue(tab.Name, out bool isVisible) || isVisible)
+                    {
+                        atkDefMode.TabPages.Add(tab);
+                    }
+                }
+
+                foreach (TabPage tab in secondaryTabs)
+                {
+                    if (!prefs.TabVisibility.TryGetValue(tab.Name, out bool isVisible) || isVisible)
+                    {
+                        tabControlAutopot.TabPages.Add(tab);
+                    }
+                }
+            });
+        }
+
 
 
         public void addform(TabPage tp, Form f)
@@ -92,6 +128,28 @@ namespace _4RTools.Forms
             ProfileSingleton.Create("Default");
             this.refreshProfileList();
             this.profileCB.SelectedItem = "Default";
+            RenderTabs();
+
+            //Paint Children Forms 
+            frmToggleApplication = SetToggleApplicationStateWindow();
+            SetAutopotWindow();
+            SetAutopotYggWindow();
+            SetSkillTimerWindow();
+            SetCustomButtonsWindow();
+            SetAHKWindow();
+            SetAutoBuffStatusWindow();
+            SetProfileWindow();
+            SetAutobuffStuffWindow();
+            SetAutobuffSkillWindow();
+            SetSongMacroWindow();
+            SetATKDEFWindow();
+            SetMacroSwitchWindow();
+            SetAutoSwitchWindow();
+            SetAutoSwitchHealWindow();
+            SetConfigWindow();
+#if DEBUG
+            SetDevWindow();
+#endif
         }
 
         public void refreshProfileList()
@@ -231,8 +289,12 @@ namespace _4RTools.Forms
             {
                 switch (subject.Message.code)
                 {
+                    case MessageCode.TURN_OFF_TABS:
+                        RenderTabs();
+                        break;
                     case MessageCode.TURN_ON:
                     case MessageCode.PROFILE_CHANGED:
+                        RenderTabs();
                         Client client = ClientSingleton.GetClient();
                         if (client != null)
                         {

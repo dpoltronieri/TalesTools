@@ -44,25 +44,21 @@ namespace _4RTools.Model
                 bool hasAntiBot = hasBuff(currentBuffs, EffectStatusIDs.ANTI_BOT);
                 string currentMap = c.ReadCurrentMap();
                 bool stopBuffsCity = ProfileSingleton.GetCurrent().UserPreferences.stopBuffsCity;
-                // CORREÇÃO AQUI: Obtenha a lista de cidades diretamente do LocalServerManager.
                 bool isInCityList = LocalServerManager.GetListCities().Contains(currentMap);
                 bool hasOpenChat = c.ReadOpenChat();
                 bool stopWithChat = ProfileSingleton.GetCurrent().UserPreferences.stopWithChat;
 
                 bool canAutobuff = !hasAntiBot
-                    // CORREÇÃO AQUI: A variável correta é stopWithChat.
                     && !(hasOpenChat && stopWithChat)
                     && !(stopBuffsCity && isInCityList);
 
                 if (canAutobuff)
                 {
-                    // Itera sobre o mapeamento de buffs para verificar quais precisam ser ativados.
                     foreach (var entry in this.buffMapping)
                     {
                         EffectStatusIDs buffId = entry.Key;
                         Key hotkey = entry.Value;
 
-                        // Se o buff não estiver ativo, simula o pressionamento da tecla.
                         if (!hasBuff(currentBuffs, buffId))
                         {
                             this.useAutobuff(hotkey);
@@ -78,7 +74,6 @@ namespace _4RTools.Model
             return autobuffItemThread;
         }
 
-        // OTIMIZAÇÃO: Novo método auxiliar que lê todos os buffs e os retorna em um HashSet.
         public HashSet<EffectStatusIDs> GetCurrentBuffsAsSet(Client c)
         {
             var activeBuffs = new HashSet<EffectStatusIDs>();
@@ -93,7 +88,6 @@ namespace _4RTools.Model
             return activeBuffs;
         }
 
-        // OTIMIZAÇÃO: O método agora verifica o buff contra o HashSet, uma operação muito mais rápida.
         public bool hasBuff(HashSet<EffectStatusIDs> currentBuffs, EffectStatusIDs buff)
         {
             return currentBuffs.Contains(buff);
