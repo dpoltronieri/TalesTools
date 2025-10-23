@@ -25,10 +25,16 @@ namespace _4RTools.Forms
                     InitializeApplicationForm();
                     break;
                 case MessageCode.TURN_HEAL_OFF:
-                    this.autoSwitchHeal.Stop();
+                    if (this.autoSwitchHeal != null)
+                    {
+                        this.autoSwitchHeal.Stop();
+                    }
                     break;
                 case MessageCode.TURN_HEAL_ON:
-                    this.autoSwitchHeal.Start();
+                    if (this.autoSwitchHeal != null)
+                    {
+                        this.autoSwitchHeal.Start();
+                    }
                     break;
             }
         }

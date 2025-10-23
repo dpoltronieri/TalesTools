@@ -38,10 +38,16 @@ namespace _4RTools.Forms
                     InitializeApplicationForm();
                     break;
                 case MessageCode.TURN_HEAL_OFF:
-                    this.autopot.Stop();
+                    if (this.autopot != null)
+                    {
+                        this.autopot.Stop();
+                    }
                     break;
                 case MessageCode.TURN_HEAL_ON:
-                    this.autopot.Start();
+                    if (this.autopot != null)
+                    {
+                        this.autopot.Start();
+                    }
                     break;
             }
         }
