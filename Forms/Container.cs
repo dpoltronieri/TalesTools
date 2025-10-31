@@ -68,25 +68,65 @@ namespace _4RTools.Forms
         private void RenderTabs()
         {
             this.Invoke((MethodInvoker)delegate {
-                atkDefMode.TabPages.Clear();
-                tabControlAutopot.TabPages.Clear();
-
                 UserPreferences prefs = ProfileSingleton.GetCurrent().UserPreferences;
+
+                // Main Tabs
+                List<TabPage> tabsToAdd = new List<TabPage>();
+                List<TabPage> tabsToRemove = new List<TabPage>();
 
                 foreach (TabPage tab in mainTabs)
                 {
-                    if (tab.Name == "tabConfig" || tab.Name == "tabPageProfiles" || tab.Name == "tabDev" || !prefs.TabVisibility.TryGetValue(tab.Name, out bool isVisible) || isVisible)
+                    bool shouldBeVisible = tab.Name == "tabConfig" || tab.Name == "tabPageProfiles" || tab.Name == "tabDev" || !prefs.TabVisibility.TryGetValue(tab.Name, out bool isVisible) || isVisible;
+                    bool isCurrentlyVisible = atkDefMode.TabPages.Contains(tab);
+
+                    if (shouldBeVisible && !isCurrentlyVisible)
                     {
-                        atkDefMode.TabPages.Add(tab);
+                        tabsToAdd.Add(tab);
+                    }
+                    else if (!shouldBeVisible && isCurrentlyVisible)
+                    {
+                        tabsToRemove.Add(tab);
                     }
                 }
 
+                foreach (TabPage tab in tabsToRemove)
+                {
+                    atkDefMode.TabPages.Remove(tab);
+                }
+
+                foreach (TabPage tab in tabsToAdd)
+                {
+                    atkDefMode.TabPages.Add(tab);
+                }
+
+
+                // Secondary Tabs
+                tabsToAdd.Clear();
+                tabsToRemove.Clear();
+
                 foreach (TabPage tab in secondaryTabs)
                 {
-                    if (!prefs.TabVisibility.TryGetValue(tab.Name, out bool isVisible) || isVisible)
+                    bool shouldBeVisible = !prefs.TabVisibility.TryGetValue(tab.Name, out bool isVisible) || isVisible;
+                    bool isCurrentlyVisible = tabControlAutopot.TabPages.Contains(tab);
+
+                    if (shouldBeVisible && !isCurrentlyVisible)
                     {
-                        tabControlAutopot.TabPages.Add(tab);
+                        tabsToAdd.Add(tab);
                     }
+                    else if (!shouldBeVisible && isCurrentlyVisible)
+                    {
+                        tabsToRemove.Add(tab);
+                    }
+                }
+
+                foreach (TabPage tab in tabsToRemove)
+                {
+                    tabControlAutopot.TabPages.Remove(tab);
+                }
+
+                foreach (TabPage tab in tabsToAdd)
+                {
+                    tabControlAutopot.TabPages.Add(tab);
                 }
             });
         }
@@ -127,8 +167,6 @@ namespace _4RTools.Forms
         {
             ProfileSingleton.Create("Default");
             this.refreshProfileList();
-            this.profileCB.SelectedItem = "Default";
-            RenderTabs();
 
             //Paint Children Forms 
             frmToggleApplication = SetToggleApplicationStateWindow();
@@ -150,6 +188,9 @@ namespace _4RTools.Forms
 #if DEBUG
             SetDevWindow();
 #endif
+
+            this.profileCB.SelectedItem = "Default";
+            RenderTabs();
         }
 
         public void refreshProfileList()
