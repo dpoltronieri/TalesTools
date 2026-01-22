@@ -39,6 +39,16 @@ This document outlines the roadmap, planned features, architectural improvements
     -   **Loops**: Repeat actions X times.
     -   **State Checks**: Wait for a specific buff/debuff before proceeding.
 
+### 1.6. Masterball Control (Mascot Manager)
+- **Goal**: Automate the deployment and rotation of "Masterball" pets (Eddga, Fenrir, etc.) with high reliability.
+- **Description**: A specialized tab to control pet priority and deployment sequences.
+    -   **Behavior**: Similar to Auto Switch but optimized for pet mechanics.
+        -   **Reliability**: Supports sending multiple keypresses in a short burst to guarantee deployment (overcoming animation delays or lag).
+        -   **Sequence**: Cycle through utility pets (e.g., Eddga for Provoke, Fenrir for Mind Breaker) and end on a "Constant" combat mascot (e.g., Satan Morroc, Lord Seyren).
+    -   **Profiles**: Support for multiple deployment strategies selectable via hotkeys.
+        -   *Example*: Press `F1` to load and execute the "Seyren" profile.
+        -   *Example*: Press `F2` to load and execute the "Satan Morroc" profile.
+
 ---
 
 ## 2. Technical Optimizations

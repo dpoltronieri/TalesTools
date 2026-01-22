@@ -4,41 +4,20 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using _4RTools.Model;
 using _4RTools.Utils;
+using System.Linq;
 
 namespace _4RTools.Forms
 {
     public partial class DevForm : Form
     {
-        // Define a estrutura para armazenar as informações dos buffs a serem exibidas.
-        private static readonly Dictionary<string, EffectStatusIDs> brisaLeveBuffs = new Dictionary<string, EffectStatusIDs>
-        {
-            { "Fogo", EffectStatusIDs.PROPERTYFIRE },
-            { "Água", EffectStatusIDs.PROPERTYWATER },
-            { "Vento", EffectStatusIDs.PROPERTYWIND },
-            { "Terra", EffectStatusIDs.PROPERTYGROUND },
-            { "Sombrio", EffectStatusIDs.PROPERTYDARK },
-            { "Fantasma", EffectStatusIDs.PROPERTYTELEKINESIS },
-            { "Sagrado", EffectStatusIDs.ASPERSIO }
-        };
-
         public DevForm()
         {
             InitializeComponent();
-            InitializeDataGridView();
         }
 
-        private void InitializeDataGridView()
+        private void DevForm_Load(object sender, EventArgs e)
         {
-            // Popula o DataGridView com os dados estáticos dos buffs uma única vez.
-            foreach (var entry in brisaLeveBuffs)
-            {
-                string buffName = entry.Key;
-                EffectStatusIDs effectId = entry.Value;
-                string enumName = effectId.ToString();
-                int id = (int)effectId;
-                // Adiciona a linha com as informações que não mudam.
-                dgvBrisaLeveBuffs.Rows.Add(buffName, enumName, id, "...", "...");
-            }
+            // Initial load of buff names happens in static constructor of BuffData
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -46,63 +25,84 @@ namespace _4RTools.Forms
             Client client = ClientSingleton.GetClient();
             if (client == null)
             {
-                // Se o cliente não for encontrado, exibe uma mensagem de status e limpa os dados.
-                this.lblBrisaLeve.Text = "Procurando cliente do jogo...";
-                ClearGridStatus();
+                // Clear grid if no client
+                this.dgvAllBuffs.Rows.Clear();
                 return;
             }
 
-            Profile currentProfile = ProfileSingleton.GetCurrent();
-            if (currentProfile == null || currentProfile.AutobuffSkill == null)
+            // Read all active buffs
+            Dictionary<int, string> activeBuffs = new Dictionary<int, string>();
+
+            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
             {
-                // Se o perfil ou a configuração de autobuff não estiverem carregados, exibe uma mensagem.
-                this.lblBrisaLeve.Text = "Perfil não carregado ou sem configuração de buffs.";
-                ClearGridStatus();
-                return;
-            }
-
-            // Se tudo estiver OK, exibe o status de monitoramento.
-            this.lblBrisaLeve.Text = "Monitorando Buffs - Brisa Leve";
-
-            var autoBuffSkill = currentProfile.AutobuffSkill;
-            // OTIMIZAÇÃO: Lê todos os buffs da memória uma vez por tick.
-            HashSet<EffectStatusIDs> currentBuffs = autoBuffSkill.GetCurrentBuffsAsSet(client);
-
-            // Atualiza o status e a tecla de cada buff na tabela.
-            foreach (DataGridViewRow row in dgvBrisaLeveBuffs.Rows)
-            {
-                if (Enum.TryParse(row.Cells["colEnumName"].Value.ToString(), out EffectStatusIDs effectId))
+                uint currentStatusId = client.CurrentBuffStatusCode(i);
+                if (currentStatusId != uint.MaxValue && currentStatusId > 0)
                 {
-                    // Atualiza a coluna Status.
-                    bool isActive = autoBuffSkill.hasBuff(currentBuffs, effectId);
-                    row.Cells["colBuffStatus"].Value = isActive ? "ON" : "OFF";
-
-                    // Atualiza a coluna da tecla relacionada.
-                    if (autoBuffSkill.buffMapping.TryGetValue(effectId, out Key mappedKey))
+                    int id = (int)currentStatusId;
+                    if (!activeBuffs.ContainsKey(id))
                     {
-                        row.Cells["colRelatedKey"].Value = mappedKey.ToString();
+                        activeBuffs.Add(id, BuffData.GetBuffName(id));
+                    }
+                }
+            }
+
+            // Update GridView
+            List<DataGridViewRow> rowsToRemove = new List<DataGridViewRow>();
+            List<int> existingIds = new List<int>();
+
+            foreach (DataGridViewRow row in this.dgvAllBuffs.Rows)
+            {
+                if (row.Cells["colId"].Value != null)
+                {
+                    int rowId = (int)row.Cells["colId"].Value;
+                    existingIds.Add(rowId);
+
+                    if (!activeBuffs.ContainsKey(rowId))
+                    {
+                        rowsToRemove.Add(row);
                     }
                     else
                     {
-                        row.Cells["colRelatedKey"].Value = "N/A";
+                        // Update name if changed (e.g. user just saved a new name)
+                        row.Cells["colName"].Value = activeBuffs[rowId];
                     }
+                }
+            }
+
+            // Remove rows for buffs that are gone
+            foreach (var row in rowsToRemove)
+            {
+                this.dgvAllBuffs.Rows.Remove(row);
+            }
+
+            // Add new rows
+            foreach (var buff in activeBuffs)
+            {
+                if (!existingIds.Contains(buff.Key))
+                {
+                    this.dgvAllBuffs.Rows.Add(buff.Key, buff.Value, "N/A");
                 }
             }
         }
 
-        // Limpa os dados dinâmicos da grade para indicar que não há informações.
-        private void ClearGridStatus()
+        private void btnSaveBuff_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in dgvBrisaLeveBuffs.Rows)
+            if (int.TryParse(this.txtBuffId.Text, out int id) && !string.IsNullOrWhiteSpace(this.txtBuffName.Text))
             {
-                row.Cells["colBuffStatus"].Value = "...";
-                row.Cells["colRelatedKey"].Value = "...";
+                BuffData.AddOrUpdateName(id, this.txtBuffName.Text);
+                MessageBox.Show($"Buff Name Saved: ID {id} = {this.txtBuffName.Text}");
+                this.txtBuffId.Text = "";
+                this.txtBuffName.Text = "";
+            }
+            else
+            {
+                MessageBox.Show("Invalid ID or Name.");
             }
         }
 
-        private void DevForm_Load(object sender, EventArgs e)
+        private void btnReload_Click(object sender, EventArgs e)
         {
-            // Código a ser executado quando o formulário carregar.
+            this.dgvAllBuffs.Rows.Clear();
         }
     }
 }

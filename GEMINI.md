@@ -19,3 +19,7 @@ This document outlines the core principles, standards, and technical guidelines 
 
 - **Pattern**: Dependencies are managed manually. There is no formal Dependency Injection (DI) container.
 - **Instantiation**: Objects and forms are instantiated directly (e.g., `var myForm = new MyForm();`). When refactoring or adding features, consider opportunities to decouple components, even without a formal DI framework.
+
+## 4. Project Structure & Compilation
+
+- **Adding New Files**: When creating new `.cs` files (Models, Forms, Utils, etc.), you **MUST** explicitly add them to the `TalesTools.csproj` file. This project does not use glob patterns for including source files; each file is listed individually in an `<ItemGroup>` with a `<Compile Include="..." />` tag. Failure to do this will result in build errors as the new code will not be part of the compilation.

@@ -399,6 +399,7 @@
     </Compile>
     <Compile Include="Model\AHK.cs" />
     <Compile Include="Model\ATKDEFMode.cs" />
+    <Compile Include="Model\BuffData.cs" />
     <Compile Include="Model\AutobuffSkill.cs" />
     <Compile Include="Model\AutoSwitch.cs" />
     <Compile Include="Model\Autopot.cs" />
