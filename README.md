@@ -1,181 +1,289 @@
 # Tales Tools - Ragnatales
 
-Este projeto e uma adaptacao do projeto 4RTools para uso pessoal e como objeto de estudo, onde acrescento features na ferramenta para atender as minhas necessidades jogando no servidor Ragnatales.
+Este projeto é uma adaptação do projeto 4RTools para uso pessoal e como objeto de estudo, onde acrescento funcionalidades na ferramenta para atender às minhas necessidades jogando no servidor Ragnatales.
 
-**ESTA VERSAO E UMA VERSAO EXTENDIDA DA ORIGINAL, CONTENDO TODAS AS FUNCIONALIDADES ORIGINAIS E ALGUMAS CUSTOMIZADAS**
+**ESTA VERSÃO É UMA VERSÃO ESTENDIDA DA ORIGINAL (biancaazuma), CONTENDO TODAS AS FUNCIONALIDADES ORIGINAIS E ALGUMAS CUSTOMIZADAS.**
 
 ## Rodando o projeto
 
-Caso voce queira usar esta versao do 4rTools voce pode baixar 'https://github.com/biancaazuma/TalesTools/releases/download/v.3.1.0/TalesTools-v3.1.0.rar' com a release que esta na raiz do projeto, ou usando o Visual Studio 2022 abrir o `4RTools.sln` e rodar e gerar suas propias releases.
+Caso você queira usar esta versão, você pode baixar a release mais recente na raiz do projeto, ou usar o Visual Studio 2022 para abrir o `TalesTools.sln` e gerar suas próprias releases.
 
-## Copiando perfil
+## ⚠️ Atenção: Perfis (Profiles)
 
-Voce pode copiar e substituir a pastar `Profile` de sua versao anterior do 4RTools para a nova pasta extraida e ambos tem compatibilidade.
+**A pasta `Profile` desta versão NÃO é compatível com a versão da biancaazuma ou versões anteriores.**
+É necessário recriar seus perfis do zero nesta nova versão para garantir o funcionamento correto de todas as novas funcionalidades.
 
-## Custom Features
-### Versão 3.1.0
-- [x] Ajustado Bug troca automatica de munição para skill sem click
-- [x] Novo Autobuff-Skill Anel dos nibelungos
-- [x] Novo Autobuff-Skill Rufar dos Tambores
-- [x] Novo Autobuff-Skill Bala Mágica
-- [x] Novo Autobuff-Skill Distorção Arcana
-- [x] Novo Autobuff-Skill Renovatio
-- [x] Novo Autobuff-Skill Força Titânica
-- [x] Adicionado parar heal em instancia competitiva (Não é preciso selecionar nada ele para automaticamente)
-- [x] Adicionado parar heal com Frenesi (Não é preciso selecionar nada ele para automaticamente)
-- [x] Adicionado parar tudo quando o chat principal é aberto (Não é preciso selecionar nada ele para automaticamente e não funciona em chat privado)(contribuição do endereço pelo @Rod)
-- [x] Adicionado macro switch com click (original 4rtools)
-- [x] Adicionado nova função de equipar item antes de potar
-- [x] Adicionado 5 Atk x Def (totalizando 8)
-- [x] Adicionado botão de prioridade (Pausa AutoBuffs e Autopot quando pressionado e manda a tecla pressionada pro jogo, o delay é a demora de mandar a tecla pressionada)
-- [x] Adicionado nova aba de Auto Switch Heal
-    - auto switch heal para HP e SP (recomendo usar um ou outro se o equipamento for do mesmo tipo (por ex: baixo, meio, topo), o delay é em segundos, e a cada x segundos ele valida o hp e sp e usa o item de acordo com a porcentagem colocada
-    - auto switch heal Pet masterball Professora Célia ( se abaixar de X porcentagem de SP, ele equipa a celia e usa a skill indulgir Y vezes, depois muda para o melhor pet, o delay é relacionado ao apertar a skill)
+---
 
-### Versão 3.0.0
-- [x] Removido Auto switch de GTB
-- [x] Ajustado Auto switch de Vajra
-- [x] Ajustado config descer da redea skill sem click
-- [x] Ajustado Nomes em Ordem de autobuffs (Provocar, Rapidez com Uma Mão, Impacto Explosivo, União Solar, Lunar e Estelar)
-- [x] Adicionado campo delay para Autobuff-Skills e Autobuff-Stuffs
-- [x] Novo Autobuff-Skills de Desejo das Sombras
-- [x] Novo Autobuff-Skills de Bater em retirada
-- [x] Novo Autobuff-Skills de kaizel
-- [x] Novo Autobuff-Skills de kaahi
-- [x] Novo Autobuff-Skills de kaite
-- [x] Novo Autobuff-Skills de kaupe
-- [x] Adicionado botões numéricos Skill Spammer
-- [x] Adicionado nova aba grande de Auto Switch
-    - auto switch genérico
-    - auto switch pets masterball (Eddga, Mestre-ferreiro Howard, Arquimaga Kathryne, Venomorfo Perfeito e Fenrir)
-- [x] Nova config de pausar TalesTools quando aparecer o Anti-Bot (contribuição do id pelo Argilago)
+# Documentação de Funcionalidades do TalesTools
 
-### Versão 2.7.4
-- [x] Ajustado Bugs AutoSwitch vajra
-- [x] Ajustado spam da habilidade Rapidez com Duas Mãos quando estiver no pântano dos mortos
-- [x] Separado Parar autobuff/cura na cidade
-- [x] Novo Autobuff-Skills de Provocar
-- [x] Novo Autobuff-Skills de União Solar, Lunar e Estelar
-- [x] Adicionado botão de reset para Autobuff-Skills e Autobuff-Stuffs
-- [x] Adicionado tooltips em algumas funções
-- [x] Novo Autobuff-Stuffs de Elixir Rubro
-- [x] Novo Autobuff-Stuffs de Poção do Dragão Místico
-- [x] Novo Autobuff-Stuffs de Poção do Bovino Furioso
-- [x] Nova config de desmontar da rédea ao atacar (feito pelo @LordVince  )
-- [x] Nova config de troca automatica de munição (feito pelo @LordVince  )
+Este documento fornece documentação detalhada para as principais abas funcionais e sistemas principais do aplicativo TalesTools.
 
-### Versão 2.7.1
-- [x] Adicionado 2 Macro Switch (feito pelo @Fabrin )
-- [x] Adicionado Auto switch GTB
-- [x] Novo Autobuff-Skills de Enlouquecedor
-- [x] Ajustado Bugs AutoSwitch
-- [x] Ajustado Bugs ATK X DEF
-- [x] Ajustado Bugs Macro Songs
+## 1. Autopot
 
-### Versão 2.7.0
-- [x] Corrigido Autobuff-Stuffs de Poção do Furor Mágico
+**Descrição:**
+O recurso Autopot usa automaticamente itens de cura (Poções) para manter os níveis de HP e SP do personagem. Foi projetado para ser a principal ferramenta de sobrevivência.
 
-### Versão 2.6.9
-- [x] Ajustado ATK x DEF para mesmo item
+**Parâmetros Chave:**
+- **HP Key**: A tecla atribuída à poção de HP.
+- **HP %**: A porcentagem abaixo da qual a poção de HP será usada.
+- **SP Key**: A tecla atribuída à poção de SP.
+- **SP %**: A porcentagem abaixo da qual a poção de SP será usada.
+- **Delay (ms)**: O intervalo de tempo (em milissegundos) entre as verificações/uso de poção (Padrão: 15ms).
+- **First Heal (Primeira Cura)**: Determina a prioridade entre cura de HP e SP (Opções: "HP" ou "SP").
+- **Stop when Critical Wound (Brisa Leve)**: Se ativado, pausa o Autopot quando o status "Ferimento Crítico" (Critical Wound) está ativo, evitando desperdício de poções.
+- **Equip Before/After (Equipar Antes/Depois)**: Permite configurar uma tecla para equipar um item específico (ex: item de bônus de cura) antes do loop de cura começar e outra tecla para equipar um item após o término do loop.
 
-### Versão 2.6.8
-- [x] Ajustado spam da habilidade Rapidez com Uma Mão quando estiver no pântano dos mortos
-- [x] Novo Autobuff-Stuffs de Suco de Gato
-- [x] Novo Autobuff-Stuffs de Poção Mental
-- [x] Novo Autobuff-Stuffs de Poção Vitata 500
-- [x] Novo Autobuff-Stuffs de Salada de Frutas Tropicais
-- [x] Novo Autobuff-Stuffs de Cálice da Ilusão
-- [x] Novo Autobuff-Stuffs de Pergaminho de Esquiva
-- [x] Novo Autobuff-Stuffs de Pergaminho de Precisão
-- [x] Novo Debuffs de Incêndio
-- [x] Novo Debuffs de Grito da Mandrágora
-- [x] Novo Debuffs de Conjuração Lenta
-- [x] Adicionado 3 Atk x Def (totalizando 4) (obs: não colocar mesma spammer key para 2 atk x def, algum não irá funcionar)
-- [x] Adicionado nova aba de Config (configurações de perfil)
-	- Ordenar uso de Autobuffs Skill
-	- Pausar autobuffs/pot/skill timer/auto switch na cidade (feito pelo @LordVince)
-	- Pausar autobuff-skill na rédea (feito pelo @LordVince)
-- [x] Ajustado Doce de Elvira remove debuffs 
-	- Conjuração Lenta
-	- Ferimento Crítico
-	- Hipotermia
-	- Grito da Mandrágora
-	- Incêndio
-	- Sono Profundo
+**Lógica:**
+1.  **Verificações de Segurança**: Verifica se o personagem está em uma cidade (se "Stop in City" estiver ativado), tem status "Anti-Bot", "Berserk" (Frenesi) ou está em modo "Competitivo". Se algum for verdadeiro, ele para.
+2.  **Loop de Prioridade**:
+    -   Se **HP Priority**: Verifica HP primeiro. Se HP < HP%, entra em um loop pressionando a tecla de HP até HP >= HP%.
+        -   *Verificação Inteligente de SP*: Dentro do loop de HP, a cada 4 poções de HP, ele verifica se SP < SP%. Se sim, usa uma poção de SP para evitar que o SP zere durante dano intenso.
+    -   Se **SP Priority**: Verifica SP primeiro. A lógica é semelhante, mas prioriza a recuperação de SP.
+3.  **Troca de Equipamento**: Se configurado, aciona a tecla "Equip Before" antes de entrar no loop de cura e a tecla "Equip After" quando o HP alvo é atingido.
 
-### Versão 2.6.7
-- [x] Ajustado delay do auto switch de nariz de dissimulado
-- [x] Ajustado desligar bot quando muda de perfil
+## 2. Yggdrasil
 
-### Versão 2.6.6
-- [x] Ajustado spam da habilidade rapidez com  duas mãos, rapidez com uma mão, Adrenalina Pura, Adrenalina Concentrada quando estiver com diminuir agilidade
-- [x] Adicionado 2 Skill Timer (totalizando 4)
-- [x] Movido Panacéia e Doce de Elvira para aba de debuffs
-- [x] Alterado icone de bala de guaraná + poção da concentração
-- [x] Adicionado botão para ligar/desligar apenas pot (se quiser continuar com o 4rtools como está atuamente só colocar o mesmo botão nos 2)
-- [x] Adicionado nova aba de Auto Switch de baixos (nariz de dissimulado e vajra)
-- [x] Nova Skill de Espadachim (Rapidez com Uma Mão)
-- [x] Ajustado spam da habilidade Caminho do Vento quando estiver em cima do pântano dos mortos
+**Descrição:**
+Um modo especializado do Autopot projetado para itens de recuperação de alto impacto, como Frutos ou Sementes de Yggdrasil. Compartilha o motor central com o Autopot, mas simplifica a interface e a lógica para cura explosiva (burst healing).
 
-### Versão 2.6.5
-- [x] Adicionado botão para ativar/desativar a pot quando estiver com Ferimento Crítico (se estiver selecionado não vai curar quando estiver com ferimento critico)
-- [x] Novo Debuffs de sentar (se o boss mandar sentar ele levanta sozinho, mas tem que associar sua tecla de sentar lá)
-- [x] Nova Skill de Arqueiro (Dança com Lobos)
+**Parâmetros Chave:**
+- **HP Key**: Tecla para o item Yggdrasil.
+- **HP %**: Porcentagem limite para usar o item.
+- **SP Key**: Tecla para o item de recuperação de SP (frequentemente o mesmo item Yggdrasil em algumas configurações, ou um item de SP separado).
+- **SP %**: Porcentagem limite para recuperação de SP.
+- **Delay**: Atraso de execução (Padrão: 50ms - tipicamente mais lento que poções padrão para evitar desperdício/uso excessivo).
 
-### Versão 2.6.4
-- [x] Adicionado chapéu aba de ATK x DEF
-- [x] Ajustado spam da habilidade Rapidez com Lança quando estiver em cima do pântano dos mortos
-- [x] Adicionado 2 Macro Switch (ja está no Max totalizando 8)
-- [x] Adicionado 4 Macro Songs (ja está no Max totalizando 8)
-- [x] Para cura de pot de hp quando estiver com ferimento critico (Ygg funciona normalmente)
-- [x] Adicionado pergaminhos de cheffenia (Ghostring, Angeling, Tao Gunka, Senhor dos Orcs, Orc Herói, Abelha Rainha)
-- [x] Novo Autobuff-Stuffs de  Manual de Combate de Classe
-- [x] Alterado icone de Goma
-- [x] Nova Skill de Noviço (Basílica)
+**Diferenças do Autopot:**
+-   **UI Simplificada**: Não mostra as opções "Stop when Critical Wound" ou "Equip Before/After", pois a cura de Yggdrasil é tipicamente instantânea e total, ignorando algumas verificações de status padrão ou necessidades de troca de equipamento.
+-   **Lógica**: Segue estritamente os limites de HP/SP para acionar as teclas sem a lógica complexa de "Troca/Equipar".
 
-### Versão 2.6.2
-- [x] Adicionado nova aba de Debuffs (para quem utiliza a pot para debuffs específicos )
-- [x] Novo Autobuff-Stuffs de Incenso queimado
-- [x] Novo Autobuff-Stuffs de Acarajé
-- [x] Novo Autobuff-Stuffs de Palitos (Laranja/Baunilha/Cassis/Chocolate/Limão/Morango)
+## 3. Skill Timer (Temporizador de Habilidades)
 
-### Versão 2.6.1
-- [x] Adicionado seleção de prioridade de cura para HP/SP
-- [x] Novo Autobuff-Stuffs de Pergaminho do eden
-- [x] Novo Autobuff-Stuffs de Pergaminho de aspersio
-- [x] Novo Autobuff-Stuffs de Pergaminho de fantasma
-- [x] Nova Skill de Noviço (Lauda Agnus)
-- [x] Nova Skill de Noviço (Lauda Ramus)
-- [x] Nova Skill de Espadachim (Impacto Explosivo)
-- [x] Adicionado mais 3 macro switchs
-- [x] Adicionado mais 1 Skill Timer
-- [x] Correção Aloe Vera (ragnatales é diferente)
+**Descrição:**
+Um utilitário para conjurar habilidades ou usar itens automaticamente em intervalos de tempo fixos. Útil para manter buffs que não possuem um ícone de status ou para ações repetitivas.
 
-### Versão 2.6.0
-- [x] Modo Escuro
-- [x] Auto-Transfer Itens
-- [x] Novas Skills de Sumo (Impositio Manus)
-- [x] Nova Skill de Archer (Disparo Selvagem)
-- [x] Nova Skill de Mestre Taekwon (Milagre solar, Lunar e Estelar)
-- [x] Nova Skill de Mestre Taekwon (Calor solar, Lunar e Estelar)
-- [x] Nova Skill de Mestre Taekwon (Proteção Solar)
-- [x] Nova Skill de Mestre Taekwon (Proteção Lunar)
-- [x] Nova Skill de Mestre Taekwon (Proteção Estelar)
-- [x] Correção Vigor Auto-Spawn
-- [x] Nova Skill de Ninja (Imagem Falsa)
-- [x] Nova Skill de Justiceiro (Reação Ilimitada)
-- [x] Nova Skill de Gatuno (Esconderijo)
-- [x] Nova Skill de Gatuno (Furtividade)
-- [x] Novo Autobuff-Stuffs de Veneno para gatunos
-## Original Features
-- [x] ON/OFF Button (with shortcut key)
-- [x] Autopot
-- [x] Autobuff status
-- [x] Manage Profiles
-- [x] AHK Spammer
-- [x] Auto Refresh Spammer
-- [x] Autobuff Stuffs
-- [x] Autobuff skills
-- [x] Song Macro
-- [x] Macro Switch/Macro Chain
-- [x] ATK x DEF Mode switch
+**Parâmetros Chave:**
+- **Lane 1-4**: A ferramenta fornece 4 faixas de temporizador independentes.
+- **Key**: A tecla a ser pressionada.
+- **Delay (s)**: O intervalo de tempo em segundos entre cada pressionamento.
+
+**Lógica:**
+-   Cada faixa opera de forma independente.
+-   Uma vez ativado, o sistema espera pelo **Delay** especificado e então simula o pressionamento da **Key**.
+-   Repete indefinidamente enquanto o recurso estiver ativo.
+-   Comumente usado para habilidades como "Impacto Explosivo" (pelo bônus), comidas, ou outros consumíveis temporizados.
+
+## 4. AutoSwitch Heal (Troca Automática de Cura)
+
+**Descrição:**
+Um trocador de equipamentos inteligente que reage aos níveis de HP e SP do personagem. Permite trocar automaticamente entre equipamento "Tank/Defensivo" e equipamento de "Dano/Ofensivo" com base na vida/mana atual.
+
+**Parâmetros Chave:**
+-   **HP Switching**:
+    -   **Less HP % / Key**: Quando HP está *abaixo* desta porcentagem, pressiona esta tecla (ex: equipar Escudo/Carta GR).
+    -   **More HP % / Key**: Quando HP está *acima* desta porcentagem, pressiona esta tecla (ex: equipar Espada de Duas Mãos/Carta de Dano).
+-   **SP Switching**:
+    -   **Less SP % / Key**: Quando SP está *abaixo* desta porcentagem, pressiona esta tecla (ex: equipar item de regen de MP).
+    -   **More SP % / Key**: Quando SP está *acima* desta porcentagem, pressiona esta tecla (ex: equipar equipamento padrão).
+-   **Equip Delay**: O tempo mínimo entre trocas de equipamento (Padrão: 3 segundos) para evitar spam/glitches.
+
+**Lógica:**
+1.  **Monitoramento**: Monitora constantemente o HP e SP atuais.
+2.  **Verificação de Condição**:
+    -   Se `HP < Less HP %`: Aciona "Less HP Key".
+    -   Senão Se `HP > More HP %`: Aciona "More HP Key".
+    -   (Lógica similar para SP).
+3.  **Segurança**: Inclui verificações padrão (Anti-Bot, Status de Cidade) para evitar trocas em momentos inapropriados.
+
+---
+
+## 5. Sistemas Principais e Ferramentas
+
+### Ragnarok Client
+**Descrição:**
+Gerencia a conexão entre a ferramenta e o cliente do jogo.
+-   **Gerenciamento de Servidor**: Permite aos usuários configurar endereços de memória (`hpAddress`, `nameAddress`, `mapAddress`) para diferentes versões de servidor. As configurações são salvas em `supported_servers.json`.
+-   **Anexar Processo**: O usuário seleciona o processo específico do cliente Ragnarok para anexar a ferramenta.
+-   **Segurança em Cidades**: Mantém uma lista de "Mapas de Cidade" (`city_name.json`) onde a automação ofensiva (como Autopot) é desativada automaticamente para evitar comportamento suspeito em zonas seguras.
+
+### Sistema de Perfis (Profile System)
+**Descrição:**
+Um sistema abrangente de gerenciamento de configurações.
+-   **Perfis**: Permite salvar configurações distintas (ajustes de Autopot, Macros, Teclas) em arquivos JSON nomeados.
+-   **Gerenciamento**: Usuários podem Criar, Carregar e Deletar perfis.
+-   **Vínculo com Personagem**: Lembra automaticamente qual perfil foi usado por último para um nome de personagem específico, facilitando a troca contínua entre personagens.
+
+### Status Atual (Dashboard)
+**Descrição:**
+O hub de controle principal para o estado da aplicação.
+-   **Alternar Global (ON/OFF)**: Um interruptor mestre que ativa ou desativa *todas* as funcionalidades de automação.
+    -   **Atalho**: Atalho de teclado configurável para alternar este estado.
+    -   **Visual**: A interface fica Verde (ON) ou Vermelha (OFF), e o Ícone na Bandeja muda para refletir o status.
+    -   **Áudio**: Toca efeitos sonoros distintos ("Speech On" / "Speech Off") para feedback auditivo.
+-   **Status de Cura**: Um sub-interruptor dedicado especificamente para funções de cura (Autopot/Yggdrasil). Isso permite pausar a cura (ex: durante uma mecânica específica) sem parar outros macros ou ferramentas.
+
+### Transfer Item (Transferir Item)
+**Descrição:**
+Um utilitário para gerenciamento de inventário.
+-   **Função**: Transfere rapidamente itens entre o Inventário e o Armazém/Carrinho.
+-   **Uso**: Enquanto a **Transfer Key** configurada estiver pressionada, a ferramenta simula `Alt + Botão Direito` repetidamente.
+-   **Lógica**: Usa inputs de baixo nível para realizar o atalho específico do Ragnarok para mover itens, acelerando significativamente as corridas de reabastecimento.
+
+### Priority Key (Tecla de Prioridade)
+**Descrição:**
+Um recurso de segurança de substituição manual.
+-   **Função**: Quando a **Priority Key** é mantida pressionada, a ferramenta **pausa todas as threads de automação**.
+-   **Caso de Uso**: Permite que o usuário assuma o controle manual total do personagem (ex: para conjurar uma habilidade específica, mover-se com precisão ou digitar) sem que os inputs do bot interfiram ou interrompam.
+-   **Configuração**:
+    -   **Key**: A tecla que aciona a pausa.
+    -   **Delay**: A responsividade da verificação (tipicamente baixa para garantir pausa imediata).
+
+---
+
+## 6. Abas de Configuração e Gerenciamento
+
+### Aba Config (Configurações)
+**Descrição:**
+Permite personalização global do comportamento e interface da aplicação.
+
+**Recursos Chave:**
+-   **Visibilidade de Abas**: Alterna a visibilidade das principais abas de recursos (ex: esconder "Macro Songs" se não for necessário) para limpar a interface.
+-   **Filtros de Autobuff**: Mostra/esconde granularmente grupos específicos de habilidades (Espadachim, Mago, etc.) ou grupos de itens (Comidas, Poções) nas abas de Autobuff.
+-   **Preferências de Segurança e Automação**:
+    -   **Stop Buffs/Heal in City**: Previne gastar consumíveis em zonas seguras.
+    -   **Stop with Chat Open**: Pausa a automação quando a barra de chat do jogo está ativa (para evitar digitar macros no chat).
+    -   **Stop Buffs on Rein (Montaria)**: Previne tentativas de conjuração enquanto montado.
+    -   **Get Off Rein**: Opção para desmontar automaticamente (usando `Get Off Rein Key`) se necessário.
+-   **Ammo Switch**: Configura teclas (`Ammo 1`, `Ammo 2`) para alternar entre tipos de munição.
+-   **Ordem de Buffs**: Interface de arrastar e soltar para priorizar a ordem em que os buffs são verificados/aplicados.
+
+### Aba Profiles (Perfis)
+**Descrição:**
+A interface para gerenciar perfis de usuário.
+
+**Recursos Chave:**
+-   **Criar Perfil**: Adiciona uma nova configuração de perfil nomeada.
+-   **Remover Perfil**: Deleta um perfil existente (o perfil Default não pode ser deletado).
+-   **Atribuir ao Personagem**: Vincula o perfil selecionado atualmente ao personagem ativo no cliente do jogo. A ferramenta carregará automaticamente este perfil quando esse personagem for detectado.
+
+### Aba Dev (Desenvolvedor)
+**Descrição:**
+Uma ferramenta de diagnóstico e monitoramento para desenvolvedores e usuários avançados.
+
+**Recursos Chave:**
+-   **Monitor Brisa Leve**: Uma visualização de grade especializada para a mecânica de "Brisa Leve" (Mudança de Elemento).
+    -   **Monitores**: Status de Fogo, Água, Vento, Terra, Sombrio, Fantasma e Sagrado.
+    -   **Exibe**: Nome do Buff, ID Interno, Status Atual (ON/OFF) e a Tecla mapeada.
+    -   **Uso**: Verifica se a ferramenta detecta corretamente esses efeitos de status específicos da memória do jogo.
+
+---
+
+## 7. Abas de Funcionalidades Principais
+
+### Skill Spammer
+**Descrição:**
+Um spammer de teclas de uso geral (AutoKey).
+
+**Modos:**
+-   **Compatibility (Compatibilidade)**: 
+    -   Usa mensagens padrão do Windows (`PostMessage`) para simular input. 
+    -   Compatível com a maioria das versões do jogo.
+    -   Suporta recursos **No Shift** e **Mouse Flick**.
+-   **Synchronous (Síncrono)**:
+    -   Usa chamadas bloqueantes (`SendMessage`) para garantir que o input seja processado antes de continuar.
+    -   Envia explicitamente eventos de Tecla Baixo e Tecla Cima, o que pode ser mais confiável para certas habilidades.
+    -   Suporta **No Shift** e **Mouse Flick**.
+-   **Speed Boost**:
+    -   Usa APIs de simulação de hardware de baixo nível (`mouse_event`) para cliques do mouse.
+    -   **Recursos Desativados**: *Não* suporta **No Shift** ou **Mouse Flick** (essas opções são desativadas na interface quando Speed Boost está ativo).
+    -   **Caso de Uso**: Para cenários que exigem a taxa de input mais rápida possível, ignorando algumas camadas de segurança/compatibilidade.
+
+**Recursos Adicionais:**
+-   **No Shift**: Injeta um pressionamento da tecla Shift antes da ação. Isso efetivamente age como um "Ataque Parado" (prevenindo que o personagem ande em direção ao alvo se clicado).
+-   **Mouse Flick**: Micro-movimentos do cursor do mouse (-1/+1 pixel) durante cliques. Isso pode ajudar a registrar cliques em jogos que ignoram input estático ou para atualizar o alvo do cursor.
+-   **Ammo Switch**: Se ativado na Config, alterna automaticamente entre as teclas `Ammo 1` e `Ammo 2` a cada ciclo de spam.
+-   **Get Off Rein**: Desmonta automaticamente o personagem (se montado) antes de atacar, garantindo que a ação de ataque não seja bloqueada pelo status de montaria.
+
+### Autobuff - Skills (Habilidades)
+**Descrição:**
+Mantém automaticamente buffs próprios derivados de habilidades de classe.
+
+**Recursos Chave:**
+-   **Grupos de Classe**: Buffs são organizados por classe (Espadachim, Arqueiro, Mago, etc.) para fácil navegação.
+-   **Lógica**: A ferramenta monitora o status do personagem. Se um buff configurado estiver faltando, pressiona a tecla atribuída para reconjurá-lo.
+-   **Configuração**:
+    -   **Key**: Atribua a tecla para a habilidade específica.
+    -   **Delay**: Intervalo de tempo entre verificações de status.
+
+### Autobuff - Stuffs (Consumíveis)
+**Descrição:**
+Usa automaticamente itens consumíveis para manter buffs baseados em itens.
+
+**Recursos Chave:**
+-   **Grupos de Itens**: Organizados por tipo (Poções, Comidas, Elementais, Caixas, Pergaminhos, Etc.).
+-   **Lógica**: Semelhante ao Autobuff de Habilidades, verifica a presença do efeito do item (ex: status "Poção do Despertar") e consome o item se o efeito estiver faltando.
+-   **Configuração**:
+    -   **Key**: Atribua a tecla para o item.
+    -   **Delay**: Intervalo de tempo entre verificações de status.
+
+### Auto Switch
+**Descrição:**
+Um trocador de equipamentos "Baseado em Estado".
+
+**Recursos Chave:**
+-   **Gatilho**: Detecta quando um buff próprio específico (ex: "Espírito", "Rapidez") está ativo.
+-   **Ação**:
+    -   **Item Key**: Equipa um item (ex: uma arma que se beneficia do buff).
+    -   **Skill Key**: Opcionalmente conjura uma habilidade após equipar.
+    -   **Next Item Key**: Equipa outro item (ex: trocando de volta) após a ação.
+-   **Caso de Uso**: Sequências de troca de equipamento especializadas acionadas pelo estado do seu personagem.
+
+### ATK x DEF
+**Descrição:**
+Um sistema de troca de modo para posturas "Ofensiva" vs "Defensiva".
+
+**Recursos Chave:**
+-   **Lanes**: Suporta até 8 configurações independentes.
+-   **Configuração por Lane**:
+    -   **Spammer Key**: A tecla usada para atacar (ex: uma tecla de spam de habilidade).
+    -   **ATK Set**: Uma lista de teclas (Equipamentos) para equipar ao entrar no modo de Ataque.
+    -   **DEF Set**: Uma lista de teclas (Equipamentos) para equipar ao entrar no modo de Defesa.
+    -   **Switch Delay**: Atraso entre trocas de equipamento.
+-   **Lógica**: Projetado para permitir transição rápida entre equipamento de dano total (enquanto ataca) e equipamento tanque total (ao parar ou defender).
+
+### Macro Songs (Macro de Músicas)
+**Descrição:**
+Um sistema de macro dedicado para Bardos e Odaliscas gerenciarem o ciclo de músicas e troca de instrumentos.
+
+**Recursos Chave:**
+-   **Lanes**: 8 faixas de macro.
+-   **Sequência**:
+    1.  **Trigger**: Tecla para iniciar o macro.
+    2.  **Equip Instrument**: Troca para o instrumento musical.
+    3.  **Macro Entries**: Sequência de habilidades de música para tocar.
+    4.  **Equip Dagger**: Troca para uma adaga (tática padrão de Ragnarok para cancelar a animação/delay da música).
+-   **Delay**: Atraso configurável entre ações na sequência.
+
+### Macro Switch (Macro de Troca)
+**Descrição:**
+Um sequenciador de macro genérico e multiuso.
+
+**Recursos Chave:**
+-   **Lanes**: 10 faixas de macro.
+-   **Sequência**: Permite definir uma cadeia de teclas a serem pressionadas em ordem.
+-   **Configuração por Passo**:
+    -   **Key**: A tecla a pressionar.
+    -   **Delay**: O tempo de espera após este passo.
+    -   **Click**: Se deve clicar com o mouse após este passo.
+-   **Trigger**: A primeira tecla na sequência age como o gatilho.
+
+### Debuffs (Auto Buff Status)
+**Descrição:**
+Cura automaticamente efeitos de status negativos (Debuffs).
+
+**Recursos Chave:**
+-   **Debuffs Padrão**: Monitora e cura males comuns como Silêncio, Cegueira, Confusão, Veneno, Alucinação e Maldição.
+    -   **Status Key**: Uma atribuição de tecla única que pode ser usada para todos esses debuffs padrão (ideal para "Poção Verde" ou "Panaceia").
+-   **Debuffs Especiais/3rd Job**: Monitora debuffs específicos de alto nível como Ferimento Crítico, Sono Profundo, Incêndio, Congelamento, etc.
+    -   **New Status Key**: Uma atribuição de tecla dedicada para curar essas condições específicas.
