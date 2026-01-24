@@ -32,6 +32,8 @@ namespace _4RTools.Forms
                 this.lblequipAfter.Hide();
                 this.txtHpEquipAfter.Hide();
                 this.txtHpEquipBefore.Hide();
+                this.txtSpEquipBefore.Hide();
+                this.txtSpEquipAfter.Hide();
             }
             subject.Attach(this);
             
@@ -50,6 +52,8 @@ namespace _4RTools.Forms
             this.txtAutopotDelay.TextChanged += (s, e) => DelayChanged?.Invoke(this, EventArgs.Empty);
             this.txtHpEquipBefore.TextChanged += (s, e) => HpEquipBeforeChanged?.Invoke(this, EventArgs.Empty);
             this.txtHpEquipAfter.TextChanged += (s, e) => HpEquipAfterChanged?.Invoke(this, EventArgs.Empty);
+            this.txtSpEquipBefore.TextChanged += (s, e) => SpEquipBeforeChanged?.Invoke(this, EventArgs.Empty);
+            this.txtSpEquipAfter.TextChanged += (s, e) => SpEquipAfterChanged?.Invoke(this, EventArgs.Empty);
             this.chkStopWitchFC.CheckedChanged += (s, e) => StopWitchFCChanged?.Invoke(this, EventArgs.Empty);
             
             this.firstHP.CheckedChanged += (s, e) => { if (firstHP.Checked) FirstHealChanged?.Invoke(this, EventArgs.Empty); };
@@ -66,6 +70,10 @@ namespace _4RTools.Forms
             txtHpEquipBefore.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
             txtHpEquipAfter.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
             txtHpEquipAfter.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            txtSpEquipBefore.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            txtSpEquipBefore.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            txtSpEquipAfter.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            txtSpEquipAfter.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
         }
 
         public void Update(ISubject subject)
@@ -93,6 +101,8 @@ namespace _4RTools.Forms
         public string Delay { get => txtAutopotDelay.Text; set => txtAutopotDelay.Text = value; }
         public string HpEquipBefore { get => txtHpEquipBefore.Text; set => txtHpEquipBefore.Text = value; }
         public string HpEquipAfter { get => txtHpEquipAfter.Text; set => txtHpEquipAfter.Text = value; }
+        public string SpEquipBefore { get => txtSpEquipBefore.Text; set => txtSpEquipBefore.Text = value; }
+        public string SpEquipAfter { get => txtSpEquipAfter.Text; set => txtSpEquipAfter.Text = value; }
         public bool StopWitchFC { get => chkStopWitchFC.Checked; set => chkStopWitchFC.Checked = value; }
         public string FirstHeal
         {
@@ -111,6 +121,8 @@ namespace _4RTools.Forms
         public event EventHandler DelayChanged;
         public event EventHandler HpEquipBeforeChanged;
         public event EventHandler HpEquipAfterChanged;
+        public event EventHandler SpEquipBeforeChanged;
+        public event EventHandler SpEquipAfterChanged;
         public event EventHandler StopWitchFCChanged;
         public event EventHandler FirstHealChanged;
     }

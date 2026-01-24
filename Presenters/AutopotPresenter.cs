@@ -61,6 +61,18 @@ namespace _4RTools.Presenters
                     Save();
                 } catch {}
             };
+            this.view.SpEquipBeforeChanged += (s, e) => {
+                try {
+                    this.autopot.spEquipBefore = (Key)Enum.Parse(typeof(Key), this.view.SpEquipBefore);
+                    Save();
+                } catch {}
+            };
+            this.view.SpEquipAfterChanged += (s, e) => {
+                try {
+                    this.autopot.spEquipAfter = (Key)Enum.Parse(typeof(Key), this.view.SpEquipAfter);
+                    Save();
+                } catch {}
+            };
             this.view.StopWitchFCChanged += (s, e) => {
                 this.autopot.stopWitchFC = this.view.StopWitchFC;
                 Save();
@@ -80,6 +92,8 @@ namespace _4RTools.Presenters
             this.view.Delay = this.autopot.delay.ToString();
             this.view.HpEquipBefore = this.autopot.hpEquipBefore.ToString();
             this.view.HpEquipAfter = this.autopot.hpEquipAfter.ToString();
+            this.view.SpEquipBefore = this.autopot.spEquipBefore.ToString();
+            this.view.SpEquipAfter = this.autopot.spEquipAfter.ToString();
             this.view.StopWitchFC = this.autopot.stopWitchFC;
             this.view.FirstHeal = this.autopot.firstHeal;
         }

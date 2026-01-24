@@ -27,6 +27,8 @@ namespace _4RTools.Model
         public string firstHeal { get; set; } = FIRSTHP;
         public Key hpEquipBefore { get; set; }
         public Key hpEquipAfter { get; set; }
+        public Key spEquipBefore { get; set; }
+        public Key spEquipAfter { get; set; }
 
         public string actionName { get; set; }
         private _4RThread thread;
@@ -150,6 +152,14 @@ namespace _4RTools.Model
 
         private void healSP(Client roClient, int hpPotCount, bool hasCriticalWound)
         {
+            bool equipedBefore = false;
+            if (roClient.IsSpBelow(spPercent) && this.actionName == ACTION_NAME_AUTOPOT)
+            {
+                pressKey(this.spEquipBefore);
+                pressKey(this.spEquipBefore);
+                equipedBefore = true;
+            }
+
             while (roClient.IsSpBelow(spPercent))
             {
                 if (!canHeal(roClient))
@@ -174,6 +184,13 @@ namespace _4RTools.Model
                 }
                 Thread.Sleep(this.delay);
             }
+
+            if (equipedBefore)
+            {
+                pressKey(this.spEquipAfter);
+                pressKey(this.spEquipAfter);
+            }
+
             if (roClient.IsHpBelow(hpPercent))
             {
                 if (this.actionName == ACTION_NAME_AUTOPOT_YGG)
