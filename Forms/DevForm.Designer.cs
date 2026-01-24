@@ -165,10 +165,8 @@ namespace _4RTools.Forms
                                 this.btnSaveBuff.Name = "btnSaveBuff";
                                 this.btnSaveBuff.Size = new System.Drawing.Size(75, 23);
                                 this.btnSaveBuff.TabIndex = 4;
-                                this.btnSaveBuff.Text = "Save";
-                                this.btnSaveBuff.UseVisualStyleBackColor = false;
-                                this.btnSaveBuff.Click += new System.EventHandler(this.btnSaveBuff_Click);
-                                // 
+                                            this.btnSaveBuff.Text = "Save";
+                                            this.btnSaveBuff.UseVisualStyleBackColor = false;                                // 
                                 // btnReload
                                 // 
                                 this.btnReload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(51)))), ((int)(((byte)(56)))));
@@ -177,16 +175,12 @@ namespace _4RTools.Forms
                                 this.btnReload.Name = "btnReload";
                                 this.btnReload.Size = new System.Drawing.Size(95, 23);
                                 this.btnReload.TabIndex = 5;
-                                this.btnReload.Text = "Clear & Reload";
-                                this.btnReload.UseVisualStyleBackColor = false;
-                                this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
-                                // 
+                                            this.btnReload.Text = "Clear & Reload";
+                                            this.btnReload.UseVisualStyleBackColor = false;                                // 
                                 // timer
                                 // 
-                                this.timer.Enabled = true;
-                                this.timer.Interval = 500;
-                                this.timer.Tick += new System.EventHandler(this.timer_Tick);
-                                // 
+                                            this.timer.Enabled = true;
+                                            this.timer.Interval = 500;                                // 
                                 // DevForm
                                 // 
                                 this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,11 +188,9 @@ namespace _4RTools.Forms
                                 this.ClientSize = new System.Drawing.Size(800, 450);
                                 this.Controls.Add(this.mainPanel);
                                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-                                this.Name = "DevForm";
-                                this.Text = "DevForm";
-                                this.Load += new System.EventHandler(this.DevForm_Load);
-                                this.mainPanel.ResumeLayout(false);
-                                this.mainPanel.PerformLayout();
+                                            this.Name = "DevForm";
+                                            this.Text = "DevForm";
+                                            this.mainPanel.ResumeLayout(false);                                this.mainPanel.PerformLayout();
                                 ((System.ComponentModel.ISupportInitialize)(this.dgvAllBuffs)).EndInit();
                                 this.grpAddBuff.ResumeLayout(false);
                                 this.grpAddBuff.PerformLayout();

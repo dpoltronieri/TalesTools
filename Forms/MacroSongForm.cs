@@ -4,17 +4,23 @@ using _4RTools.Utils;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Windows.Input;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class MacroSongForm : Form, IObserver
+    public partial class MacroSongForm : Form, IObserver, IMacroSongView
     {
         public static int TOTAL_MACRO_LANES_FOR_SONGS = 8;
+        private MacroSongPresenter presenter;
+        private Macro macro;
+
         public MacroSongForm(Subject subject)
         {
-            subject.Attach(this);
             InitializeComponent();
-            configureMacroLanes();
+            subject.Attach(this);
+            this.macro = ProfileSingleton.GetCurrent().SongMacro;
+            this.presenter = new MacroSongPresenter(this, this.macro);
+            ConfigureMacroLanes();
         }
 
         public void Update(ISubject subject) 
@@ -22,185 +28,100 @@ namespace _4RTools.Forms
             switch((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
-                    updateUi();
+                    this.macro = ProfileSingleton.GetCurrent().SongMacro;
+                    this.presenter.UpdateModel(this.macro);
                     break;
                 case MessageCode.TURN_ON:
-                    ProfileSingleton.GetCurrent().SongMacro.Start();
+                    this.macro.Start();
                     break;
                 case MessageCode.TURN_OFF:
-                    ProfileSingleton.GetCurrent().SongMacro.Stop();
+                    this.macro.Stop();
                     break;
             }
-
         }
 
-        private void UpdatePanelData(int id)
-        {
-            try
-            {
-                Macro songMacro = ProfileSingleton.GetCurrent().SongMacro;
-                GroupBox p = (GroupBox)this.Controls.Find("panelMacro" + id, true)[0];
-                ChainConfig chainConfig = new ChainConfig(songMacro.chainConfigs[id - 1]);
-                FormUtils.ResetForm(p);
-
-                //Update Trigger Macro Value
-                Control[] c = p.Controls.Find("inTriggerMacro" + chainConfig.id, true);
-                if (c.Length > 0)
-                {
-                    TextBox textBox = (TextBox)c[0];
-                    textBox.Text = chainConfig.trigger.ToString();
-                }
-
-                //Update Dagger Value
-                Control[] cDagger = p.Controls.Find("inDaggerMacro" + chainConfig.id, true);
-                if (cDagger.Length > 0)
-                {
-                    TextBox textBox = (TextBox)cDagger[0];
-                    textBox.Text = chainConfig.daggerKey.ToString();
-                }
-
-                //Update Instrument Value
-                Control[] cInstrument = p.Controls.Find("inInstrumentMacro" + chainConfig.id, true);
-                if (cInstrument.Length > 0)
-                {
-                    TextBox textBox = (TextBox)cInstrument[0];
-                    textBox.Text = chainConfig.instrumentKey.ToString();
-                }
-
-
-                List<string> names = new List<string>(chainConfig.macroEntries.Keys);
-                foreach (string cbName in names)
-                {
-                    Control[] controls = p.Controls.Find(cbName, true);
-                    if (controls.Length > 0)
-                    {
-                        TextBox textBox = (TextBox)controls[0];
-                        textBox.Text = chainConfig.macroEntries[cbName].key.ToString();
-                    }
-                }
-
-                //Update Delay Macro Value
-                Control[] d = p.Controls.Find("delayMac" + chainConfig.id, true);
-                if (d.Length > 0)
-                {
-                    NumericUpDown delayInput = (NumericUpDown)d[0];
-                    delayInput.Value = chainConfig.delay;
-                }
-            } catch { }
-        }
-
-        private void onTextChange(object sender, EventArgs e)
-        {
-            Macro SongMacro = ProfileSingleton.GetCurrent().SongMacro;
-            TextBox textBox = (TextBox)sender;
-            Key key = (Key)Enum.Parse(typeof(Key), textBox.Text.ToString());
-
-            if(textBox.Tag != null)
-            {
-                //Could be Trigger, Dagger or Instrument input
-                string[] inputTag = textBox.Tag.ToString().Split(new[] { ":" }, StringSplitOptions.None);
-                int macroid = short.Parse(inputTag[0]);
-                string type = inputTag[1];
-                ChainConfig chainConfig = ProfileSingleton.GetCurrent().SongMacro.chainConfigs.Find(config => config.id == macroid);
-
-                switch (type)
-                {
-                    case "Dagger":
-                        chainConfig.daggerKey = key;
-                        break;
-                    case "Instrument":
-                        chainConfig.instrumentKey= key;
-                        break;
-                    case "Trigger":
-                        chainConfig.trigger = key;
-                        break;
-                }
-            }
-            else
-            {
-                int macroID = short.Parse(textBox.Name.Split(new[] { "mac" }, StringSplitOptions.None)[1]);
-                ChainConfig chainConfig = SongMacro.chainConfigs.Find(songMacro => songMacro.id == macroID);
-                if(chainConfig == null)
-                {
-                    SongMacro.chainConfigs.Add(new ChainConfig(macroID, Key.None));
-                    chainConfig = SongMacro.chainConfigs.Find(songMacro => songMacro.id == macroID);
-                }
-                chainConfig.macroEntries[textBox.Name] = new MacroKey(key, chainConfig.delay);
-            }
-
-            ProfileSingleton.SetConfiguration(SongMacro);
-        }
-
-        private void onDelayChange(object sender, EventArgs e)
-        {
-            Macro SongMacro = ProfileSingleton.GetCurrent().SongMacro;
-            NumericUpDown delayInput = (NumericUpDown)sender;
-            int macroID = Int16.Parse(delayInput.Name.Split(new[] { "delayMac" }, StringSplitOptions.None)[1]);
-            ChainConfig chainConfig = SongMacro.chainConfigs.Find(songMacro => songMacro.id == macroID);
-
-            chainConfig.delay = decimal.ToInt16(delayInput.Value);
-
-            List<string> names = new List<string>(chainConfig.macroEntries.Keys);
-            foreach (string cbName in names)
-            {
-                chainConfig.macroEntries[cbName].delay = chainConfig.delay;
-            }
-            ProfileSingleton.SetConfiguration(SongMacro);
-        }
-
-        private void onReset(object sender, EventArgs e)
-        {
-            Macro SongMacro = ProfileSingleton.GetCurrent().SongMacro;
-            Button delayInput = (Button)sender;
-            int btnResetID = Int16.Parse(delayInput.Name.Split(new[] { "btnResMac" }, StringSplitOptions.None)[1]);
-            ProfileSingleton.SetConfiguration(SongMacro);
-            this.UpdatePanelData(btnResetID);
-        }
-
-
-        private void updateUi()
+        private void ConfigureMacroLanes()
         {
             for (int i = 1; i <= TOTAL_MACRO_LANES_FOR_SONGS; i++)
             {
-                UpdatePanelData(i);
+                InitializeLane(i);
             }
         }
 
-        private void configureMacroLanes()
-        {
-            for (int i = 1; i <= TOTAL_MACRO_LANES_FOR_SONGS; i++)
-            {
-                initializeLane(i);
-            }
-        }
-
-        private void initializeLane(int id)
+        private void InitializeLane(int id)
         {
             try
             {
                 GroupBox p = (GroupBox)this.Controls.Find("panelMacro" + id, true)[0];
                 foreach (Control c in p.Controls)
                 {
-                    if (c is TextBox)
+                    if (c is TextBox textBox)
                     {
-                        TextBox textBox = (TextBox)c;
                         textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
                         textBox.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-                        textBox.TextChanged += new EventHandler(this.onTextChange);
+                        textBox.TextChanged += (s, e) => {
+                            string tag = textBox.Tag?.ToString();
+                            int laneId = tag != null ? short.Parse(tag.Split(':')[0]) : short.Parse(textBox.Name.Split(new[] { "mac" }, StringSplitOptions.None)[1]);
+                            MacroChanged?.Invoke(this, new MacroEventArgs { LaneId = laneId, ControlName = textBox.Name, Text = textBox.Text, Tag = tag });
+                        };
                     }
 
-                    if (c is Button)
+                    if (c is Button resetButton)
                     {
-                        Button resetButton = (Button)c;
-                        resetButton.Click += new EventHandler(this.onReset);
+                        resetButton.Click += (s, e) => {
+                            int btnResetID = Int16.Parse(resetButton.Name.Split(new[] { "btnResMac" }, StringSplitOptions.None)[1]);
+                            ResetRequested?.Invoke(this, new MacroEventArgs { LaneId = btnResetID });
+                        };
                     }
 
-                    if (c is NumericUpDown)
+                    if (c is NumericUpDown numericUpDown)
                     {
-                        NumericUpDown numericUpDown = (NumericUpDown)c;
-                        numericUpDown.ValueChanged += new EventHandler(this.onDelayChange);
+                        numericUpDown.ValueChanged += (s, e) => {
+                            int macroID = Int16.Parse(numericUpDown.Name.Split(new[] { "delayMac" }, StringSplitOptions.None)[1]);
+                            DelayChanged?.Invoke(this, new MacroEventArgs { LaneId = macroID, Delay = decimal.ToInt32(numericUpDown.Value) });
+                        };
                     }
                 }
+            } catch { }
+        }
+
+        // IMacroSongView Implementation
+        public event EventHandler<MacroEventArgs> MacroChanged;
+        public event EventHandler<MacroEventArgs> DelayChanged;
+        public event EventHandler<MacroEventArgs> ResetRequested;
+
+        public void UpdateControl(int laneId, string controlName, string value)
+        {
+            try
+            {
+                GroupBox p = (GroupBox)this.Controls.Find("panelMacro" + laneId, true)[0];
+                Control[] controls = p.Controls.Find(controlName, true);
+                if (controls.Length > 0 && controls[0] is TextBox textBox)
+                {
+                    if(textBox.Text != value) textBox.Text = value == "None" ? "" : value;
+                }
+            } catch { }
+        }
+
+        public void UpdateDelay(int laneId, int value)
+        {
+            try
+            {
+                GroupBox p = (GroupBox)this.Controls.Find("panelMacro" + laneId, true)[0];
+                Control[] controls = p.Controls.Find("delayMac" + laneId, true);
+                if (controls.Length > 0 && controls[0] is NumericUpDown num)
+                {
+                    if(num.Value != value) num.Value = value;
+                }
+            } catch { }
+        }
+
+        public void ResetLane(int laneId)
+        {
+            try
+            {
+                GroupBox p = (GroupBox)this.Controls.Find("panelMacro" + laneId, true)[0];
+                FormUtils.ResetForm(p);
             } catch { }
         }
     }

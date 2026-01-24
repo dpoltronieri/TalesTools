@@ -5,48 +5,34 @@ using System.Windows.Input;
 using _4RTools.Model;
 using _4RTools.Utils;
 using System.Linq;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class DevForm : Form
+    public partial class DevForm : Form, IDevView
     {
+        private DevPresenter presenter;
+
         public DevForm()
         {
             InitializeComponent();
+            this.presenter = new DevPresenter(this);
+            
+            this.timer.Tick += (s, e) => MonitorTick?.Invoke(this, EventArgs.Empty);
+            this.btnSaveBuff.Click += (s, e) => SaveBuffName?.Invoke(this, EventArgs.Empty);
+            this.btnReload.Click += (s, e) => Reload?.Invoke(this, EventArgs.Empty);
         }
 
-        private void DevForm_Load(object sender, EventArgs e)
+        // IDevView Implementation
+        public string BuffId { get => txtBuffId.Text; set => txtBuffId.Text = value; }
+        public string BuffName { get => txtBuffName.Text; set => txtBuffName.Text = value; }
+
+        public event EventHandler SaveBuffName;
+        public event EventHandler Reload;
+        public event EventHandler MonitorTick;
+
+        public void UpdateBuffList(Dictionary<int, string> activeBuffs)
         {
-            // Initial load of buff names happens in static constructor of BuffData
-        }
-
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            Client client = ClientSingleton.GetClient();
-            if (client == null)
-            {
-                // Clear grid if no client
-                this.dgvAllBuffs.Rows.Clear();
-                return;
-            }
-
-            // Read all active buffs
-            Dictionary<int, string> activeBuffs = new Dictionary<int, string>();
-
-            for (int i = 1; i < Constants.MAX_BUFF_LIST_INDEX_SIZE; i++)
-            {
-                uint currentStatusId = client.CurrentBuffStatusCode(i);
-                if (currentStatusId != uint.MaxValue && currentStatusId > 0)
-                {
-                    int id = (int)currentStatusId;
-                    if (!activeBuffs.ContainsKey(id))
-                    {
-                        activeBuffs.Add(id, BuffData.GetBuffName(id));
-                    }
-                }
-            }
-
-            // Update GridView
             List<DataGridViewRow> rowsToRemove = new List<DataGridViewRow>();
             List<int> existingIds = new List<int>();
 
@@ -63,19 +49,16 @@ namespace _4RTools.Forms
                     }
                     else
                     {
-                        // Update name if changed (e.g. user just saved a new name)
                         row.Cells["colName"].Value = activeBuffs[rowId];
                     }
                 }
             }
 
-            // Remove rows for buffs that are gone
             foreach (var row in rowsToRemove)
             {
                 this.dgvAllBuffs.Rows.Remove(row);
             }
 
-            // Add new rows
             foreach (var buff in activeBuffs)
             {
                 if (!existingIds.Contains(buff.Key))
@@ -85,22 +68,12 @@ namespace _4RTools.Forms
             }
         }
 
-        private void btnSaveBuff_Click(object sender, EventArgs e)
+        public void ShowMessage(string message)
         {
-            if (int.TryParse(this.txtBuffId.Text, out int id) && !string.IsNullOrWhiteSpace(this.txtBuffName.Text))
-            {
-                BuffData.AddOrUpdateName(id, this.txtBuffName.Text);
-                MessageBox.Show($"Buff Name Saved: ID {id} = {this.txtBuffName.Text}");
-                this.txtBuffId.Text = "";
-                this.txtBuffName.Text = "";
-            }
-            else
-            {
-                MessageBox.Show("Invalid ID or Name.");
-            }
+            MessageBox.Show(message);
         }
 
-        private void btnReload_Click(object sender, EventArgs e)
+        public void ClearBuffList()
         {
             this.dgvAllBuffs.Rows.Clear();
         }

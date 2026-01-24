@@ -1,79 +1,52 @@
 ﻿using System;
 using _4RTools.Model;
 using System.Windows.Forms;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class ProfileForm: Form
+    public partial class ProfileForm: Form, IProfileView
     {
         private Container container;
+        private ProfilePresenter presenter;
+
         public ProfileForm(Container container)
         {
             InitializeComponent();
             this.container = container;
+            this.presenter = new ProfilePresenter(this);
 
-            foreach (string profile in Profile.ListAll())
-            {
-                if (profile != "Default") { this.lbProfilesList.Items.Add(profile); };
-            }
+            this.btnSave.Click += (s, e) => SaveProfile?.Invoke(this, EventArgs.Empty);
+            this.btnRemoveProfile.Click += (s, e) => RemoveProfile?.Invoke(this, EventArgs.Empty);
+            this.btnAssignProfile.Click += (s, e) => AssignProfile?.Invoke(this, EventArgs.Empty);
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            string newProfileName = this.txtProfileName.Text;
-            if (string.IsNullOrEmpty(newProfileName)) { return; }
+        // IProfileView Implementation
+        public string ProfileName { get => txtProfileName.Text; set => txtProfileName.Text = value; }
+        public string SelectedProfile => lbProfilesList.SelectedItem?.ToString();
 
-            ProfileSingleton.Create(newProfileName);
-            this.lbProfilesList.Items.Add(newProfileName);
+        public event EventHandler SaveProfile;
+        public event EventHandler RemoveProfile;
+        public event EventHandler AssignProfile;
+
+        public void AddProfileToList(string profileName)
+        {
+            this.lbProfilesList.Items.Add(profileName);
+        }
+
+        public void RemoveProfileFromList(string profileName)
+        {
+            this.lbProfilesList.Items.Remove(profileName);
+        }
+
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message);
+        }
+
+        public void RefreshParentProfileList()
+        {
             this.container.refreshProfileList();
-            this.txtProfileName.Text = ""; // clear text box
-        }
-
-        private void btnRemoveProfile_Click(object sender, EventArgs e)
-        {
-            if (this.lbProfilesList.SelectedItem == null)
-            {
-                MessageBox.Show("No profile found! To delete a profile, first select an option from the Profile list.");
-                return;
-            }
-
-            string selectedProfile = this.lbProfilesList.SelectedItem.ToString();
-            if (selectedProfile == "Default")
-            {
-                MessageBox.Show("Cannot delete a Default profile!");
-            } else
-            {
-                ProfileSingleton.Delete(selectedProfile);
-                this.lbProfilesList.Items.Remove(selectedProfile);
-                this.container.refreshProfileList();
-            }
-        }
-
-        private void btnAssignProfile_Click(object sender, EventArgs e)
-        {
-            Client client = ClientSingleton.GetClient();
-            if (client == null)
-            {
-                MessageBox.Show("No client selected. Please select a client first.");
-                return;
-            }
-
-            if (this.lbProfilesList.SelectedItem == null)
-            {
-                MessageBox.Show("No profile selected. Please select a profile from the list.");
-                return;
-            }
-
-            string characterName = client.ReadCharacterName();
-            if (string.IsNullOrEmpty(characterName))
-            {
-                MessageBox.Show("Could not read character name from the client.");
-                return;
-            }
-
-            string selectedProfile = this.lbProfilesList.SelectedItem.ToString();
-            CharacterProfileManager.SetProfile(characterName, selectedProfile);
-            MessageBox.Show($"Profile '{selectedProfile}' assigned to character '{characterName}'.");
         }
     }
 }

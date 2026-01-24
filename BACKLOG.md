@@ -105,10 +105,10 @@ This document outlines the roadmap, planned features, architectural improvements
 -   [x] **ClientUpdaterForm** (`ClientUpdaterPresenter`)
 -   [x] **ConfigForm** (`ConfigPresenter`)
 -   [x] **CustomButtonForm** (`CustomButtonPresenter`)
--   [ ] **DevForm**
--   [ ] **MacroSongForm**
--   [ ] **MacroSwitchForm**
--   [ ] **ProfileForm**
+-   [x] **DevForm** (`DevPresenter`)
+-   [x] **MacroSongForm** (`MacroSongPresenter`)
+-   [x] **MacroSwitchForm** (`MacroSwitchPresenter`)
+-   [x] **ProfileForm** (`ProfilePresenter`)
 -   [ ] **ServersForm**
 -   [ ] **SkillAutoBuffForm**
 -   [ ] **SkillTimerForm**

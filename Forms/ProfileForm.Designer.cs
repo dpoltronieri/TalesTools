@@ -61,7 +61,6 @@ namespace _4RTools.Forms
             this.btnSave.Text = "Create";
             this.btnSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSave.UseVisualStyleBackColor = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // label1
             // 
@@ -83,7 +82,6 @@ namespace _4RTools.Forms
             this.btnRemoveProfile.TabIndex = 3;
             this.btnRemoveProfile.Text = "Remove Selected Profile";
             this.btnRemoveProfile.UseVisualStyleBackColor = false;
-            this.btnRemoveProfile.Click += new System.EventHandler(this.btnRemoveProfile_Click);
             // 
             // lblProfilesList
             // 
@@ -118,7 +116,6 @@ namespace _4RTools.Forms
             this.btnAssignProfile.TabIndex = 9;
             this.btnAssignProfile.Text = "Assign Profile";
             this.btnAssignProfile.UseVisualStyleBackColor = false;
-            this.btnAssignProfile.Click += new System.EventHandler(this.btnAssignProfile_Click);
             // 
             // ProfileForm
             // 

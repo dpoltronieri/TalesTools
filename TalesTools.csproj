@@ -441,6 +441,14 @@
     <Compile Include="Presenters\ConfigPresenter.cs" />
     <Compile Include="Presenters\ICustomButtonView.cs" />
     <Compile Include="Presenters\CustomButtonPresenter.cs" />
+    <Compile Include="Presenters\IDevView.cs" />
+    <Compile Include="Presenters\DevPresenter.cs" />
+    <Compile Include="Presenters\IMacroSongView.cs" />
+    <Compile Include="Presenters\MacroSongPresenter.cs" />
+    <Compile Include="Presenters\IMacroSwitchView.cs" />
+    <Compile Include="Presenters\MacroSwitchPresenter.cs" />
+    <Compile Include="Presenters\IProfileView.cs" />
+    <Compile Include="Presenters\ProfilePresenter.cs" />
     <Compile Include="Forms\AutopotForm.cs">
       <SubType>Form</SubType>
     </Compile>

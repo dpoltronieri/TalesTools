@@ -45,3 +45,7 @@ The application is transitioning to the MVP pattern to separate concerns and imp
 -   `ClientUpdaterForm`
 -   `ConfigForm`
 -   `CustomButtonForm`
+-   `DevForm`
+-   `MacroSongForm`
+-   `MacroSwitchForm`
+-   `ProfileForm`
