@@ -4,17 +4,25 @@ using System.Windows.Input;
 using _4RTools.Model;
 using _4RTools.Utils;
 using System.Drawing;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class AutopotForm : Form, IObserver
+    public partial class AutopotForm : Form, IObserver, IAutopotView
     {
         private Autopot autopot;
         private bool isYgg;
+        private AutopotPresenter presenter;
 
         public AutopotForm(Subject subject, bool isYgg)
         {
             InitializeComponent();
+            this.isYgg = isYgg;
+            
+            // Initial model load
+            this.autopot = this.isYgg ? ProfileSingleton.GetCurrent().AutopotYgg : ProfileSingleton.GetCurrent().Autopot;
+            this.presenter = new AutopotPresenter(this, this.autopot);
+
             if (isYgg)
             {
                 this.picBoxHP.Image = Resources._4RTools.ETCResource.Yggdrasil;
@@ -26,7 +34,38 @@ namespace _4RTools.Forms
                 this.txtHpEquipBefore.Hide();
             }
             subject.Attach(this);
-            this.isYgg = isYgg;
+            
+            WireUpEvents();
+            WireUpInputHandlers();
+        }
+
+        private void WireUpEvents()
+        {
+            this.txtHpKey.TextChanged += (s, e) => HpKeyChanged?.Invoke(this, EventArgs.Empty);
+            this.txtSPKey.TextChanged += (s, e) => SpKeyChanged?.Invoke(this, EventArgs.Empty);
+            this.txtHPpct.ValueChanged += (s, e) => HpPercentChanged?.Invoke(this, EventArgs.Empty); // NumericUpDown uses ValueChanged
+            this.txtHPpct.KeyUp += (s, e) => HpPercentChanged?.Invoke(this, EventArgs.Empty); // Also catch text edits
+            this.txtSPpct.ValueChanged += (s, e) => SpPercentChanged?.Invoke(this, EventArgs.Empty);
+            this.txtSPpct.KeyUp += (s, e) => SpPercentChanged?.Invoke(this, EventArgs.Empty);
+            this.txtAutopotDelay.TextChanged += (s, e) => DelayChanged?.Invoke(this, EventArgs.Empty);
+            this.txtHpEquipBefore.TextChanged += (s, e) => HpEquipBeforeChanged?.Invoke(this, EventArgs.Empty);
+            this.txtHpEquipAfter.TextChanged += (s, e) => HpEquipAfterChanged?.Invoke(this, EventArgs.Empty);
+            this.chkStopWitchFC.CheckedChanged += (s, e) => StopWitchFCChanged?.Invoke(this, EventArgs.Empty);
+            
+            this.firstHP.CheckedChanged += (s, e) => { if (firstHP.Checked) FirstHealChanged?.Invoke(this, EventArgs.Empty); };
+            this.firstSP.CheckedChanged += (s, e) => { if (firstSP.Checked) FirstHealChanged?.Invoke(this, EventArgs.Empty); };
+        }
+
+        private void WireUpInputHandlers()
+        {
+            txtHpKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            txtHpKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            txtSPKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            txtSPKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            txtHpEquipBefore.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            txtHpEquipBefore.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            txtHpEquipAfter.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            txtHpEquipAfter.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
         }
 
         public void Update(ISubject subject)
@@ -35,138 +74,44 @@ namespace _4RTools.Forms
             {
                 case MessageCode.PROFILE_CHANGED:
                     this.autopot = this.isYgg ? ProfileSingleton.GetCurrent().AutopotYgg : ProfileSingleton.GetCurrent().Autopot;
-                    InitializeApplicationForm();
+                    this.presenter.UpdateModel(this.autopot);
                     break;
                 case MessageCode.TURN_HEAL_OFF:
-                    if (this.autopot != null)
-                    {
-                        this.autopot.Stop();
-                    }
+                    if (this.autopot != null) this.autopot.Stop();
                     break;
                 case MessageCode.TURN_HEAL_ON:
-                    if (this.autopot != null)
-                    {
-                        this.autopot.Start();
-                    }
+                    if (this.autopot != null) this.autopot.Start();
                     break;
             }
         }
 
-        private void InitializeApplicationForm()
+        // IAutopotView Implementation
+        public string HpKey { get => txtHpKey.Text; set => txtHpKey.Text = value; }
+        public string SpKey { get => txtSPKey.Text; set => txtSPKey.Text = value; }
+        public string HpPercent { get => txtHPpct.Text; set => txtHPpct.Text = value; }
+        public string SpPercent { get => txtSPpct.Text; set => txtSPpct.Text = value; }
+        public string Delay { get => txtAutopotDelay.Text; set => txtAutopotDelay.Text = value; }
+        public string HpEquipBefore { get => txtHpEquipBefore.Text; set => txtHpEquipBefore.Text = value; }
+        public string HpEquipAfter { get => txtHpEquipAfter.Text; set => txtHpEquipAfter.Text = value; }
+        public bool StopWitchFC { get => chkStopWitchFC.Checked; set => chkStopWitchFC.Checked = value; }
+        public string FirstHeal
         {
-            this.txtHpKey.Text = this.autopot.hpKey.ToString();
-            this.txtSPKey.Text = this.autopot.spKey.ToString();
-            this.txtHPpct.Text = this.autopot.hpPercent.ToString();
-            this.txtSPpct.Text = this.autopot.spPercent.ToString();
-            this.txtAutopotDelay.Text = this.autopot.delay.ToString();
-            this.txtHpEquipBefore.Text = this.autopot.hpEquipBefore.ToString();
-            this.txtHpEquipAfter.Text = this.autopot.hpEquipAfter.ToString();
-            this.chkStopWitchFC.Checked = this.autopot.stopWitchFC;
-            RadioButton rdHealFirst = (RadioButton)this.Controls[ProfileSingleton.GetCurrent().Autopot.firstHeal];
-            if (rdHealFirst != null) { rdHealFirst.Checked = true; };
-
-            txtHpKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
-            txtHpKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            txtHpKey.TextChanged += new EventHandler(this.onHpTextChange);
-            txtSPKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
-            txtSPKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            txtSPKey.TextChanged += new EventHandler(this.onSpTextChange);
-            txtHpEquipBefore.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
-            txtHpEquipBefore.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            txtHpEquipBefore.TextChanged += new EventHandler(this.txtHpEquipBeforeTextChange);
-            txtHpEquipAfter.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
-            txtHpEquipAfter.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            txtHpEquipAfter.TextChanged += new EventHandler(this.txtHpEquipAfterTextChange);
-
-        }
-
-        private void onHpTextChange(object sender, EventArgs e)
-        {
-            Key key = (Key)Enum.Parse(typeof(Key), txtHpKey.Text.ToString());
-            this.autopot.hpKey = key;
-            ProfileSingleton.SetConfiguration(this.autopot);
-            this.ActiveControl = null;
-        }
-
-        private void onSpTextChange(object sender, EventArgs e)
-        {
-            Key key = (Key)Enum.Parse(typeof(Key), txtSPKey.Text.ToString());
-            this.autopot.spKey = key;
-            ProfileSingleton.SetConfiguration(this.autopot);
-            this.ActiveControl = null;
-        }
-
-        private void txtAutopotDelayTextChanged(object sender, EventArgs e)
-        {
-            try
+            get => firstHP.Checked ? Autopot.FIRSTHP : Autopot.FIRSTSP;
+            set
             {
-                this.autopot.delay = Int16.Parse(this.txtAutopotDelay.Text);
-                ProfileSingleton.SetConfiguration(this.autopot);
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
-        
-        }
-
-        private void txtHPpctTextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.autopot.hpPercent = Int16.Parse(this.txtHPpct.Text);
-                ProfileSingleton.SetConfiguration(this.autopot);
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
-
-        }
-
-        private void chkStopWitchFC_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox chk = sender as CheckBox;
-            this.autopot.stopWitchFC = chk.Checked;
-            ProfileSingleton.SetConfiguration(this.autopot);
-        }
-
-        private void txtSPpctTextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.autopot.spPercent = Int16.Parse(this.txtSPpct.Text);
-                ProfileSingleton.SetConfiguration(this.autopot);
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
-        }
-        private void RadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton rb = sender as RadioButton;
-            if (rb.Checked)
-            {
-                this.autopot.firstHeal = rb.Name;
-                ProfileSingleton.SetConfiguration(this.autopot);
+                if (value == Autopot.FIRSTHP) firstHP.Checked = true;
+                else firstSP.Checked = true;
             }
         }
 
-        private void txtHpEquipAfterTextChange(object sender, EventArgs e)
-        {
-            Key key = (Key)Enum.Parse(typeof(Key), txtHpEquipAfter.Text.ToString());
-            this.autopot.hpEquipAfter = key;
-            ProfileSingleton.SetConfiguration(this.autopot);
-            this.ActiveControl = null;
-        }
-
-        private void txtHpEquipBeforeTextChange(object sender, EventArgs e)
-        {
-            Key key = (Key)Enum.Parse(typeof(Key), txtHpEquipBefore.Text.ToString());
-            this.autopot.hpEquipBefore = key;
-            ProfileSingleton.SetConfiguration(this.autopot);
-            this.ActiveControl = null;
-        }
+        public event EventHandler HpKeyChanged;
+        public event EventHandler SpKeyChanged;
+        public event EventHandler HpPercentChanged;
+        public event EventHandler SpPercentChanged;
+        public event EventHandler DelayChanged;
+        public event EventHandler HpEquipBeforeChanged;
+        public event EventHandler HpEquipAfterChanged;
+        public event EventHandler StopWitchFCChanged;
+        public event EventHandler FirstHealChanged;
     }
 }

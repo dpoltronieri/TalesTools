@@ -421,6 +421,8 @@
     <Compile Include="Model\Action.cs" />
     <Compile Include="Model\Macro.cs" />
     <Compile Include="Model\Profile.cs" />
+    <Compile Include="Presenters\IAutopotView.cs" />
+    <Compile Include="Presenters\AutopotPresenter.cs" />
     <Compile Include="Forms\AutopotForm.cs">
       <SubType>Form</SubType>
     </Compile>

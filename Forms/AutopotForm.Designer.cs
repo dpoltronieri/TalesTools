@@ -66,7 +66,6 @@
             this.txtHPpct.Name = "txtHPpct";
             this.txtHPpct.Size = new System.Drawing.Size(44, 23);
             this.txtHPpct.TabIndex = 39;
-            this.txtHPpct.ValueChanged += new System.EventHandler(this.txtHPpctTextChanged);
             // 
             // labelSP
             // 
@@ -98,7 +97,6 @@
             this.txtAutopotDelay.Name = "txtAutopotDelay";
             this.txtAutopotDelay.Size = new System.Drawing.Size(45, 23);
             this.txtAutopotDelay.TabIndex = 36;
-            this.txtAutopotDelay.TextChanged += new System.EventHandler(this.txtAutopotDelayTextChanged);
             // 
             // picBoxSP
             // 
@@ -192,7 +190,6 @@
             this.txtSPpct.Name = "txtSPpct";
             this.txtSPpct.Size = new System.Drawing.Size(44, 23);
             this.txtSPpct.TabIndex = 40;
-            this.txtSPpct.ValueChanged += new System.EventHandler(this.txtSPpctTextChanged);
             // 
             // label5
             // 
@@ -214,7 +211,6 @@
             this.firstHP.TabIndex = 48;
             this.firstHP.TabStop = true;
             this.firstHP.UseVisualStyleBackColor = true;
-            this.firstHP.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // firstSP
             // 
@@ -224,7 +220,6 @@
             this.firstSP.Size = new System.Drawing.Size(14, 13);
             this.firstSP.TabIndex = 49;
             this.firstSP.UseVisualStyleBackColor = true;
-            this.firstSP.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // chkStopWitchFC
             // 
@@ -236,7 +231,6 @@
             this.chkStopWitchFC.TabIndex = 50;
             this.chkStopWitchFC.Text = "Parar com Ferimento Crítico";
             this.chkStopWitchFC.UseVisualStyleBackColor = true;
-            this.chkStopWitchFC.CheckedChanged += new System.EventHandler(this.chkStopWitchFC_CheckedChanged);
             // 
             // txtHpEquipBefore
             // 

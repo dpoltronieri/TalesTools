@@ -1,5 +1,7 @@
 {
-  "model": "gemini-2.5-flash",
+  "model": {
+    "name": "gemini-3"
+  },
   "features": {
     "checkpointing": true
   },
