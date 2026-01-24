@@ -109,8 +109,8 @@ This document outlines the roadmap, planned features, architectural improvements
 -   [x] **MacroSongForm** (`MacroSongPresenter`)
 -   [x] **MacroSwitchForm** (`MacroSwitchPresenter`)
 -   [x] **ProfileForm** (`ProfilePresenter`)
--   [ ] **ServersForm**
--   [ ] **SkillAutoBuffForm**
--   [ ] **SkillTimerForm**
--   [ ] **StuffAutoBuffForm**
--   [ ] **ToggleApplicationStateForm**
+-   [x] **ServersForm** (`ServersPresenter`)
+-   [x] **SkillAutoBuffForm** (`SkillAutoBuffPresenter`)
+-   [x] **SkillTimerForm** (`SkillTimerPresenter`)
+-   [x] **StuffAutoBuffForm** (`StuffAutoBuffPresenter`)
+-   [x] **ToggleApplicationStateForm** (`ToggleApplicationStatePresenter`)

@@ -83,7 +83,6 @@
             this.btnStatusToggle.TabIndex = 21;
             this.btnStatusToggle.Text = "OFF";
             this.btnStatusToggle.UseVisualStyleBackColor = false;
-            this.btnStatusToggle.Click += new System.EventHandler(this.btnToggleStatusHandler);
             // 
             // lblStatusToggle
             // 
@@ -131,7 +130,6 @@
             this.btnStatusHealToggle.TabIndex = 21;
             this.btnStatusHealToggle.Text = "OFF";
             this.btnStatusHealToggle.UseVisualStyleBackColor = false;
-            this.btnStatusHealToggle.Click += new System.EventHandler(this.btnToggleStatusHealHandler);
             // 
             // txtStatusHealToggleKey
             // 

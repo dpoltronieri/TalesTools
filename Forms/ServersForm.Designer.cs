@@ -64,9 +64,8 @@
             this.btnAddServer.Name = "btnAddServer";
             this.btnAddServer.Size = new System.Drawing.Size(104, 23);
             this.btnAddServer.TabIndex = 27;
-            this.btnAddServer.Text = "Add Server";
+            this.btnAddServer.Text = "Add New";
             this.btnAddServer.UseVisualStyleBackColor = false;
-            this.btnAddServer.Click += new System.EventHandler(this.btnAddServer_Click);
             // 
             // datagridServers
             // 
@@ -143,8 +142,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ServersForm";
             this.Text = "ServersForm";
-            this.Load += new System.EventHandler(this.ServersForm_Load);
-            this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.datagridServers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.clientDTOBindingSource)).EndInit();
             this.ResumeLayout(false);

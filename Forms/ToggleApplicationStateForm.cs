@@ -5,18 +5,16 @@ using _4RTools.Utils;
 using _4RTools.Model;
 using System.Media;
 using _4RTools.Properties;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class ToggleApplicationStateForm : Form, IObserver
+    public partial class ToggleApplicationStateForm : Form, IObserver, IToggleApplicationStateView
     {
         private Subject subject;
         private ContextMenu contextMenu;
         private MenuItem menuItem;
-
-        //Store key used for last profile - necessarly to clean when change profile
-        private Keys lastKey;
-        private Keys healLastKey;
+        private ToggleApplicationStatePresenter presenter;
 
         public ToggleApplicationStateForm() { }
 
@@ -26,18 +24,31 @@ namespace _4RTools.Forms
 
             subject.Attach(this);
             this.subject = subject;
-            KeyboardHook.Enable();
-            this.txtStatusToggleKey.Text = ProfileSingleton.GetCurrent().UserPreferences.toggleStateKey;
+            this.presenter = new ToggleApplicationStatePresenter(this, subject);
+
+            WireUpInputHandlers();
+            InitializeContextualMenu();
+        }
+
+        private void WireUpInputHandlers()
+        {
             this.txtStatusToggleKey.KeyDown += new KeyEventHandler(FormUtils.OnKeyDown);
             this.txtStatusToggleKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            this.txtStatusToggleKey.TextChanged += new EventHandler(this.onStatusToggleKeyChange);
+            this.txtStatusToggleKey.TextChanged += (s, e) => ToggleKeyChanged?.Invoke(this, EventArgs.Empty);
 
-            this.txtStatusHealToggleKey.Text = ProfileSingleton.GetCurrent().UserPreferences.toggleStateHealKey;
             this.txtStatusHealToggleKey.KeyDown += new KeyEventHandler(FormUtils.OnKeyDown);
             this.txtStatusHealToggleKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            this.txtStatusHealToggleKey.TextChanged += new EventHandler(this.onStatusHealToggleKeyChange);
+            this.txtStatusHealToggleKey.TextChanged += (s, e) => ToggleHealKeyChanged?.Invoke(this, EventArgs.Empty);
 
-            InitializeContextualMenu();
+            this.btnStatusToggle.Click += (s, e) => {
+                bool isOn = this.btnStatusToggle.Text == "ON";
+                this.presenter.ExecuteToggleStatus(isOn);
+            };
+
+            this.btnStatusHealToggle.Click += (s, e) => {
+                bool isOn = this.btnStatusHealToggle.Text == "ON";
+                this.presenter.ExecuteToggleHealStatus(isOn);
+            };
         }
 
         private void InitializeContextualMenu()
@@ -50,7 +61,7 @@ namespace _4RTools.Forms
 
             this.menuItem.Index = 0;
             this.menuItem.Text = "Close";
-            this.menuItem.Click += new EventHandler(this.notifyShutdownApplication);
+            this.menuItem.Click += (s, e) => ShutdownApplication?.Invoke(this, EventArgs.Empty);
 
             this.notifyIconTray.ContextMenu = this.contextMenu;
         }
@@ -60,81 +71,9 @@ namespace _4RTools.Forms
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
-                    Keys currentToggleKey = (Keys)Enum.Parse(typeof(Keys), ProfileSingleton.GetCurrent().UserPreferences.toggleStateKey);
-                    KeyboardHook.RemoveDown(lastKey); //Remove last key hook to prevent toggle with last profile key used.
-
-                    this.txtStatusToggleKey.Text = currentToggleKey.ToString();
-                    KeyboardHook.AddKeyDown(currentToggleKey, new KeyboardHook.KeyPressed(this.toggleStatus));
-                    lastKey = currentToggleKey;
-
-                    Keys currentHealToggleKey = (Keys)Enum.Parse(typeof(Keys), ProfileSingleton.GetCurrent().UserPreferences.toggleStateHealKey);
-                    KeyboardHook.RemoveUp(healLastKey); //Remove last key hook to prevent toggle with last profile key used.
-
-                    this.txtStatusHealToggleKey.Text = currentHealToggleKey.ToString();
-                    KeyboardHook.AddKeyUp(currentHealToggleKey, new KeyboardHook.KeyPressed(this.toggleStatusHeal));
-                    healLastKey = currentHealToggleKey;
+                    this.presenter.OnProfileChanged();
                     break;
             }
-        }
-
-        private void btnToggleStatusHandler(object sender, EventArgs e) { this.toggleStatus(); }
-
-        private void onStatusToggleKeyChange(object sender, EventArgs e)
-        {
-            //Get last key from profile before update it in json
-            Keys currentToggleKey = (Keys)Enum.Parse(typeof(Keys), this.txtStatusToggleKey.Text);
-            KeyboardHook.RemoveDown(lastKey);
-            KeyboardHook.AddKeyDown(currentToggleKey, new KeyboardHook.KeyPressed(this.toggleStatus));
-            ProfileSingleton.GetCurrent().UserPreferences.toggleStateKey = currentToggleKey.ToString(); //Update profile key
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().UserPreferences);
-
-            lastKey = currentToggleKey; //Refresh lastKey to update 
-        }
-
-        private bool toggleStatus()
-        {
-            bool isOn = this.btnStatusToggle.Text == "ON";
-            if (isOn)
-            {
-                this.btnStatusToggle.BackColor = Color.Red;
-                this.btnStatusToggle.Text = "OFF";
-                this.notifyIconTray.Icon = Resources._4RTools.ETCResource.TalesIcon_off;
-                this.subject.Notify(new Utils.Message(MessageCode.TURN_OFF, null));
-                this.lblStatusToggle.Text = "Press the key to start!";
-                this.lblStatusToggle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-                new SoundPlayer(Resources._4RTools.ETCResource.Speech_Off).Play();
-            }
-            else
-            {
-                Client client = ClientSingleton.GetClient();
-                if (client == null)
-                {
-                    System.Collections.Generic.List<string> processes = ClientObserver.Instance.GetProcessList();
-                    if (processes.Count == 1)
-                    {
-                        ClientObserver.Instance.SelectProcess(processes[0]);
-                        client = ClientSingleton.GetClient();
-                    }
-                }
-
-                if (client != null)
-                {
-                    this.btnStatusToggle.BackColor = Color.Green;
-                    this.btnStatusToggle.Text = "ON";
-                    this.notifyIconTray.Icon = Resources._4RTools.ETCResource.TalesIcon_on;
-                    this.subject.Notify(new Utils.Message(MessageCode.TURN_ON, null));
-                    this.lblStatusToggle.Text = "Press the key to stop!";
-                    this.lblStatusToggle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-                    new SoundPlayer(Resources._4RTools.ETCResource.Speech_On).Play();
-                }
-                else
-                {
-                    this.lblStatusToggle.Text = "Please select a valid Ragnarok Client!";
-                    this.lblStatusToggle.ForeColor = Color.Red;
-                }
-            }
-
-            return true;
         }
 
         public bool TurnOFF()
@@ -142,73 +81,14 @@ namespace _4RTools.Forms
             bool isOn = this.btnStatusToggle.Text == "ON";
             if (isOn)
             {
-                this.btnStatusToggle.BackColor = Color.Red;
-                this.btnStatusToggle.Text = "OFF";
-                this.subject.Notify(new Utils.Message(MessageCode.TURN_OFF, null));
-                this.lblStatusToggle.Text = "Press the key to start!";
-                this.lblStatusToggle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-                new SoundPlayer(Resources._4RTools.ETCResource.Speech_Off).Play();
+                this.presenter.ExecuteToggleStatus(true);
             }
 
             bool isOnheal = this.btnStatusHealToggle.Text == "ON";
             if (isOnheal)
             {
-                this.btnStatusHealToggle.BackColor = Color.Red;
-                this.btnStatusHealToggle.Text = "OFF";
-                this.subject.Notify(new Utils.Message(MessageCode.TURN_HEAL_OFF, null));
-                this.lblStatusHealToggle.Text = "Press the key to start healing!";
-                this.lblStatusHealToggle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-                new SoundPlayer(Resources._4RTools.ETCResource.Healing_Off).Play();
+                this.presenter.ExecuteToggleHealStatus(true);
             }
-            return true;
-        }
-
-
-        private void btnToggleStatusHealHandler(object sender, EventArgs e) { this.toggleStatusHeal(); }
-
-        private void onStatusHealToggleKeyChange(object sender, EventArgs e)
-        {
-            //Get last key from profile before update it in json
-            Keys currentHealToggleKey = (Keys)Enum.Parse(typeof(Keys), this.txtStatusHealToggleKey.Text);
-            KeyboardHook.RemoveUp(healLastKey);
-            KeyboardHook.AddKeyUp(currentHealToggleKey, new KeyboardHook.KeyPressed(this.toggleStatusHeal));
-            ProfileSingleton.GetCurrent().UserPreferences.toggleStateHealKey = currentHealToggleKey.ToString(); //Update profile key
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().UserPreferences);
-
-            healLastKey = currentHealToggleKey; //Refresh lastKey to update 
-        }
-
-        private bool toggleStatusHeal()
-        {
-            bool isOn = this.btnStatusHealToggle.Text == "ON";
-            if (isOn)
-            {
-                this.btnStatusHealToggle.BackColor = Color.Red;
-                this.btnStatusHealToggle.Text = "OFF";
-                this.subject.Notify(new Utils.Message(MessageCode.TURN_HEAL_OFF, null));
-                this.lblStatusHealToggle.Text = "Press the key to start healing!";
-                this.lblStatusHealToggle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-                new SoundPlayer(Resources._4RTools.ETCResource.Healing_Off).Play();
-            }
-            else
-            {
-                Client client = ClientSingleton.GetClient();
-                if (client != null)
-                {
-                    this.btnStatusHealToggle.BackColor = Color.Green;
-                    this.btnStatusHealToggle.Text = "ON";
-                    this.subject.Notify(new Utils.Message(MessageCode.TURN_HEAL_ON, null));
-                    this.lblStatusHealToggle.Text = "Press the key to stop healing!";
-                    this.lblStatusHealToggle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(155)))), ((int)(((byte)(164)))));
-                    new SoundPlayer(Resources._4RTools.ETCResource.Healing_On).Play();
-                }
-                else
-                {
-                    this.lblStatusHealToggle.Text = "Please select a valid Ragnarok Client!";
-                    this.lblStatusHealToggle.ForeColor = Color.Red;
-                }
-            }
-
             return true;
         }
 
@@ -217,11 +97,32 @@ namespace _4RTools.Forms
             this.subject.Notify(new Utils.Message(MessageCode.CLICK_ICON_TRAY, null));
         }
 
-        private void notifyShutdownApplication(object Sender, EventArgs e)
+        // IToggleApplicationStateView Implementation
+        public string ToggleKey { get => txtStatusToggleKey.Text; set => txtStatusToggleKey.Text = value; }
+        public string ToggleHealKey { get => txtStatusHealToggleKey.Text; set => txtStatusHealToggleKey.Text = value; }
+        public string StatusText { set => lblStatusToggle.Text = value; }
+        public Color StatusColor { set => lblStatusToggle.ForeColor = value; }
+        public string ToggleButtonText { set => btnStatusToggle.Text = value; }
+        public Color ToggleButtonBackColor { set => btnStatusToggle.BackColor = value; }
+        public string HealStatusText { set => lblStatusHealToggle.Text = value; }
+        public Color HealStatusColor { set => lblStatusHealToggle.ForeColor = value; }
+        public string ToggleHealButtonText { set => btnStatusHealToggle.Text = value; }
+        public Color ToggleHealButtonBackColor { set => btnStatusHealToggle.BackColor = value; }
+
+        public event EventHandler ToggleKeyChanged;
+        public event EventHandler ToggleHealKeyChanged;
+        public event EventHandler ToggleStatus;
+        public event EventHandler ToggleHealStatus;
+        public event EventHandler ShutdownApplication;
+
+        public void SetIcon(Icon icon)
         {
-            // Close the form, which closes the application.
-            this.subject.Notify(new Utils.Message(MessageCode.SHUTDOWN_APPLICATION, null));
+            this.notifyIconTray.Icon = icon;
         }
 
+        public void PlaySound(System.IO.Stream sound)
+        {
+            new SoundPlayer(sound).Play();
+        }
     }
 }

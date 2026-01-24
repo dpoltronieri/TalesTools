@@ -449,6 +449,16 @@
     <Compile Include="Presenters\MacroSwitchPresenter.cs" />
     <Compile Include="Presenters\IProfileView.cs" />
     <Compile Include="Presenters\ProfilePresenter.cs" />
+    <Compile Include="Presenters\ISkillAutoBuffView.cs" />
+    <Compile Include="Presenters\SkillAutoBuffPresenter.cs" />
+    <Compile Include="Presenters\ISkillTimerView.cs" />
+    <Compile Include="Presenters\SkillTimerPresenter.cs" />
+    <Compile Include="Presenters\IStuffAutoBuffView.cs" />
+    <Compile Include="Presenters\StuffAutoBuffPresenter.cs" />
+    <Compile Include="Presenters\IToggleApplicationStateView.cs" />
+    <Compile Include="Presenters\ToggleApplicationStatePresenter.cs" />
+    <Compile Include="Presenters\IServersView.cs" />
+    <Compile Include="Presenters\ServersPresenter.cs" />
     <Compile Include="Forms\AutopotForm.cs">
       <SubType>Form</SubType>
     </Compile>

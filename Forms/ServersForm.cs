@@ -10,17 +10,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class ServersForm : Form, IObserver
+    public partial class ServersForm : Form, IObserver, IServersView
     {
         private Subject subject;
+        private ServersPresenter presenter;
+
         public ServersForm(Subject subject)
         {
             InitializeComponent();
-            subject.Attach(this);
             this.subject = subject;
+            this.presenter = new ServersPresenter(this, subject);
+            
+            this.btnAddServer.Click += (s, e) => AddServer?.Invoke(this, EventArgs.Empty);
+            this.datagridServers.AllowUserToAddRows = false;
+            
+            subject.Attach(this);
         }
 
         public void Update(ISubject subject)
@@ -28,51 +36,53 @@ namespace _4RTools.Forms
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.SERVER_LIST_CHANGED:
-                    this.doRender();
+                    this.presenter.LoadServers();
                     break;
             }
-        }
-
-
-        private void ServersForm_Load(object sender, EventArgs e)
-        {
-            this.datagridServers.AllowUserToAddRows = false;
-            this.doRender();
-        }
-
-        private void doRender()
-        {
-            clientDTOBindingSource.Clear();
-            LocalServerManager.GetLocalClients().ForEach(c => clientDTOBindingSource.Add(c));
         }
 
         private void datagridServers_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             //Update
-            ClientDTO current = (ClientDTO)clientDTOBindingSource.Current;
+            if (e.RowIndex < 0) return;
+
+            ClientDTO current = (ClientDTO)clientDTOBindingSource[e.RowIndex];
             current.index = e.RowIndex;
 
             if (this.datagridServers.Columns[e.ColumnIndex].Name == "Delete")
             {
-                //Delete
-                if(MessageBox.Show("Are you sure want to delete this Server?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    clientDTOBindingSource.RemoveCurrent();
-                    LocalServerManager.RemoveClient(current);
-                    this.subject.Notify(new Utils.Message(MessageCode.SERVER_LIST_CHANGED, "Server Deleted"));
-                    MessageBox.Show("Server " + current.name + " successfully deleted !!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                DeleteServer?.Invoke(this, new ServerEventArgs { Server = current });
             }
             else
             {
-                new AddServerForm(current, this.subject).Show();
+                EditServer?.Invoke(this, new ServerEventArgs { Server = current });
             }
         }
 
-        private void btnAddServer_Click(object sender, EventArgs e)
+        // IServersView Implementation
+        public event EventHandler AddServer;
+        public event EventHandler<ServerEventArgs> EditServer;
+        public event EventHandler<ServerEventArgs> DeleteServer;
+
+        public void RenderServers(List<ClientDTO> servers)
         {
-            new AddServerForm(null, this.subject).Show();
+            clientDTOBindingSource.Clear();
+            servers.ForEach(c => clientDTOBindingSource.Add(c));
         }
 
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public bool ConfirmDeletion(string serverName)
+        {
+            return MessageBox.Show("Are you sure want to delete this Server?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        public void OpenAddServerForm(ClientDTO server)
+        {
+            new AddServerForm(server, this.subject).Show();
+        }
     }
 }

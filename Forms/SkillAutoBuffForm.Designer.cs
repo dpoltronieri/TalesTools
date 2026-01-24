@@ -181,7 +181,6 @@
             this.btnResetAutobuff.Text = "Reset\r\n";
             this.toolTip2.SetToolTip(this.btnResetAutobuff, "Remove todos os atalhos");
             this.btnResetAutobuff.UseVisualStyleBackColor = false;
-            this.btnResetAutobuff.Click += new System.EventHandler(this.btnResetAutobuff_Click);
             // 
             // numericDelay
             // 
@@ -197,7 +196,6 @@
             this.numericDelay.Name = "numericDelay";
             this.numericDelay.Size = new System.Drawing.Size(60, 20);
             this.numericDelay.TabIndex = 302;
-            this.numericDelay.ValueChanged += new System.EventHandler(this.numericDelay_TextChanged);
             // 
             // label5
             // 

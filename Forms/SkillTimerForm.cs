@@ -4,16 +4,23 @@ using System.Windows.Forms;
 using _4RTools.Utils;
 using _4RTools.Model;
 using System.Windows.Input;
+using _4RTools.Presenters;
+
 namespace _4RTools.Forms
 {
-    public partial class SkillTimerForm : Form, IObserver
+    public partial class SkillTimerForm : Form, IObserver, ISkillTimerView
     {
         public static int TOTAL_SKILL_TIMER = 4;
+        private SkillTimerPresenter presenter;
+        private AutoRefreshSpammer model;
+
         public SkillTimerForm(Subject subject)
         {
             InitializeComponent();
             subject.Attach(this);
-            configureTimerLanes();
+            this.model = ProfileSingleton.GetCurrent().AutoRefreshSpammer;
+            this.presenter = new SkillTimerPresenter(this, this.model);
+            ConfigureTimerLanes();
         }
 
         public void Update(ISubject subject)
@@ -21,179 +28,71 @@ namespace _4RTools.Forms
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
-                    validate();
-                    updateUi();
+                    this.model = ProfileSingleton.GetCurrent().AutoRefreshSpammer;
+                    this.presenter.UpdateModel(this.model);
                     break;
                 case MessageCode.TURN_ON:
-                    ProfileSingleton.GetCurrent().AutoRefreshSpammer.Start();
+                    this.model.Start();
                     break;
                 case MessageCode.TURN_OFF:
-                    ProfileSingleton.GetCurrent().AutoRefreshSpammer.Stop();
+                    this.model.Stop();
                     break;
             }
         }
 
-        private void validate()
+        private void ConfigureTimerLanes()
         {
             for (int i = 1; i <= TOTAL_SKILL_TIMER; i++)
             {
-                validateAllSkillTimer(i);
+                InitializeLane(i);
             }
         }
 
-        private void updateUi()
-        {
-            for (int i = 1; i <= TOTAL_SKILL_TIMER; i++)
-            {
-                UpdatePanelData(i);
-            }
-        }
-
-        private void configureTimerLanes()
-        {
-            for (int i = 1; i <= TOTAL_SKILL_TIMER; i++)
-            {
-                initializeLane(i);
-            }
-        }
-
-        private void validateAllSkillTimer(int id)
+        private void InitializeLane(int id)
         {
             try
             {
-                AutoRefreshSpammer Spammers = ProfileSingleton.GetCurrent().AutoRefreshSpammer;
-
-                if (!Spammers.skillTimer.ContainsKey(id))
-                {
-                    Spammers.skillTimer.Add(id, new MacroKey(Key.None, 5));
-
-                    Control[] c = this.Controls.Find("txtSkillTimerKey" + id, true);
-                    if (c.Length > 0)
-                    {
-                        TextBox keyTextBox = (TextBox)c[0];
-                        keyTextBox.Text = Spammers.skillTimer[id].key.ToString();
-                    }
-
-                    //Update Delay Macro Value
-                    Control[] d = this.Controls.Find("txtAutoRefreshDelay" + id, true);
-                    if (d.Length > 0)
-                    {
-                        NumericUpDown delayInput = (NumericUpDown)d[0];
-                        delayInput.Value = Spammers.skillTimer[id].delay;
-                    }
-                }
-
-                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutoRefreshSpammer);
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
-        }
-
-        private void initializeLane(int id)
-        {
-            try
-            {
-
                 TextBox textBox = (TextBox)this.Controls.Find("txtSkillTimerKey" + id, true)[0];
                 textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
                 textBox.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-                textBox.TextChanged += new EventHandler(this.onTextChange);
+                textBox.TextChanged += (s, e) => {
+                    KeyChanged?.Invoke(this, new SkillTimerEventArgs { LaneId = id, Key = textBox.Text });
+                };
 
                 NumericUpDown txtAutoRefreshDelay = (NumericUpDown)this.Controls.Find("txtAutoRefreshDelay" + id, true)[0];
-                txtAutoRefreshDelay.ValueChanged += new EventHandler(this.txtAutoRefreshDelayTextChanged);
-
+                txtAutoRefreshDelay.ValueChanged += (s, e) => {
+                    DelayChanged?.Invoke(this, new SkillTimerEventArgs { LaneId = id, Delay = (int)txtAutoRefreshDelay.Value });
+                };
             }
             catch { }
         }
 
-        private void UpdatePanelData(int id)
+        // ISkillTimerView Implementation
+        public event EventHandler<SkillTimerEventArgs> KeyChanged;
+        public event EventHandler<SkillTimerEventArgs> DelayChanged;
+
+        public void UpdateControl(int laneId, string controlName, string value)
         {
             try
             {
-                AutoRefreshSpammer Spammers = ProfileSingleton.GetCurrent().AutoRefreshSpammer;
-
-                MacroKey skillTimer = Spammers.skillTimer[id];
-
-                //Update Trigger Macro Value
-                Control[] c = this.Controls.Find("txtSkillTimerKey" + id, true);
-                if (c.Length > 0)
+                Control[] c = this.Controls.Find(controlName, true);
+                if (c.Length > 0 && c[0] is TextBox textBox)
                 {
-                    TextBox keyTextBox = (TextBox)c[0];
-                    keyTextBox.Text = skillTimer.key.ToString();
+                    if (textBox.Text != value) textBox.Text = value;
                 }
-
-                //Update Delay Macro Value
-                Control[] d = this.Controls.Find("txtAutoRefreshDelay" + id, true);
-                if (d.Length > 0)
-                {
-                    NumericUpDown delayInput = (NumericUpDown)d[0];
-                    delayInput.Value = skillTimer.delay;
-                }
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
+            } catch {}
         }
 
-        private void onTextChange(object sender, EventArgs e)
+        public void UpdateDelay(int laneId, int value)
         {
             try
             {
-                AutoRefreshSpammer Spammers = ProfileSingleton.GetCurrent().AutoRefreshSpammer;
-                TextBox textBox = (TextBox)sender;
-                Key key = (Key)Enum.Parse(typeof(Key), textBox.Text.ToString());
-
-                var id = int.Parse(textBox.Name[textBox.Name.Length - 1].ToString());
-
-                if (Spammers.skillTimer.ContainsKey(id))
+                Control[] d = this.Controls.Find("txtAutoRefreshDelay" + laneId, true);
+                if (d.Length > 0 && d[0] is NumericUpDown num)
                 {
-                    MacroKey skillTimer = Spammers.skillTimer[id];
-                    skillTimer.key = key;
+                    if (num.Value != value) num.Value = value;
                 }
-                else
-                {
-                    Spammers.skillTimer.Add(id, new MacroKey(Key.None, 5));
-                }
-
-                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutoRefreshSpammer);
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
+            } catch {}
         }
-
-
-        private void txtAutoRefreshDelayTextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                AutoRefreshSpammer Spammers = ProfileSingleton.GetCurrent().AutoRefreshSpammer;
-                NumericUpDown numericUpDown = (NumericUpDown)sender;
-                int delay = (int)numericUpDown.Value;
-
-                var id = int.Parse(numericUpDown.Name[numericUpDown.Name.Length - 1].ToString());
-
-                if (Spammers.skillTimer.ContainsKey(id))
-                {
-                    var skillTimer = Spammers.skillTimer[id];
-                    skillTimer.delay = delay;
-                }
-                else
-                {
-                    Spammers.skillTimer.Add(id, new MacroKey(Key.None, 5));
-                }
-
-                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutoRefreshSpammer);
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
-        }
-        
     }
 }

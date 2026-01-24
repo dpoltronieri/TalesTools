@@ -49,3 +49,8 @@ The application is transitioning to the MVP pattern to separate concerns and imp
 -   `MacroSongForm`
 -   `MacroSwitchForm`
 -   `ProfileForm`
+-   `ServersForm`
+-   `SkillAutoBuffForm`
+-   `SkillTimerForm`
+-   `StuffAutoBuffForm`
+-   `ToggleApplicationStateForm`

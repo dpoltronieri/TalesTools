@@ -5,18 +5,23 @@ using _4RTools.Model;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Drawing;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class SkillAutoBuffForm : Form, IObserver
+    public partial class SkillAutoBuffForm : Form, IObserver, ISkillAutoBuffView
     {
-
         private List<BuffContainer> skillContainers =  new List<BuffContainer>();
+        private SkillAutoBuffPresenter presenter;
+        private AutoBuffSkill model;
 
         public SkillAutoBuffForm(Subject subject)
         {
             this.KeyPreview = true;
             InitializeComponent();
+
+            this.model = ProfileSingleton.GetCurrent().AutobuffSkill;
+            this.presenter = new SkillAutoBuffPresenter(this, this.model);
 
             // Create a panel to hold the config buttons
             Panel configPanel = new Panel { Width = 520, Height = 60 };
@@ -58,7 +63,13 @@ namespace _4RTools.Forms
 
             new BuffRenderer(skillContainers, toolTip1, ProfileSingleton.GetCurrent().AutobuffSkill.actionName, subject).doRender();
             subject.Attach(this);
+            WireUpEvents();
+        }
 
+        private void WireUpEvents()
+        {
+            this.numericDelay.ValueChanged += (s, e) => DelayChanged?.Invoke(this, EventArgs.Empty);
+            this.btnResetAutobuff.Click += (s, e) => ResetRequested?.Invoke(this, EventArgs.Empty);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -132,35 +143,27 @@ namespace _4RTools.Forms
             {
                 case MessageCode.PROFILE_CHANGED:
                     RenderClassGroups();
-                    BuffRenderer.doUpdate(new Dictionary<EffectStatusIDs, Key>(ProfileSingleton.GetCurrent().AutobuffSkill.buffMapping), this);
-                    this.numericDelay.Value = ProfileSingleton.GetCurrent().AutobuffSkill.delay;
+                    this.model = ProfileSingleton.GetCurrent().AutobuffSkill;
+                    this.presenter.UpdateModel(this.model);
                     break;
                 case MessageCode.TURN_OFF:
-                    ProfileSingleton.GetCurrent().AutobuffSkill.Stop();
+                    this.model.Stop();
                     break;
                 case MessageCode.TURN_ON:
-                    ProfileSingleton.GetCurrent().AutobuffSkill.Start();
+                    this.model.Start();
                     break;
             }
         }
 
-        private void btnResetAutobuff_Click(object sender, EventArgs e)
-        {
-            ProfileSingleton.GetCurrent().AutobuffSkill.ClearKeyMapping();
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutobuffSkill);
-            BuffRenderer.doUpdate(new Dictionary<EffectStatusIDs, Key>(ProfileSingleton.GetCurrent().AutobuffSkill.buffMapping), this);
-            this.numericDelay.Value = 100;
-        }
+        // ISkillAutoBuffView Implementation
+        public int Delay { get => decimal.ToInt32(numericDelay.Value); set { try { numericDelay.Value = value; } catch {} } }
 
-        private void numericDelay_TextChanged(object sender, EventArgs e)
+        public event EventHandler DelayChanged;
+        public event EventHandler ResetRequested;
+
+        public void UpdateUI(Dictionary<EffectStatusIDs, System.Windows.Input.Key> buffMapping)
         {
-            try
-            {
-                ProfileSingleton.GetCurrent().AutobuffSkill.delay = Convert.ToInt16(this.numericDelay.Value);
-                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutobuffSkill);
-                this.ActiveControl = null;
-            }
-            catch { }
+            BuffRenderer.doUpdate(buffMapping, this);
         }
     }
 }
