@@ -427,6 +427,14 @@
     <Compile Include="Presenters\AHKPresenter.cs" />
     <Compile Include="Presenters\IAutoSwitchView.cs" />
     <Compile Include="Presenters\AutoSwitchPresenter.cs" />
+    <Compile Include="Presenters\IAutoSwitchHealView.cs" />
+    <Compile Include="Presenters\AutoSwitchHealPresenter.cs" />
+    <Compile Include="Presenters\IATKDEFView.cs" />
+    <Compile Include="Presenters\ATKDEFPresenter.cs" />
+    <Compile Include="Presenters\IAddServerView.cs" />
+    <Compile Include="Presenters\AddServerPresenter.cs" />
+    <Compile Include="Presenters\IAutoBuffStatusView.cs" />
+    <Compile Include="Presenters\AutoBuffStatusPresenter.cs" />
     <Compile Include="Forms\AutopotForm.cs">
       <SubType>Form</SubType>
     </Compile>

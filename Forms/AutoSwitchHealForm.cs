@@ -3,17 +3,22 @@ using System;
 using System.Windows.Input;
 using _4RTools.Model;
 using _4RTools.Utils;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class AutoSwitchHealForm : Form, IObserver
+    public partial class AutoSwitchHealForm : Form, IObserver, IAutoSwitchHealView
     {
         private AutoSwitchHeal autoSwitchHeal;
+        private AutoSwitchHealPresenter presenter;
 
         public AutoSwitchHealForm(Subject subject, bool isYgg)
         {
             InitializeComponent();
             subject.Attach(this);
+            this.autoSwitchHeal = ProfileSingleton.GetCurrent().AutoSwitchHeal;
+            this.presenter = new AutoSwitchHealPresenter(this, this.autoSwitchHeal);
+            SetupInputs();
         }
 
         public void Update(ISubject subject)
@@ -22,7 +27,7 @@ namespace _4RTools.Forms
             {
                 case MessageCode.PROFILE_CHANGED:
                     this.autoSwitchHeal = ProfileSingleton.GetCurrent().AutoSwitchHeal;
-                    InitializeApplicationForm();
+                    this.presenter.UpdateModel(this.autoSwitchHeal);
                     break;
                 case MessageCode.TURN_HEAL_OFF:
                     if (this.autoSwitchHeal != null)
@@ -39,10 +44,6 @@ namespace _4RTools.Forms
             }
         }
 
-        private void InitializeApplicationForm()
-        {
-            SetupInputs();
-        }
         public void SetupInputs()
         {
             try
@@ -54,76 +55,44 @@ namespace _4RTools.Forms
                         TextBox textBox = (TextBox)c;
                         textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
                         textBox.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-                        textBox.TextChanged += new EventHandler(this.onTextChange);
-
+                        textBox.TextChanged += (s, e) => PropertyChanged?.Invoke(this, new AutoSwitchHealEventArgs { PropertyName = textBox.Name.Substring(3), Value = textBox.Text });
                     }
                     if (c is NumericUpDown)
                     {
                         NumericUpDown numericUpDown = (NumericUpDown)c;
-                        numericUpDown.ValueChanged += new EventHandler(this.onPercentChange);
+                        numericUpDown.ValueChanged += (s, e) => PropertyChanged?.Invoke(this, new AutoSwitchHealEventArgs { PropertyName = numericUpDown.Name.Substring(3), Value = numericUpDown.Value.ToString() });
                     }
-                    FillForm(c);
                 }
             }
             catch { }
-
         }
 
-        private void FillForm(Control c)
-        {
-            var property = typeof(AutoSwitchHeal).GetProperty(c.Name.Substring(3));
-            if (property != null)
-            {
-                c.Text = property.GetValue(this.autoSwitchHeal)?.ToString();
-            }
-        }
+        public event EventHandler<AutoSwitchHealEventArgs> PropertyChanged;
 
-        private void onTextChange(object sender, EventArgs e)
+        public void SetControlValue(string propertyName, string value)
         {
             try
             {
-                TextBox txtbox = (TextBox)sender;
-                Key key = (Key)Enum.Parse(typeof(Key), txtbox.Text.ToString());
-                var property = typeof(AutoSwitchHeal).GetProperty(txtbox.Name.Substring(3));
-                if (property != null)
+                string controlName = "txt" + propertyName; // Conventional prefix, or iterate all
+                Control[] controls = this.Controls.Find(controlName, true);
+                if (controls.Length == 0)
                 {
-                    var oldValue = property.GetValue(this.autoSwitchHeal);
-                    if (!Equals(oldValue, key))
-                    {
-                        property.SetValue(this.autoSwitchHeal, key);
-                        ProfileSingleton.SetConfiguration(this.autoSwitchHeal);
-                    }
+                    // Fallback to numeric or other prefixes if necessary
+                    controls = this.Controls.Find("num" + propertyName, true);
                 }
-                this.ActiveControl = null;
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
-        }
 
-        private void onPercentChange(object sender, EventArgs e)
-        {
-            try
-            {
-                NumericUpDown numericUpDown = (NumericUpDown)sender;
-                int percent = Int16.Parse(numericUpDown.Text);
-                var property = typeof(AutoSwitchHeal).GetProperty(numericUpDown.Name.Substring(3));
-                if (property != null)
+                if (controls.Length > 0)
                 {
-                    var oldValue = property.GetValue(this.autoSwitchHeal);
-                    if (!Equals(oldValue, percent))
+                    Control c = controls[0];
+                    if (c is TextBox && c.Text != value) c.Text = value;
+                    if (c is NumericUpDown num)
                     {
-                        property.SetValue(this.autoSwitchHeal, percent);
-                        ProfileSingleton.SetConfiguration(this.autoSwitchHeal);
+                        decimal val = decimal.Parse(value);
+                        if (num.Value != val) num.Value = val;
                     }
                 }
-                this.ActiveControl = null;
             }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
+            catch { }
         }
     }
 }

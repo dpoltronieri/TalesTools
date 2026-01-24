@@ -4,17 +4,23 @@ using System.Windows.Forms;
 using _4RTools.Utils;
 using _4RTools.Model;
 using System.Windows.Input;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class ATKDEFForm : Form, IObserver
+    public partial class ATKDEFForm : Form, IObserver, IATKDEFView
     {
         public static int TOTAL_ATKDEF_LANES = 8;
         public static int TOTAL_EQUIPS = 6;
+        private ATKDEFPresenter presenter;
+        private ATKDEFMode model;
+
         public ATKDEFForm(Subject subject)
         {
-            subject.Attach(this);
             InitializeComponent();
+            subject.Attach(this);
+            this.model = ProfileSingleton.GetCurrent().AtkDefMode;
+            this.presenter = new ATKDEFPresenter(this, this.model);
             SetupInputs();
         }
 
@@ -23,146 +29,62 @@ namespace _4RTools.Forms
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
-                    UpdateUi();
+                    this.model = ProfileSingleton.GetCurrent().AtkDefMode;
+                    this.presenter.UpdateModel(this.model);
                     break;
                 case MessageCode.TURN_ON:
-                    ProfileSingleton.GetCurrent().AtkDefMode.Start();
+                    this.model.Start();
                     break;
                 case MessageCode.TURN_OFF:
-                    ProfileSingleton.GetCurrent().AtkDefMode.Stop();
+                    this.model.Stop();
                     break;
             }
         }
 
-        private void UpdatePanelData(int id)
+        public event EventHandler<ATKDEFEventArgs> ChangeRequested;
+
+        public void UpdateControlValue(int laneId, string controlType, string value)
         {
             try
             {
-                GroupBox group = (GroupBox)this.Controls.Find("equipGroup" + id, true)[0];
-                EquipConfig exist = ProfileSingleton.GetCurrent().AtkDefMode.equipConfigs.Find(config => config.id == id);
-                if (exist == null)
+                string suffix = controlType == "spammerKey" ? "SpammerKey" :
+                                controlType == "spammerDelay" ? "SpammerDelay" :
+                                controlType == "switchDelay" ? "SwitchDelay" :
+                                controlType == "spammerClick" ? "SpammerClick" : "";
+                
+                string controlName = "in" + laneId + suffix;
+                Control[] controls = this.Controls.Find(controlName, true);
+                if (controls.Length > 0)
                 {
-                    ProfileSingleton.GetCurrent().AtkDefMode.equipConfigs.Add(new EquipConfig(id, Key.None));
-                    ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AtkDefMode);
-                }
-                EquipConfig equipConfig = new EquipConfig(ProfileSingleton.GetCurrent().AtkDefMode.equipConfigs[id - 1]);
-                FormUtils.ResetForm(group);
-
-                Control[] cKey = group.Controls.Find("in" + id + "SpammerKey", true);
-                if (cKey.Length > 0)
-                {
-                    TextBox textBox = (TextBox)cKey[0];
-                    textBox.Text = equipConfig.keySpammer.ToString();
-                }
-
-                Control[] cSpammerDelay = group.Controls.Find("in" + id + "SpammerDelay", true);
-                if (cSpammerDelay.Length > 0)
-                {
-                    NumericUpDown numeric = (NumericUpDown)cSpammerDelay[0];
-                    numeric.Value = equipConfig.ahkDelay;
-                }
-
-                Control[] cSwitchDelay = group.Controls.Find("in" + id + "SwitchDelay", true);
-                if (cSwitchDelay.Length > 0)
-                {
-                    NumericUpDown numeric = (NumericUpDown)cSwitchDelay[0];
-                    numeric.Value = equipConfig.switchDelay;
-                }
-
-                Control[] cSpammerClick = group.Controls.Find("in" + id + "SpammerClick", true);
-                if (cSpammerClick.Length > 0)
-                {
-                    CheckBox checkBox = (CheckBox)cSpammerClick[0];
-                    checkBox.Checked = equipConfig.keySpammerWithClick;
-                }
-
-                Dictionary<string, Key> atkKeys = new Dictionary<string, Key>(equipConfig.atkKeys);
-                Dictionary<string, Key> defKeys = new Dictionary<string, Key>(equipConfig.defKeys);
-
-                for (int i = 1; i <= TOTAL_EQUIPS; i++)
-                {
-                    Control[] equipDef = group.Controls.Find("in" + id + "Def" + i, true);
-                    TextBox tbDef = (TextBox)equipDef[0];
-                    tbDef.Text = defKeys.ContainsKey(tbDef.Name) ? defKeys[tbDef.Name].ToString() : Keys.None.ToString();
-
-                    Control[] equipAtk = group.Controls.Find("in" + id + "Atk" + i, true);
-                    TextBox tbAtk = (TextBox)equipAtk[0];
-                    tbAtk.Text = atkKeys.ContainsKey(tbAtk.Name) ? atkKeys[tbAtk.Name].ToString() : Keys.None.ToString();
+                    Control c = controls[0];
+                    if (c is TextBox && c.Text != value) c.Text = value;
+                    else if (c is NumericUpDown num)
+                    {
+                        decimal val = decimal.Parse(value);
+                        if (num.Value != val) num.Value = val;
+                    }
+                    else if (c is CheckBox chk)
+                    {
+                        bool val = bool.Parse(value);
+                        if (chk.Checked != val) chk.Checked = val;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                var exc = ex;
-            };
-
+            catch { }
         }
 
-        private void UpdateUi()
+        public void UpdateEquipValue(int laneId, string type, int index, string value)
         {
-            for (int i = 1; i <= TOTAL_ATKDEF_LANES; i++)
+            try
             {
-                UpdatePanelData(i);
+                string controlName = "in" + laneId + type + index;
+                Control[] controls = this.Controls.Find(controlName, true);
+                if (controls.Length > 0 && controls[0].Text != value)
+                {
+                    controls[0].Text = value == "None" ? "" : value;
+                }
             }
-        }
-
-        private void onDelayChange(object sender, EventArgs e)
-        {
-            NumericUpDown delayInput = (NumericUpDown)sender;
-
-            string[] inputTag = delayInput.Tag.ToString().Split(new[] { ":" }, StringSplitOptions.None);
-            int id = short.Parse(inputTag[0]);
-            string type = inputTag[1];
-            EquipConfig equipConfig = ProfileSingleton.GetCurrent().AtkDefMode.equipConfigs.Find(config => config.id == id);
-
-            if (type == "spammerDelay")
-            {
-                //Spammer Delay Change
-                equipConfig.ahkDelay = decimal.ToInt16(delayInput.Value);
-            }
-            else
-            {
-                //Switch Delay Change
-                equipConfig.switchDelay = decimal.ToInt16(delayInput.Value);
-            }
-
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AtkDefMode);
-        }
-
-        private void onTextChange(object sender, EventArgs e)
-        {
-
-            TextBox textBox = (TextBox)sender;
-            Key key = (Key)Enum.Parse(typeof(Key), textBox.Text.ToString());
-
-            string[] inputTag = textBox.Tag.ToString().Split(new[] { ":" }, StringSplitOptions.None);
-            int id = short.Parse(inputTag[0]);
-            string type = inputTag[1];
-            EquipConfig equipConfig = ProfileSingleton.GetCurrent().AtkDefMode.equipConfigs.Find(config => config.id == id);
-
-            if (type.Equals("spammerKey"))
-            {
-                equipConfig.keySpammer = key;
-            }
-            else
-            {
-                type = inputTag[1].Remove(inputTag[1].Length - 1).ToUpper();
-                ProfileSingleton.GetCurrent().AtkDefMode.AddSwitchItem(id, textBox.Name, key, type);
-            }
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AtkDefMode);
-
-        }
-
-        private void ChkBox_CheckedChanged(object sender, EventArgs e)
-        {
-
-            CheckBox checkBox = (CheckBox)sender;
-
-            string[] inputTag = checkBox.Tag.ToString().Split(new[] { ":" }, StringSplitOptions.None);
-            int id = short.Parse(inputTag[0]);
-
-            EquipConfig equipConfig = ProfileSingleton.GetCurrent().AtkDefMode.equipConfigs.Find(config => config.id == id);
-            equipConfig.keySpammerWithClick = checkBox.Checked;
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AtkDefMode);
+            catch { }
         }
 
         public void SetupInputs()
@@ -171,38 +93,49 @@ namespace _4RTools.Forms
             {
                 foreach (Control c in FormUtils.GetAll(this, typeof(TextBox)))
                 {
-                    if (c is TextBox)
+                    if (c is TextBox textBox)
                     {
-                        TextBox textBox = (TextBox)c;
                         textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
                         textBox.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-                        textBox.TextChanged += new EventHandler(this.onTextChange);
+                        textBox.TextChanged += (s, e) => {
+                            if (string.IsNullOrEmpty(textBox.Text)) return;
+                            string[] inputTag = textBox.Tag.ToString().Split(':');
+                            int id = int.Parse(inputTag[0]);
+                            string type = inputTag[1];
+                            if (type == "spammerKey")
+                                ChangeRequested?.Invoke(this, new ATKDEFEventArgs { LaneId = id, ControlType = type, Value = textBox.Text });
+                            else
+                            {
+                                string baseType = type.Remove(type.Length - 1).ToUpper();
+                                ChangeRequested?.Invoke(this, new ATKDEFEventArgs { LaneId = id, ControlType = baseType, Value = textBox.Text, ControlName = textBox.Name });
+                            }
+                        };
                     }
-
                 }
 
                 foreach (Control c in FormUtils.GetAll(this, typeof(NumericUpDown)))
                 {
-                    if (c is NumericUpDown)
+                    if (c is NumericUpDown numeric)
                     {
-                        NumericUpDown numericUpDown = (NumericUpDown)c;
-                        numericUpDown.ValueChanged += new EventHandler(this.onDelayChange);
+                        numeric.ValueChanged += (s, e) => {
+                            string[] inputTag = numeric.Tag.ToString().Split(':');
+                            ChangeRequested?.Invoke(this, new ATKDEFEventArgs { LaneId = int.Parse(inputTag[0]), ControlType = inputTag[1], Value = numeric.Value.ToString() });
+                        };
                     }
-
                 }
 
                 foreach (Control c in FormUtils.GetAll(this, typeof(CheckBox)))
                 {
-                    if (c is CheckBox)
+                    if (c is CheckBox chk)
                     {
-                        CheckBox numericUpDown = (CheckBox)c;
-                        numericUpDown.CheckedChanged += new EventHandler(this.ChkBox_CheckedChanged);
+                        chk.CheckedChanged += (s, e) => {
+                            string[] inputTag = chk.Tag.ToString().Split(':');
+                            ChangeRequested?.Invoke(this, new ATKDEFEventArgs { LaneId = int.Parse(inputTag[0]), ControlType = "spammerClick", Value = chk.Checked.ToString() });
+                        };
                     }
-
                 }
             }
             catch { }
-
         }
     }
 }

@@ -83,3 +83,35 @@ This document outlines the roadmap, planned features, architectural improvements
     -   **View**: The Form, strictly handling user input and rendering.
     -   **Presenter/ViewModel**: An intermediate layer to handle the logic (e.g., `AutopotPresenter`).
 -   **Benefit**: Allows testing logic without instantiating UI forms and makes code more readable.
+
+#### Implementation Process
+1.  **Interface Definition**: Create an `I<FormName>View` interface in the `Presenters` namespace. This interface defines the properties and events that the View (Form) exposes to the Presenter.
+2.  **Presenter Creation**: Create a `<FormName>Presenter` class in the `Presenters` namespace. This class takes the Interface and the Model as dependencies. It subscribes to View events to update the Model and updates the View when the Model changes.
+3.  **Form Refactoring**:
+    -   Implement the `I<FormName>View` interface in the Form.
+    -   Instantiate the Presenter in the Form's constructor.
+    -   Remove direct Model manipulation and logic from the Form's code-behind.
+    -   Delegate actions to the Presenter or fire events defined in the Interface.
+4.  **Cleanup**: Remove unused event handlers from the `Designer.cs` file if they were replaced by generic event subscriptions in the Presenter.
+
+#### Status Tracker
+-   [x] **AutopotForm** (`AutopotPresenter`)
+-   [x] **AHKForm** (`AHKPresenter`)
+-   [x] **AutoSwitchForm** (`AutoSwitchPresenter`)
+-   [x] **AutoSwitchHealForm** (`AutoSwitchHealPresenter`)
+-   [x] **ATKDEFForm** (`ATKDEFPresenter`)
+-   [x] **AddServerForm** (`AddServerPresenter`)
+-   [x] **AutoBuffStatusForm** (`AutoBuffStatusPresenter`)
+-   [ ] **AutoPatcher**
+-   [ ] **ClientUpdaterForm**
+-   [ ] **ConfigForm**
+-   [ ] **CustomButtonForm**
+-   [ ] **DevForm**
+-   [ ] **MacroSongForm**
+-   [ ] **MacroSwitchForm**
+-   [ ] **ProfileForm**
+-   [ ] **ServersForm**
+-   [ ] **SkillAutoBuffForm**
+-   [ ] **SkillTimerForm**
+-   [ ] **StuffAutoBuffForm**
+-   [ ] **ToggleApplicationStateForm**

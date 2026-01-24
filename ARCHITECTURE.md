@@ -38,3 +38,7 @@ The application is transitioning to the MVP pattern to separate concerns and imp
 -   `AutopotForm`
 -   `AHKForm`
 -   `AutoSwitchForm`
+-   `AutoSwitchHealForm`
+-   `ATKDEFForm`
+-   `AddServerForm`
+-   `AutoBuffStatusForm`

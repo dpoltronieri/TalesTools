@@ -6,12 +6,16 @@ using _4RTools.Utils;
 using _4RTools.Model;
 using System.Linq;
 using System.Windows.Media.Effects;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class AutoBuffStatusForm : Form, IObserver
+    public partial class AutoBuffStatusForm : Form, IObserver, IAutoBuffStatusView
     {
         private List<BuffContainer> debuffContainers = new List<BuffContainer>();
+        private AutoBuffStatusPresenter presenter;
+        private StatusRecovery statusRecovery;
+        private DebuffsRecovery debuffsRecovery;
 
         public AutoBuffStatusForm(Subject subject)
         {
@@ -19,15 +23,44 @@ namespace _4RTools.Forms
             debuffContainers.Add(new BuffContainer(this.DebuffsGP, Buff.GetDebuffs()));
 
             new DebuffRenderer(debuffContainers, toolTip1).doRender();
+            
+            this.statusRecovery = ProfileSingleton.GetCurrent().StatusRecovery;
+            this.debuffsRecovery = ProfileSingleton.GetCurrent().DebuffsRecovery;
+            this.presenter = new AutoBuffStatusPresenter(this, this.statusRecovery, this.debuffsRecovery);
 
-            this.txtStatusKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
-            this.txtStatusKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            this.txtStatusKey.TextChanged += new EventHandler(onStatusKeyChange);
-            this.txtNewStatusKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
-            this.txtNewStatusKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
-            this.txtNewStatusKey.TextChanged += new EventHandler(on3RDStatusKeyChange);
+            WireUpInputHandlers();
+            WireUpEvents();
 
             subject.Attach(this);
+        }
+
+        private void WireUpInputHandlers()
+        {
+            this.txtStatusKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            this.txtStatusKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            this.txtNewStatusKey.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+            this.txtNewStatusKey.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+            
+            var groupbox = this.Controls.OfType<GroupBox>().FirstOrDefault();
+            if (groupbox != null)
+            {
+                foreach (TextBox txt in groupbox.Controls.OfType<TextBox>())
+                {
+                    txt.KeyDown += new System.Windows.Forms.KeyEventHandler(FormUtils.OnKeyDown);
+                    txt.KeyPress += new KeyPressEventHandler(FormUtils.OnKeyPress);
+                    txt.TextChanged += (s, e) => {
+                        if (string.IsNullOrEmpty(txt.Text)) return;
+                        EffectStatusIDs id = (EffectStatusIDs)int.Parse(txt.Name.Split('n')[1]);
+                        DebuffKeyChanged?.Invoke(this, new AutoBuffStatusKeyEventArgs { Id = id, Key = txt.Text });
+                    };
+                }
+            }
+        }
+
+        private void WireUpEvents()
+        {
+            this.txtStatusKey.TextChanged += (s, e) => StatusKeyChanged?.Invoke(this, EventArgs.Empty);
+            this.txtNewStatusKey.TextChanged += (s, e) => NewStatusKeyChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void Update(ISubject subject)
@@ -35,67 +68,45 @@ namespace _4RTools.Forms
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
-                    this.txtStatusKey.Text = ProfileSingleton.GetCurrent().StatusRecovery.buffMapping.Keys.Contains(EffectStatusIDs.SILENCE) ? ProfileSingleton.GetCurrent().StatusRecovery.buffMapping[EffectStatusIDs.SILENCE].ToString() : Keys.None.ToString();
-                    this.txtNewStatusKey.Text = ProfileSingleton.GetCurrent().StatusRecovery.buffMapping.Keys.Contains(EffectStatusIDs.CRITICALWOUND) ? ProfileSingleton.GetCurrent().StatusRecovery.buffMapping[EffectStatusIDs.CRITICALWOUND].ToString() : Keys.None.ToString();
-                    doUpdate(this);
+                    this.statusRecovery = ProfileSingleton.GetCurrent().StatusRecovery;
+                    this.debuffsRecovery = ProfileSingleton.GetCurrent().DebuffsRecovery;
+                    this.presenter.UpdateModels(this.statusRecovery, this.debuffsRecovery);
                     break;
                 case MessageCode.TURN_OFF:
-                    ProfileSingleton.GetCurrent().DebuffsRecovery.Stop();
-                    ProfileSingleton.GetCurrent().StatusRecovery.Stop();
+                    this.debuffsRecovery.Stop();
+                    this.statusRecovery.Stop();
                     break;
                 case MessageCode.TURN_ON:
-                    ProfileSingleton.GetCurrent().DebuffsRecovery.Start();
-                    ProfileSingleton.GetCurrent().StatusRecovery.Start();
+                    this.debuffsRecovery.Start();
+                    this.statusRecovery.Start();
                     break;
             }
         }
-        public static void doUpdate(Control control)
+
+        // IAutoBuffStatusView Implementation
+        public string StatusKey { get => txtStatusKey.Text; set => txtStatusKey.Text = value; }
+        public string NewStatusKey { get => txtNewStatusKey.Text; set => txtNewStatusKey.Text = value; }
+
+        public event EventHandler StatusKeyChanged;
+        public event EventHandler NewStatusKeyChanged;
+        public event EventHandler<AutoBuffStatusKeyEventArgs> DebuffKeyChanged;
+
+        public void SetDebuffKey(EffectStatusIDs id, string key)
         {
-            var autobuffDict = ProfileSingleton.GetCurrent().DebuffsRecovery.debuffMapping;
-            var groupbox = control.Controls.OfType<GroupBox>().FirstOrDefault();
-            foreach (TextBox txt in groupbox.Controls.OfType<TextBox>()) {
-                var buffid = int.Parse(txt.Name.Split('n')[1]);
-                var existe = autobuffDict.FirstOrDefault(x => x.Key.Equals((EffectStatusIDs)buffid));
-                if (existe.Key != 0)
+            try
+            {
+                var groupbox = this.Controls.OfType<GroupBox>().FirstOrDefault();
+                if (groupbox != null)
                 {
-                    txt.Text = autobuffDict[(EffectStatusIDs)buffid].ToString();
-                }
-                else
-                {
-                    txt.Text = "None";
+                    string controlName = "in" + (int)id;
+                    Control[] controls = groupbox.Controls.Find(controlName, true);
+                    if (controls.Length > 0 && controls[0].Text != key)
+                    {
+                        controls[0].Text = key == "None" ? "" : key;
+                    }
                 }
             }
-        }
-        private void onStatusKeyChange(object sender, EventArgs e)
-        {
-            Key k = (Key)Enum.Parse(typeof(Key), this.txtStatusKey.Text.ToString());
-
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.POISON, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.SILENCE, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.BLIND, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.CONFUSION, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.HALLUCINATIONWALK, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.HALLUCINATION, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.CURSE, k);
-
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().StatusRecovery);
-            this.ActiveControl = null;
-        }
-
-        private void on3RDStatusKeyChange(object sender, EventArgs e)
-        {
-            Key k = (Key)Enum.Parse(typeof(Key), this.txtNewStatusKey.Text.ToString());
-
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.SLOW_CAST, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.CRITICALWOUND, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.FREEZING, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.MANDRAGORA, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.BURNING, k);
-            ProfileSingleton.GetCurrent().StatusRecovery.AddKeyToBuff(EffectStatusIDs.DEEP_SLEEP, k);
-
-
-            ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().StatusRecovery);
-            this.ActiveControl = null;
+            catch { }
         }
     }
 }
