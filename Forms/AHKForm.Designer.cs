@@ -598,7 +598,6 @@ namespace _4RTools.Forms
             this.txtSpammerDelay.Name = "txtSpammerDelay";
             this.txtSpammerDelay.Size = new System.Drawing.Size(59, 23);
             this.txtSpammerDelay.TabIndex = 31;
-            this.txtSpammerDelay.ValueChanged += new System.EventHandler(this.txtSpammerDelay_TextChanged);
             // 
             // panel2
             // 
@@ -711,7 +710,6 @@ namespace _4RTools.Forms
             this.chkNoShift.TabIndex = 39;
             this.chkNoShift.Text = "No Shift";
             this.chkNoShift.UseVisualStyleBackColor = true;
-            this.chkNoShift.CheckedChanged += new System.EventHandler(this.chkNoShift_CheckedChanged);
             // 
             // pbUpAndDownArrow
             // 
@@ -733,7 +731,6 @@ namespace _4RTools.Forms
             this.chkMouseFlick.TabIndex = 38;
             this.chkMouseFlick.Text = "Mouse Flick";
             this.chkMouseFlick.UseVisualStyleBackColor = true;
-            this.chkMouseFlick.CheckedChanged += new System.EventHandler(this.chkMouseFlick_CheckedChanged);
             // 
             // ahkSpeedBoost
             // 
@@ -746,7 +743,6 @@ namespace _4RTools.Forms
             this.ahkSpeedBoost.TabStop = true;
             this.ahkSpeedBoost.Text = "Speed boost";
             this.ahkSpeedBoost.UseVisualStyleBackColor = true;
-            this.ahkSpeedBoost.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // ahkCompatibility
             // 
@@ -759,7 +755,6 @@ namespace _4RTools.Forms
             this.ahkCompatibility.TabStop = true;
             this.ahkCompatibility.Text = "Compatibility";
             this.ahkCompatibility.UseVisualStyleBackColor = true;
-            this.ahkCompatibility.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // ahkSynchronous
             // 
@@ -772,7 +767,6 @@ namespace _4RTools.Forms
             this.ahkSynchronous.TabStop = true;
             this.ahkSynchronous.Text = "Síncrono";
             this.ahkSynchronous.UseVisualStyleBackColor = true;
-            this.ahkSynchronous.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // groupBox4
             // 

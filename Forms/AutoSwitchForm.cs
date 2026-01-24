@@ -7,14 +7,18 @@ using _4RTools.Model;
 using System.Linq;
 using static _4RTools.Model.AutoSwitch;
 using System.Diagnostics;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class AutoSwitchForm : Form, IObserver
+    public partial class AutoSwitchForm : Form, IObserver, IAutoSwitchView
     {
         private List<Buff> allBuffs = new List<Buff>();
         private Subject _subject;
         string OldTextKey = string.Empty;
+        private AutoSwitchPresenter presenter;
+        private AutoSwitch autoSwitch;
+
         class ComboboxValue
         {
             public int Id { get; private set; }
@@ -38,6 +42,8 @@ namespace _4RTools.Forms
 
             setupInputs();
             _subject = subject;
+            this.autoSwitch = ProfileSingleton.GetCurrent().AutoSwitch;
+            this.presenter = new AutoSwitchPresenter(this, this.autoSwitch);
 
             this.allBuffs.Add(new Buff("Incenso Queimado", EffectStatusIDs.SPIRIT, Resources._4RTools.Icons.burnt_incense));
             this.allBuffs.AddRange(Buff.GetArcherSkills());
@@ -56,6 +62,13 @@ namespace _4RTools.Forms
             }
 
             subject.Attach(this);
+            WireUpEvents();
+        }
+
+        private void WireUpEvents()
+        {
+            this.numDelay.ValueChanged += (s, e) => DelayChanged?.Invoke(this, EventArgs.Empty);
+            this.numSwitchDelay.ValueChanged += (s, e) => SwitchDelayChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void setupInputs()
@@ -78,7 +91,7 @@ namespace _4RTools.Forms
         private void loadCustomSkills(Subject subject)
         {
             List<Buff> filteredBuffs = new List<Buff>();
-            foreach (var skill in ProfileSingleton.GetCurrent().AutoSwitch.autoSwitchGenericMapping)
+            foreach (var skill in this.autoSwitch.autoSwitchGenericMapping)
             {
                 if (this.allBuffs.Exists(x => x.effectStatusID == skill.skillId))
                 {
@@ -96,14 +109,15 @@ namespace _4RTools.Forms
             switch ((subject as Subject).Message.code)
             {
                 case MessageCode.PROFILE_CHANGED:
-                    loadExclusiveSkills();
+                    this.autoSwitch = ProfileSingleton.GetCurrent().AutoSwitch;
+                    this.presenter.UpdateModel(this.autoSwitch); // Helper to refresh view
                     loadCustomSkills(subject as Subject);
                     break;
                 case MessageCode.TURN_OFF:
-                    ProfileSingleton.GetCurrent().AutoSwitch.Stop();
+                    this.autoSwitch.Stop();
                     break;
                 case MessageCode.TURN_ON:
-                    ProfileSingleton.GetCurrent().AutoSwitch.Start();
+                    this.autoSwitch.Start();
                     break;
                 case MessageCode.CHANGED_AUTOSWITCH_SKILL:
                     loadCustomSkills(subject as Subject);
@@ -111,44 +125,8 @@ namespace _4RTools.Forms
             }
         }
 
-        private void loadExclusiveSkills()
-        {
-            var _autoSwitchMapping = ProfileSingleton.GetCurrent().AutoSwitch.autoSwitchMapping;
+        // Removed loadExclusiveSkills() as it is now handled by Presenter via SetKey
 
-            GroupBox group = (GroupBox)this.Controls.Find("ProcSwitchGP", true)[0];
-
-            foreach (Control c in group.Controls)
-            {
-                if (c is TextBox)
-                {
-                    string type = c.Name.Split(new[] { "in" }, StringSplitOptions.None)[0];
-                    EffectStatusIDs statID = (EffectStatusIDs)Int16.Parse(c.Name.Split(new[] { "in" }, StringSplitOptions.None)[1]);
-                    switch (type)
-                    {
-                        case item:
-                            c.Text = _autoSwitchMapping.Exists(x => x.skillId == statID) ? _autoSwitchMapping.FirstOrDefault(x => x.skillId == statID).itemKey.ToString() : Keys.None.ToString();
-                            break;
-
-                        case nextItem:
-                            c.Text = _autoSwitchMapping.Exists(x => x.skillId == statID) ? _autoSwitchMapping.FirstOrDefault(x => x.skillId == statID).nextItemKey.ToString() : Keys.None.ToString();
-                            break;
-                    }
-                }
-            }
-            Control[] cDelay = this.Controls.Find("numDelay", true);
-            if (cDelay.Length > 0)
-            {
-                NumericUpDown numeric = (NumericUpDown)cDelay[0];
-                numeric.Value = Convert.ToInt16(ProfileSingleton.GetCurrent().AutoSwitch.delay);
-            }
-
-            Control[] cSwitchDelay = this.Controls.Find("numSwitchDelay", true);
-            if (cSwitchDelay.Length > 0)
-            {
-                NumericUpDown numeric = (NumericUpDown)cSwitchDelay[0];
-                numeric.Value = Convert.ToInt16(ProfileSingleton.GetCurrent().AutoSwitch.switchEquipDelay);
-            }
-        }
         private void onFocus(object sender, EventArgs e)
         { 
             TextBox txtBox = (TextBox)sender;
@@ -163,38 +141,12 @@ namespace _4RTools.Forms
                 bool textChanged = this.OldTextKey != String.Empty && this.OldTextKey != txtBox.Text.ToString();
                 if ((txtBox.Text.ToString() != String.Empty) && textChanged)
                 {
-                    Key key = (Key)Enum.Parse(typeof(Key), txtBox.Text.ToString());
                     EffectStatusIDs statusID = (EffectStatusIDs)Int16.Parse(txtBox.Name.Split(new[] { "in" }, StringSplitOptions.None)[1]);
                     string type = txtBox.Name.Split(new[] { "in" }, StringSplitOptions.None)[0];
+                    string key = txtBox.Text.ToString();
 
-                    AutoSwitchConfig config = ProfileSingleton.GetCurrent().AutoSwitch.autoSwitchMapping.Find(cfg => cfg.skillId == statusID);
-                    if (config != null)
-                    {
-                        config.skillId = statusID;
-
-                        switch (type)
-                        {
-                            case item:
-                                config.itemKey = key;
-                                break;
-
-                            case skill:
-                                config.skillKey = key;
-                                break;
-
-                            case nextItem:
-                                config.nextItemKey = key;
-                                break;
-                        }
-                        
-                    }
-                    else
-                    {
-
-                        ProfileSingleton.GetCurrent().AutoSwitch.autoSwitchMapping.Add(new AutoSwitchConfig(statusID, key, type));
-                    }
-
-                    ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutoSwitch);
+                    KeyChanged?.Invoke(this, new AutoSwitchKeyEventArgs { SkillId = statusID, Type = type, Key = key });
+                    
                     _subject.Notify(new Utils.Message(Utils.MessageCode.ADDED_NEW_AUTOSWITCH_PETS, null));
                 }
                 this.ActiveControl = null;
@@ -205,38 +157,41 @@ namespace _4RTools.Forms
         private void btnNewSwitch(object sender, EventArgs e)
         {
             var txtSkill = skillCB.Text;
-
             var skill = this.allBuffs.FirstOrDefault(x => x.name == txtSkill);
-            var _autoSwitchGenericMapping = ProfileSingleton.GetCurrent().AutoSwitch.autoSwitchGenericMapping;
-            if (!_autoSwitchGenericMapping.Exists(x => x.skillId == skill.effectStatusID))
+            
+            if (skill != null)
             {
-                _autoSwitchGenericMapping.Add(new AutoSwitchConfig(skill.effectStatusID, Key.None));
-                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutoSwitch);
+                AddNewSkill?.Invoke(this, skill.effectStatusID);
                 _subject.Notify(new Utils.Message(Utils.MessageCode.CHANGED_AUTOSWITCH_SKILL, null));
             }
-
-
         }
 
-        private void txtDelay_TextChanged(object sender, EventArgs e)
+        // IAutoSwitchView Implementation
+        public string Delay { get => numDelay.Value.ToString(); set { try { numDelay.Value = decimal.Parse(value); } catch {} } }
+        public string SwitchDelay { get => numSwitchDelay.Value.ToString(); set { try { numSwitchDelay.Value = decimal.Parse(value); } catch {} } }
+
+        public event EventHandler DelayChanged;
+        public event EventHandler SwitchDelayChanged;
+        public event EventHandler<AutoSwitchKeyEventArgs> KeyChanged;
+        public event EventHandler<EffectStatusIDs> AddNewSkill;
+
+        public void SetKey(EffectStatusIDs id, string type, string key)
         {
             try
             {
-                ProfileSingleton.GetCurrent().AutoSwitch.delay = Convert.ToInt16(this.numDelay.Value);
-                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutoSwitch);
+                string controlName = $"{type}in{(int)id}";
+                // Note: The original code parsed "in" as separator. 
+                // Name format in Designer seems to be like "ITEMin34", "SKILLin34".
+                // Let's verify control finding.
+                GroupBox group = (GroupBox)this.Controls.Find("ProcSwitchGP", true)[0];
+                Control[] controls = group.Controls.Find(controlName, true);
+                if (controls.Length > 0)
+                {
+                    if (controls[0].Text != key)
+                        controls[0].Text = key == "None" ? "" : key; // Or just key? Original used Keys.None.ToString() which is "None"
+                }
             }
-            catch { }
+            catch {}
         }
-
-        private void txtSwitchDelay_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                ProfileSingleton.GetCurrent().AutoSwitch.switchEquipDelay = Convert.ToInt16(this.numSwitchDelay.Value);
-                ProfileSingleton.SetConfiguration(ProfileSingleton.GetCurrent().AutoSwitch);
-            }
-            catch { }
-        }
-
     }
 }

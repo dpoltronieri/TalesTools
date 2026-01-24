@@ -423,6 +423,10 @@
     <Compile Include="Model\Profile.cs" />
     <Compile Include="Presenters\IAutopotView.cs" />
     <Compile Include="Presenters\AutopotPresenter.cs" />
+    <Compile Include="Presenters\IAHKView.cs" />
+    <Compile Include="Presenters\AHKPresenter.cs" />
+    <Compile Include="Presenters\IAutoSwitchView.cs" />
+    <Compile Include="Presenters\AutoSwitchPresenter.cs" />
     <Compile Include="Forms\AutopotForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -198,7 +198,6 @@ namespace _4RTools.Forms
             this.btnAddAutoSwitch.TabIndex = 316;
             this.btnAddAutoSwitch.Text = "Add";
             this.btnAddAutoSwitch.UseVisualStyleBackColor = false;
-            this.btnAddAutoSwitch.Click += new System.EventHandler(this.btnNewSwitch);
             // 
             // skillCB
             // 
@@ -436,7 +435,6 @@ namespace _4RTools.Forms
             0,
             0,
             0});
-            this.numDelay.ValueChanged += new System.EventHandler(this.txtDelay_TextChanged);
             // 
             // numSwitchDelay
             // 
@@ -458,7 +456,6 @@ namespace _4RTools.Forms
             0,
             0,
             0});
-            this.numSwitchDelay.ValueChanged += new System.EventHandler(this.txtSwitchDelay_TextChanged);
             // 
             // ITEMin126
             // 

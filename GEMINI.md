@@ -23,3 +23,7 @@ This document outlines the core principles, standards, and technical guidelines 
 ## 4. Project Structure & Compilation
 
 - **Adding New Files**: When creating new `.cs` files (Models, Forms, Utils, etc.), you **MUST** explicitly add them to the `TalesTools.csproj` file. This project does not use glob patterns for including source files; each file is listed individually in an `<ItemGroup>` with a `<Compile Include="..." />` tag. Failure to do this will result in build errors as the new code will not be part of the compilation.
+
+## 5. Architecture Changes
+
+- **MVP Pattern**: The project is migrating to the Model-View-Presenter (MVP) pattern for Windows Forms. New forms should implement an `IView` interface in the `Presenters` namespace, and logic should be handled by a corresponding `Presenter` class. Existing forms are being incrementally refactored.
