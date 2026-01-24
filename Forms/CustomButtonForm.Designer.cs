@@ -152,7 +152,6 @@
             0,
             0,
             0});
-            this.txtPriorityDelay.ValueChanged += new System.EventHandler(this.txtPriorityDelay_TextChanged);
             // 
             // CustomButtonForm
             // 

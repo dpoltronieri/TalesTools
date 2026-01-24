@@ -42,3 +42,6 @@ The application is transitioning to the MVP pattern to separate concerns and imp
 -   `ATKDEFForm`
 -   `AddServerForm`
 -   `AutoBuffStatusForm`
+-   `ClientUpdaterForm`
+-   `ConfigForm`
+-   `CustomButtonForm`

@@ -6,63 +6,38 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using _4RTools.Presenters;
 
 namespace _4RTools.Forms
 {
-    public partial class ClientUpdaterForm : Form
+    public partial class ClientUpdaterForm : Form, IClientUpdaterView
     {
-        private System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
+        private ClientUpdaterPresenter presenter;
 
         public ClientUpdaterForm()
         {
             InitializeComponent();
-            StartUpdate();
+            this.presenter = new ClientUpdaterPresenter(this);
+            this.Load += async (s, e) => await this.presenter.StartUpdate();
         }
 
-        private async void StartUpdate()
+        // IClientUpdaterView Implementation
+        public int ProgressBarValue { get => pbSupportedServer.Value; set => pbSupportedServer.Value = value; }
+        public int MaxProgressBarValue { get => pbSupportedServer.Maximum; set => pbSupportedServer.Maximum = value; }
+
+        public void ShowMessage(string message)
         {
-            List<ClientDTO> clients = new List<ClientDTO>();
-
-
-            /**
-             * Try to load remote supported_server.json file and append all data in clients list.
-             */
-            try
-            {
-                clients.AddRange(LocalServerManager.GetLocalClients()); //Load Local Servers First
-                LoadServers(clients);                                              //If fetch successfully update and load local file.
-                Thread.Sleep(100);
-            }
-            catch(Exception ex)
-            {
-                //If catch some exception while Fetch, load resource file.
-                MessageBox.Show("Cannot load supported_servers file. Loading resource instead....");
-                clients.AddRange(JsonConvert.DeserializeObject<List<ClientDTO>>(LoadResourceServerFile()));
-            }
-            finally
-            {
-                new Container().Show();
-                Hide();
-            }
+            MessageBox.Show(message);
         }
 
-        private string LoadResourceServerFile()
+        public void StartContainer()
         {
-            return Resources._4RTools.ETCResource.supported_servers;
+            new Container().Show();
         }
 
-        private void LoadServers(List<ClientDTO> clients)
+        public void CloseView()
         {
-            foreach (ClientDTO clientDTO in clients)
-            {
-                try
-                {
-                    ClientListSingleton.AddClient(new Client(clientDTO));
-                    pbSupportedServer.Increment(1);
-                }
-                catch { }
-                
-            }
+            this.Hide();
         }
     }
 }

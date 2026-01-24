@@ -102,10 +102,9 @@ This document outlines the roadmap, planned features, architectural improvements
 -   [x] **ATKDEFForm** (`ATKDEFPresenter`)
 -   [x] **AddServerForm** (`AddServerPresenter`)
 -   [x] **AutoBuffStatusForm** (`AutoBuffStatusPresenter`)
--   [ ] **AutoPatcher**
--   [ ] **ClientUpdaterForm**
--   [ ] **ConfigForm**
--   [ ] **CustomButtonForm**
+-   [x] **ClientUpdaterForm** (`ClientUpdaterPresenter`)
+-   [x] **ConfigForm** (`ConfigPresenter`)
+-   [x] **CustomButtonForm** (`CustomButtonPresenter`)
 -   [ ] **DevForm**
 -   [ ] **MacroSongForm**
 -   [ ] **MacroSwitchForm**

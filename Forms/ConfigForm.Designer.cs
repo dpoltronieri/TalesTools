@@ -116,7 +116,6 @@ namespace _4RTools.Forms
             this.chkStopHealOnCity.TabIndex = 310;
             this.chkStopHealOnCity.Text = "Pausar cura na cidade";
             this.chkStopHealOnCity.UseVisualStyleBackColor = true;
-            this.chkStopHealOnCity.CheckedChanged += new System.EventHandler(this.chkStopHealOnCity_CheckedChanged);
             // 
             // ammo2textBox
             // 
@@ -149,7 +148,6 @@ namespace _4RTools.Forms
             this.switchAmmoCheckBox.TabIndex = 307;
             this.switchAmmoCheckBox.Text = "Troca Automática de munição";
             this.switchAmmoCheckBox.UseVisualStyleBackColor = true;
-            this.switchAmmoCheckBox.CheckedChanged += new System.EventHandler(this.switchAmmoCheckBox_CheckedChanged);
             // 
             // textReinKey
             // 
@@ -171,7 +169,6 @@ namespace _4RTools.Forms
             this.getOffReinCheckBox.TabIndex = 2;
             this.getOffReinCheckBox.Text = "Desmontar da Rédea ao atacar";
             this.getOffReinCheckBox.UseVisualStyleBackColor = true;
-            this.getOffReinCheckBox.CheckedChanged += new System.EventHandler(this.getOffReinCheckBox_CheckedChanged);
             // 
             // chkStopBuffsOnRein
             // 
@@ -182,7 +179,6 @@ namespace _4RTools.Forms
             this.chkStopBuffsOnRein.TabIndex = 1;
             this.chkStopBuffsOnRein.Text = "Pausar autobuff-skill na rédea";
             this.chkStopBuffsOnRein.UseVisualStyleBackColor = true;
-            this.chkStopBuffsOnRein.CheckedChanged += new System.EventHandler(this.chkStopBuffsOnRein_CheckedChanged);
             // 
             // chkStopBuffsOnCity
             // 
@@ -193,7 +189,6 @@ namespace _4RTools.Forms
             this.chkStopBuffsOnCity.TabIndex = 0;
             this.chkStopBuffsOnCity.Text = "Pausar autobuffs/skill timer/auto switch na cidade";
             this.chkStopBuffsOnCity.UseVisualStyleBackColor = true;
-            this.chkStopBuffsOnCity.CheckedChanged += new System.EventHandler(this.chkStopBuffsOnCity_CheckedChanged);
             // 
             // label1
             // 
@@ -228,7 +223,6 @@ namespace _4RTools.Forms
             this.chkStopWithChat.TabIndex = 311;
             this.chkStopWithChat.Text = "Pausar Tales Tools com chat aberto";
             this.chkStopWithChat.UseVisualStyleBackColor = true;
-            this.chkStopWithChat.CheckedChanged += new System.EventHandler(this.chkStopWithChat_CheckedChanged);
             // 
             // ConfigForm
             // 

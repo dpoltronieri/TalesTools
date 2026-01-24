@@ -435,6 +435,12 @@
     <Compile Include="Presenters\AddServerPresenter.cs" />
     <Compile Include="Presenters\IAutoBuffStatusView.cs" />
     <Compile Include="Presenters\AutoBuffStatusPresenter.cs" />
+    <Compile Include="Presenters\IClientUpdaterView.cs" />
+    <Compile Include="Presenters\ClientUpdaterPresenter.cs" />
+    <Compile Include="Presenters\IConfigView.cs" />
+    <Compile Include="Presenters\ConfigPresenter.cs" />
+    <Compile Include="Presenters\ICustomButtonView.cs" />
+    <Compile Include="Presenters\CustomButtonPresenter.cs" />
     <Compile Include="Forms\AutopotForm.cs">
       <SubType>Form</SubType>
     </Compile>
